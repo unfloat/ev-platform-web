@@ -1,5 +1,5 @@
-import React from "react";
-import ChartistGraph from "react-chartist";
+import React from 'react';
+import ChartistGraph from 'react-chartist';
 // react-bootstrap components
 import {
   Badge,
@@ -13,113 +13,113 @@ import {
   Col,
   Form,
   OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+  Tooltip
+} from 'react-bootstrap';
 
-function Dashboard() {
+function Dashboard () {
   return (
     <>
       <Container fluid>
         <Row>
-          <Col lg="3" sm="6">
-            <Card className="card-stats">
+          <Col lg='3' sm='6'>
+            <Card className='card-stats'>
               <Card.Body>
                 <Row>
-                  <Col xs="5">
-                    <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-chart text-warning"></i>
+                  <Col xs='5'>
+                    <div className='icon-big text-center icon-warning'>
+                      <i className='nc-icon nc-chart text-warning' />
                     </div>
                   </Col>
-                  <Col xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Number</p>
-                      <Card.Title as="h4">150GB</Card.Title>
+                  <Col xs='7'>
+                    <div className='numbers'>
+                      <p className='card-category'>Number</p>
+                      <Card.Title as='h4'>150GB</Card.Title>
                     </div>
                   </Col>
                 </Row>
               </Card.Body>
               <Card.Footer>
-                <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-redo mr-1"></i>
+                <hr />
+                <div className='stats'>
+                  <i className='fas fa-redo mr-1' />
                   Update Now
                 </div>
               </Card.Footer>
             </Card>
           </Col>
-          <Col lg="3" sm="6">
-            <Card className="card-stats">
+          <Col lg='3' sm='6'>
+            <Card className='card-stats'>
               <Card.Body>
                 <Row>
-                  <Col xs="5">
-                    <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-light-3 text-success"></i>
+                  <Col xs='5'>
+                    <div className='icon-big text-center icon-warning'>
+                      <i className='nc-icon nc-light-3 text-success' />
                     </div>
                   </Col>
-                  <Col xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Revenue</p>
-                      <Card.Title as="h4">$ 1,345</Card.Title>
+                  <Col xs='7'>
+                    <div className='numbers'>
+                      <p className='card-category'>Revenue</p>
+                      <Card.Title as='h4'>$ 1,345</Card.Title>
                     </div>
                   </Col>
                 </Row>
               </Card.Body>
               <Card.Footer>
-                <hr></hr>
-                <div className="stats">
-                  <i className="far fa-calendar-alt mr-1"></i>
+                <hr />
+                <div className='stats'>
+                  <i className='far fa-calendar-alt mr-1' />
                   Last day
                 </div>
               </Card.Footer>
             </Card>
           </Col>
-          <Col lg="3" sm="6">
-            <Card className="card-stats">
+          <Col lg='3' sm='6'>
+            <Card className='card-stats'>
               <Card.Body>
                 <Row>
-                  <Col xs="5">
-                    <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-vector text-danger"></i>
+                  <Col xs='5'>
+                    <div className='icon-big text-center icon-warning'>
+                      <i className='nc-icon nc-vector text-danger' />
                     </div>
                   </Col>
-                  <Col xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Errors</p>
-                      <Card.Title as="h4">23</Card.Title>
+                  <Col xs='7'>
+                    <div className='numbers'>
+                      <p className='card-category'>Errors</p>
+                      <Card.Title as='h4'>23</Card.Title>
                     </div>
                   </Col>
                 </Row>
               </Card.Body>
               <Card.Footer>
-                <hr></hr>
-                <div className="stats">
-                  <i className="far fa-clock-o mr-1"></i>
+                <hr />
+                <div className='stats'>
+                  <i className='far fa-clock-o mr-1' />
                   In the last hour
                 </div>
               </Card.Footer>
             </Card>
           </Col>
-          <Col lg="3" sm="6">
-            <Card className="card-stats">
+          <Col lg='3' sm='6'>
+            <Card className='card-stats'>
               <Card.Body>
                 <Row>
-                  <Col xs="5">
-                    <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-favourite-28 text-primary"></i>
+                  <Col xs='5'>
+                    <div className='icon-big text-center icon-warning'>
+                      <i className='nc-icon nc-favourite-28 text-primary' />
                     </div>
                   </Col>
-                  <Col xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Followers</p>
-                      <Card.Title as="h4">+45K</Card.Title>
+                  <Col xs='7'>
+                    <div className='numbers'>
+                      <p className='card-category'>Followers</p>
+                      <Card.Title as='h4'>+45K</Card.Title>
                     </div>
                   </Col>
                 </Row>
               </Card.Body>
               <Card.Footer>
-                <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-redo mr-1"></i>
+                <hr />
+                <div className='stats'>
+                  <i className='fas fa-redo mr-1' />
                   Update now
                 </div>
               </Card.Footer>
@@ -127,107 +127,107 @@ function Dashboard() {
           </Col>
         </Row>
         <Row>
-          <Col md="8">
+          <Col md='8'>
             <Card>
               <Card.Header>
-                <Card.Title as="h4">Users Behavior</Card.Title>
-                <p className="card-category">24 Hours performance</p>
+                <Card.Title as='h4'>Users Behavior</Card.Title>
+                <p className='card-category'>24 Hours performance</p>
               </Card.Header>
               <Card.Body>
-                <div className="ct-chart" id="chartHours">
+                <div className='ct-chart' id='chartHours'>
                   <ChartistGraph
                     data={{
                       labels: [
-                        "9:00AM",
-                        "12:00AM",
-                        "3:00PM",
-                        "6:00PM",
-                        "9:00PM",
-                        "12:00PM",
-                        "3:00AM",
-                        "6:00AM",
+                        '9:00AM',
+                        '12:00AM',
+                        '3:00PM',
+                        '6:00PM',
+                        '9:00PM',
+                        '12:00PM',
+                        '3:00AM',
+                        '6:00AM'
                       ],
                       series: [
                         [287, 385, 490, 492, 554, 586, 698, 695],
                         [67, 152, 143, 240, 287, 335, 435, 437],
-                        [23, 113, 67, 108, 190, 239, 307, 308],
-                      ],
+                        [23, 113, 67, 108, 190, 239, 307, 308]
+                      ]
                     }}
-                    type="Line"
+                    type='Line'
                     options={{
                       low: 0,
                       high: 800,
                       showArea: false,
-                      height: "245px",
+                      height: '245px',
                       axisX: {
-                        showGrid: false,
+                        showGrid: false
                       },
                       lineSmooth: true,
                       showLine: true,
                       showPoint: true,
                       fullWidth: true,
                       chartPadding: {
-                        right: 50,
-                      },
+                        right: 50
+                      }
                     }}
                     responsiveOptions={[
                       [
-                        "screen and (max-width: 640px)",
+                        'screen and (max-width: 640px)',
                         {
                           axisX: {
                             labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
+                              return value[0]
+                            }
+                          }
+                        }
+                      ]
                     ]}
                   />
                 </div>
               </Card.Body>
               <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  Open <i className="fas fa-circle text-danger"></i>
-                  Click <i className="fas fa-circle text-warning"></i>
+                <div className='legend'>
+                  <i className='fas fa-circle text-info' />
+                  Open <i className='fas fa-circle text-danger' />
+                  Click <i className='fas fa-circle text-warning' />
                   Click Second Time
                 </div>
-                <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-history"></i>
+                <hr />
+                <div className='stats'>
+                  <i className='fas fa-history' />
                   Updated 3 minutes ago
                 </div>
               </Card.Footer>
             </Card>
           </Col>
-          <Col md="4">
+          <Col md='4'>
             <Card>
               <Card.Header>
-                <Card.Title as="h4">Email Statistics</Card.Title>
-                <p className="card-category">Last Campaign Performance</p>
+                <Card.Title as='h4'>Email Statistics</Card.Title>
+                <p className='card-category'>Last Campaign Performance</p>
               </Card.Header>
               <Card.Body>
                 <div
-                  className="ct-chart ct-perfect-fourth"
-                  id="chartPreferences"
+                  className='ct-chart ct-perfect-fourth'
+                  id='chartPreferences'
                 >
                   <ChartistGraph
                     data={{
-                      labels: ["40%", "20%", "40%"],
-                      series: [40, 20, 40],
+                      labels: ['40%', '20%', '40%'],
+                      series: [40, 20, 40]
                     }}
-                    type="Pie"
+                    type='Pie'
                   />
                 </div>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  Open <i className="fas fa-circle text-danger"></i>
-                  Bounce <i className="fas fa-circle text-warning"></i>
+                <div className='legend'>
+                  <i className='fas fa-circle text-info' />
+                  Open <i className='fas fa-circle text-danger' />
+                  Bounce <i className='fas fa-circle text-warning' />
                   Unsubscribe
                 </div>
-                <hr></hr>
-                <div className="stats">
-                  <i className="far fa-clock"></i>
+                <hr />
+                <div className='stats'>
+                  <i className='far fa-clock' />
                   Campaign sent 2 days ago
                 </div>
               </Card.Body>
@@ -235,29 +235,29 @@ function Dashboard() {
           </Col>
         </Row>
         <Row>
-          <Col md="6">
+          <Col md='6'>
             <Card>
               <Card.Header>
-                <Card.Title as="h4">2017 Sales</Card.Title>
-                <p className="card-category">All products including Taxes</p>
+                <Card.Title as='h4'>2017 Sales</Card.Title>
+                <p className='card-category'>All products including Taxes</p>
               </Card.Header>
               <Card.Body>
-                <div className="ct-chart" id="chartActivity">
+                <div className='ct-chart' id='chartActivity'>
                   <ChartistGraph
                     data={{
                       labels: [
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "Mai",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Oct",
-                        "Nov",
-                        "Dec",
+                        'Jan',
+                        'Feb',
+                        'Mar',
+                        'Apr',
+                        'Mai',
+                        'Jun',
+                        'Jul',
+                        'Aug',
+                        'Sep',
+                        'Oct',
+                        'Nov',
+                        'Dec'
                       ],
                       series: [
                         [
@@ -272,7 +272,7 @@ function Dashboard() {
                           568,
                           610,
                           756,
-                          895,
+                          895
                         ],
                         [
                           412,
@@ -286,67 +286,67 @@ function Dashboard() {
                           368,
                           410,
                           636,
-                          695,
-                        ],
-                      ],
+                          695
+                        ]
+                      ]
                     }}
-                    type="Bar"
+                    type='Bar'
                     options={{
                       seriesBarDistance: 10,
                       axisX: {
-                        showGrid: false,
+                        showGrid: false
                       },
-                      height: "245px",
+                      height: '245px'
                     }}
                     responsiveOptions={[
                       [
-                        "screen and (max-width: 640px)",
+                        'screen and (max-width: 640px)',
                         {
                           seriesBarDistance: 5,
                           axisX: {
                             labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
+                              return value[0]
+                            }
+                          }
+                        }
+                      ]
                     ]}
                   />
                 </div>
               </Card.Body>
               <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  Tesla Model S <i className="fas fa-circle text-danger"></i>
+                <div className='legend'>
+                  <i className='fas fa-circle text-info' />
+                  Tesla Model S <i className='fas fa-circle text-danger' />
                   BMW 5 Series
                 </div>
-                <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-check"></i>
+                <hr />
+                <div className='stats'>
+                  <i className='fas fa-check' />
                   Data information certified
                 </div>
               </Card.Footer>
             </Card>
           </Col>
-          <Col md="6">
-            <Card className="card-tasks">
+          <Col md='6'>
+            <Card className='card-tasks'>
               <Card.Header>
-                <Card.Title as="h4">Tasks</Card.Title>
-                <p className="card-category">Backend development</p>
+                <Card.Title as='h4'>Tasks</Card.Title>
+                <p className='card-category'>Backend development</p>
               </Card.Header>
               <Card.Body>
-                <div className="table-full-width">
+                <div className='table-full-width'>
                   <Table>
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Check className="mb-1 pl-0">
+                          <Form.Check className='mb-1 pl-0'>
                             <Form.Check.Label>
                               <Form.Check.Input
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
+                                defaultValue=''
+                                type='checkbox'
+                               />
+                              <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
                         </td>
@@ -354,47 +354,47 @@ function Dashboard() {
                           Sign contract for "What are conference organizers
                           afraid of?"
                         </td>
-                        <td className="td-actions text-right">
+                        <td className='td-actions text-right'>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-488980961">
+                              <Tooltip id='tooltip-488980961'>
                                 Edit Task..
                               </Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='info'
                             >
-                              <i className="fas fa-edit"></i>
+                              <i className='fas fa-edit' />
                             </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-506045838">Remove..</Tooltip>
+                              <Tooltip id='tooltip-506045838'>Remove..</Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='danger'
                             >
-                              <i className="fas fa-times"></i>
+                              <i className='fas fa-times' />
                             </Button>
                           </OverlayTrigger>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <Form.Check className="mb-1 pl-0">
+                          <Form.Check className='mb-1 pl-0'>
                             <Form.Check.Label>
                               <Form.Check.Input
                                 defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
+                                defaultValue=''
+                                type='checkbox'
+                               />
+                              <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
                         </td>
@@ -402,47 +402,47 @@ function Dashboard() {
                           Lines From Great Russian Literature? Or E-mails From
                           My Boss?
                         </td>
-                        <td className="td-actions text-right">
+                        <td className='td-actions text-right'>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-537440761">
+                              <Tooltip id='tooltip-537440761'>
                                 Edit Task..
                               </Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='info'
                             >
-                              <i className="fas fa-edit"></i>
+                              <i className='fas fa-edit' />
                             </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-21130535">Remove..</Tooltip>
+                              <Tooltip id='tooltip-21130535'>Remove..</Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='danger'
                             >
-                              <i className="fas fa-times"></i>
+                              <i className='fas fa-times' />
                             </Button>
                           </OverlayTrigger>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <Form.Check className="mb-1 pl-0">
+                          <Form.Check className='mb-1 pl-0'>
                             <Form.Check.Label>
                               <Form.Check.Input
                                 defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
+                                defaultValue=''
+                                type='checkbox'
+                               />
+                              <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
                         </td>
@@ -451,46 +451,46 @@ function Dashboard() {
                           what was found when a ravaging rain swept through
                           metro Detroit
                         </td>
-                        <td className="td-actions text-right">
+                        <td className='td-actions text-right'>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-577232198">
+                              <Tooltip id='tooltip-577232198'>
                                 Edit Task..
                               </Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='info'
                             >
-                              <i className="fas fa-edit"></i>
+                              <i className='fas fa-edit' />
                             </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-773861645">Remove..</Tooltip>
+                              <Tooltip id='tooltip-773861645'>Remove..</Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='danger'
                             >
-                              <i className="fas fa-times"></i>
+                              <i className='fas fa-times' />
                             </Button>
                           </OverlayTrigger>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <Form.Check className="mb-1 pl-0">
+                          <Form.Check className='mb-1 pl-0'>
                             <Form.Check.Label>
                               <Form.Check.Input
                                 defaultChecked
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
+                                type='checkbox'
+                               />
+                              <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
                         </td>
@@ -498,122 +498,122 @@ function Dashboard() {
                           Create 4 Invisible User Experiences you Never Knew
                           About
                         </td>
-                        <td className="td-actions text-right">
+                        <td className='td-actions text-right'>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-422471719">
+                              <Tooltip id='tooltip-422471719'>
                                 Edit Task..
                               </Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='info'
                             >
-                              <i className="fas fa-edit"></i>
+                              <i className='fas fa-edit' />
                             </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-829164576">Remove..</Tooltip>
+                              <Tooltip id='tooltip-829164576'>Remove..</Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='danger'
                             >
-                              <i className="fas fa-times"></i>
+                              <i className='fas fa-times' />
                             </Button>
                           </OverlayTrigger>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <Form.Check className="mb-1 pl-0">
+                          <Form.Check className='mb-1 pl-0'>
                             <Form.Check.Label>
                               <Form.Check.Input
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
+                                defaultValue=''
+                                type='checkbox'
+                               />
+                              <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
                         </td>
                         <td>Read "Following makes Medium better"</td>
-                        <td className="td-actions text-right">
+                        <td className='td-actions text-right'>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-160575228">
+                              <Tooltip id='tooltip-160575228'>
                                 Edit Task..
                               </Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='info'
                             >
-                              <i className="fas fa-edit"></i>
+                              <i className='fas fa-edit' />
                             </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-922981635">Remove..</Tooltip>
+                              <Tooltip id='tooltip-922981635'>Remove..</Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='danger'
                             >
-                              <i className="fas fa-times"></i>
+                              <i className='fas fa-times' />
                             </Button>
                           </OverlayTrigger>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <Form.Check className="mb-1 pl-0">
+                          <Form.Check className='mb-1 pl-0'>
                             <Form.Check.Label>
                               <Form.Check.Input
-                                defaultValue=""
+                                defaultValue=''
                                 disabled
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
+                                type='checkbox'
+                               />
+                              <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
                         </td>
                         <td>Unfollow 5 enemies from twitter</td>
-                        <td className="td-actions text-right">
+                        <td className='td-actions text-right'>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-938342127">
+                              <Tooltip id='tooltip-938342127'>
                                 Edit Task..
                               </Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='info'
                             >
-                              <i className="fas fa-edit"></i>
+                              <i className='fas fa-edit' />
                             </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
                             overlay={
-                              <Tooltip id="tooltip-119603706">Remove..</Tooltip>
+                              <Tooltip id='tooltip-119603706'>Remove..</Tooltip>
                             }
                           >
                             <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
+                              className='btn-simple btn-link p-1'
+                              type='button'
+                              variant='danger'
                             >
-                              <i className="fas fa-times"></i>
+                              <i className='fas fa-times' />
                             </Button>
                           </OverlayTrigger>
                         </td>
@@ -623,9 +623,9 @@ function Dashboard() {
                 </div>
               </Card.Body>
               <Card.Footer>
-                <hr></hr>
-                <div className="stats">
-                  <i className="now-ui-icons loader_refresh spin"></i>
+                <hr />
+                <div className='stats'>
+                  <i className='now-ui-icons loader_refresh spin' />
                   Updated 3 minutes ago
                 </div>
               </Card.Footer>
@@ -634,7 +634,7 @@ function Dashboard() {
         </Row>
       </Container>
     </>
-  );
+  )
 }
 
-export default Dashboard;
+export default Dashboard

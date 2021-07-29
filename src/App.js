@@ -32,13 +32,15 @@ import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import AdminLayout from "layouts/Admin.js";
+import Login from "views/Login";
 function App() {
     return (
         <Provider store={store}>
             <BrowserRouter>
                 <Switch>
+                    <Route path="/login" render={(props) => <Login {...props} />} />
                     <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-                    <Redirect from="/" to="/admin/dashboard" />
+                    <Redirect from="/" to="/login" />
                 </Switch>
             </BrowserRouter>
         </Provider>

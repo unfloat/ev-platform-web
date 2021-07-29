@@ -16,12 +16,16 @@
 
 */
 import React, { Component } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
+import { connect } from 'react-redux'
+import { logoutUser } from '../../actions/authActions'
+
 
 import routes from "routes.js";
 
-function Header() {
+function Header({ logoutUser }) {
+  const history = useHistory();
   const location = useLocation();
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
@@ -43,6 +47,12 @@ function Header() {
     }
     return "Brand";
   };
+
+  const logout = () => {
+    logoutUser()
+    history.push("/admin/login");
+  }
+
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
@@ -195,8 +205,7 @@ function Header() {
             <Nav.Item>
               <Nav.Link
                 className="m-0"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={logout}
               >
                 <span className="no-icon">Log out</span>
               </Nav.Link>
@@ -208,4 +217,13 @@ function Header() {
   );
 }
 
-export default Header;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+})
+
+const mapDispatchToProps = dispatch => ({
+  logoutUser: () => dispatch(logoutUser())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
