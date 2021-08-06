@@ -1,16 +1,13 @@
-import axios from "../api";
-const jwt = require('jwt-simple');
+import axios from '../api';
 
-import { REGISTER_USER, SET_CURRENT_USER, GET_ERRORS, CLEAR_ERRORS } from './types';
+import { SET_CURRENT_USER, GET_ERRORS, CLEAR_ERRORS } from './types';
 // Register User
 export const registerUser = userData => dispatch => {
   axios
     .post('/auth/register', userData)
     .then(res => {
       const { token, user } = res.data;
-      console.log('AAAAAAAAAAAAAAAAA', user);
-      localStorage.setItem('token', token);
-      // const decoded = jwt.decode(token);
+      localStorage.setItem('token', token.accessToken);
       dispatch(clearErrors());
       dispatch(setCurrentUser(user));
     })
@@ -20,8 +17,8 @@ export const registerUser = userData => dispatch => {
         payload: {
           message: err.response.data,
           visible: true,
-          success: false
-        }
+          success: false,
+        },
       })
     );
 };
@@ -31,9 +28,8 @@ export const loginUser = userData => dispatch => {
     .post('/auth/login', userData)
     .then(res => {
       const { token, user } = res.data;
-      console.log('user', user);
-      localStorage.setItem('token', token);
-      // const decoded = jwt.decode(token);
+      localStorage.setItem('token', token.accessToken);
+      console.log('HERE');
       dispatch(clearErrors());
       dispatch(setCurrentUser(user));
     })
@@ -42,18 +38,17 @@ export const loginUser = userData => dispatch => {
         type: GET_ERRORS,
         payload: {
           message: err.message,
-          visible: true
-        }
+          visible: true,
+        },
       })
     );
 };
-
 
 // Set logged in user
 export const setCurrentUser = decoded => {
   return {
     type: SET_CURRENT_USER,
-    payload: decoded
+    payload: decoded,
   };
 };
 
@@ -66,6 +61,6 @@ export const logoutUser = () => dispatch => {
 // Clear errors
 export const clearErrors = () => {
   return {
-    type: CLEAR_ERRORS
+    type: CLEAR_ERRORS,
   };
 };

@@ -15,38 +15,40 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
 
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './assets/css/animate.min.css';
+import './assets/scss/light-bootstrap-dashboard-react.scss?v=2.0.0';
+import './assets/css/demo.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
+import AdminLayout from 'layouts/Admin';
+import Login from 'views/Login';
+import Register from 'views/Register';
+import PrivateRoute from 'components/PrivateRoute';
+// import { ProvideAuth } from './hooks/use-auth';
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./assets/css/animate.min.css";
-import "./assets/scss/light-bootstrap-dashboard-react.scss?v=2.0.0";
-import "./assets/css/demo.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-
-import AdminLayout from "layouts/Admin.js";
-import Login from "views/Login";
 function App() {
-    return (
-        <Provider store={store}>
-            <BrowserRouter>
-                <Switch>
-                    <Route path="/login" render={(props) => <Login {...props} />} />
-                    <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-                    <Redirect from="/" to="/login" />
-                </Switch>
-            </BrowserRouter>
-        </Provider>
-    )
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route path='/login' render={props => <Login {...props} />} />
+
+          <PrivateRoute
+            path='/admin/dashboard'
+            render={props => <AdminLayout {...props} />}
+          />
+          <Route path='/register' render={props => <Register {...props} />} />
+        </Switch>
+      </BrowserRouter>
+    </Provider>
+  );
 }
 
 export default App;
-
-

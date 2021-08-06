@@ -13,10 +13,10 @@ import {
   Col,
   Form,
   OverlayTrigger,
-  Tooltip
+  Tooltip,
 } from 'react-bootstrap';
 
-function Dashboard () {
+function Dashboard() {
   return (
     <>
       <Container fluid>
@@ -145,13 +145,13 @@ function Dashboard () {
                         '9:00PM',
                         '12:00PM',
                         '3:00AM',
-                        '6:00AM'
+                        '6:00AM',
                       ],
                       series: [
                         [287, 385, 490, 492, 554, 586, 698, 695],
                         [67, 152, 143, 240, 287, 335, 435, 437],
-                        [23, 113, 67, 108, 190, 239, 307, 308]
-                      ]
+                        [23, 113, 67, 108, 190, 239, 307, 308],
+                      ],
                     }}
                     type='Line'
                     options={{
@@ -160,15 +160,15 @@ function Dashboard () {
                       showArea: false,
                       height: '245px',
                       axisX: {
-                        showGrid: false
+                        showGrid: false,
                       },
                       lineSmooth: true,
                       showLine: true,
                       showPoint: true,
                       fullWidth: true,
                       chartPadding: {
-                        right: 50
-                      }
+                        right: 50,
+                      },
                     }}
                     responsiveOptions={[
                       [
@@ -176,11 +176,11 @@ function Dashboard () {
                         {
                           axisX: {
                             labelInterpolationFnc: function (value) {
-                              return value[0]
-                            }
-                          }
-                        }
-                      ]
+                              return value[0];
+                            },
+                          },
+                        },
+                      ],
                     ]}
                   />
                 </div>
@@ -214,7 +214,7 @@ function Dashboard () {
                   <ChartistGraph
                     data={{
                       labels: ['40%', '20%', '40%'],
-                      series: [40, 20, 40]
+                      series: [40, 20, 40],
                     }}
                     type='Pie'
                   />
@@ -257,46 +257,26 @@ function Dashboard () {
                         'Sep',
                         'Oct',
                         'Nov',
-                        'Dec'
+                        'Dec',
                       ],
                       series: [
                         [
-                          542,
-                          443,
-                          320,
-                          780,
-                          553,
-                          453,
-                          326,
-                          434,
-                          568,
-                          610,
-                          756,
-                          895
+                          542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756,
+                          895,
                         ],
                         [
-                          412,
-                          243,
-                          280,
-                          580,
-                          453,
-                          353,
-                          300,
-                          364,
-                          368,
-                          410,
-                          636,
-                          695
-                        ]
-                      ]
+                          412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636,
+                          695,
+                        ],
+                      ],
                     }}
                     type='Bar'
                     options={{
                       seriesBarDistance: 10,
                       axisX: {
-                        showGrid: false
+                        showGrid: false,
                       },
-                      height: '245px'
+                      height: '245px',
                     }}
                     responsiveOptions={[
                       [
@@ -305,11 +285,11 @@ function Dashboard () {
                           seriesBarDistance: 5,
                           axisX: {
                             labelInterpolationFnc: function (value) {
-                              return value[0]
-                            }
-                          }
-                        }
-                      ]
+                              return value[0];
+                            },
+                          },
+                        },
+                      ],
                     ]}
                   />
                 </div>
@@ -345,7 +325,7 @@ function Dashboard () {
                               <Form.Check.Input
                                 defaultValue=''
                                 type='checkbox'
-                               />
+                              />
                               <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
@@ -393,7 +373,7 @@ function Dashboard () {
                                 defaultChecked
                                 defaultValue=''
                                 type='checkbox'
-                               />
+                              />
                               <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
@@ -441,7 +421,7 @@ function Dashboard () {
                                 defaultChecked
                                 defaultValue=''
                                 type='checkbox'
-                               />
+                              />
                               <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
@@ -489,7 +469,7 @@ function Dashboard () {
                               <Form.Check.Input
                                 defaultChecked
                                 type='checkbox'
-                               />
+                              />
                               <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
@@ -536,7 +516,7 @@ function Dashboard () {
                               <Form.Check.Input
                                 defaultValue=''
                                 type='checkbox'
-                               />
+                              />
                               <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
@@ -581,7 +561,7 @@ function Dashboard () {
                                 defaultValue=''
                                 disabled
                                 type='checkbox'
-                               />
+                              />
                               <span className='form-check-sign' />
                             </Form.Check.Label>
                           </Form.Check>
@@ -634,7 +614,7 @@ function Dashboard () {
         </Row>
       </Container>
     </>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

@@ -15,26 +15,27 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
-import { connect } from 'react-redux'
-import { logoutUser } from '../../actions/authActions'
+import React from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+import { Navbar, Container, Nav, Dropdown, Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
+import { logoutUser } from '../../actions/authActions';
+import { useAuth } from './../../hooks/use-auth';
 
-import routes from "routes.js";
+import routes from 'routes.js';
 
 function Header({ logoutUser }) {
   const history = useHistory();
   const location = useLocation();
-  const mobileSidebarToggle = (e) => {
+  const mobileSidebarToggle = e => {
     e.preventDefault();
-    document.documentElement.classList.toggle("nav-open");
-    var node = document.createElement("div");
-    node.id = "bodyClick";
+    document.documentElement.classList.toggle('nav-open');
+    let node = document.createElement('div');
+    node.id = 'bodyClick';
     node.onclick = function () {
       this.parentElement.removeChild(this);
-      document.documentElement.classList.toggle("nav-open");
+      document.documentElement.classList.toggle('nav-open');
     };
     document.body.appendChild(node);
   };
@@ -45,169 +46,136 @@ function Header({ logoutUser }) {
         return routes[i].name;
       }
     }
-    return "Brand";
+    return 'Brand';
   };
 
   const logout = () => {
-    logoutUser()
-    history.push("/admin/login");
-  }
+    logoutUser();
+    history.push('/login');
+  };
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg='light' expand='lg'>
       <Container fluid>
-        <div className="d-flex justify-content-center align-items-center ml-2 ml-lg-0">
+        <div className='d-flex justify-content-center align-items-center ml-2 ml-lg-0'>
           <Button
-            variant="dark"
-            className="d-lg-none btn-fill d-flex justify-content-center align-items-center rounded-circle p-2"
+            variant='dark'
+            className='d-lg-none btn-fill d-flex justify-content-center align-items-center rounded-circle p-2'
             onClick={mobileSidebarToggle}
           >
-            <i className="fas fa-ellipsis-v"></i>
+            <i className='fas fa-ellipsis-v' />
           </Button>
           <Navbar.Brand
-            href="#home"
-            onClick={(e) => e.preventDefault()}
-            className="mr-2"
+            href='#home'
+            onClick={e => e.preventDefault()}
+            className='mr-2'
           >
             {getBrandText()}
           </Navbar.Brand>
         </div>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" className="mr-2">
-          <span className="navbar-toggler-bar burger-lines"></span>
-          <span className="navbar-toggler-bar burger-lines"></span>
-          <span className="navbar-toggler-bar burger-lines"></span>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' className='mr-2'>
+          <span className='navbar-toggler-bar burger-lines' />
+          <span className='navbar-toggler-bar burger-lines' />
+          <span className='navbar-toggler-bar burger-lines' />
         </Navbar.Toggle>
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="nav mr-auto" navbar>
+        <Navbar.Collapse id='basic-navbar-nav'>
+          <Nav className='nav mr-auto' navbar>
             <Nav.Item>
               <Nav.Link
-                data-toggle="dropdown"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-                className="m-0"
+                data-toggle='dropdown'
+                href='#pablo'
+                onClick={e => e.preventDefault()}
+                className='m-0'
               >
-                <i className="nc-icon nc-palette"></i>
-                <span className="d-lg-none ml-1">Dashboard</span>
+                <i className='nc-icon nc-palette' />
+                <span className='d-lg-none ml-1'>Dashboard</span>
               </Nav.Link>
             </Nav.Item>
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle
                 as={Nav.Link}
-                data-toggle="dropdown"
-                id="dropdown-67443507"
-                variant="default"
-                className="m-0"
+                data-toggle='dropdown'
+                id='dropdown-67443507'
+                variant='default'
+                className='m-0'
               >
-                <i className="nc-icon nc-planet"></i>
-                <span className="notification">5</span>
-                <span className="d-lg-none ml-1">Notification</span>
+                <i className='nc-icon nc-planet' />
+                <span className='notification'>5</span>
+                <span className='d-lg-none ml-1'>Notification</span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Notification 1
                 </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Notification 2
                 </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Notification 3
                 </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Notification 4
                 </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Another notification
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <Nav.Item>
               <Nav.Link
-                className="m-0"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                className='m-0'
+                href='#pablo'
+                onClick={e => e.preventDefault()}
               >
-                <i className="nc-icon nc-zoom-split"></i>
-                <span className="d-lg-block"> Search</span>
+                <i className='nc-icon nc-zoom-split' />
+                <span className='d-lg-block'> Search</span>
               </Nav.Link>
             </Nav.Item>
           </Nav>
-          <Nav className="ml-auto" navbar>
+          <Nav className='ml-auto' navbar>
             <Nav.Item>
               <Nav.Link
-                className="m-0"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                className='m-0'
+                href='#pablo'
+                onClick={e => e.preventDefault()}
               >
-                <span className="no-icon">Account</span>
+                <span className='no-icon'>Account</span>
               </Nav.Link>
             </Nav.Item>
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle
                 aria-expanded={false}
-                aria-haspopup={true}
+                aria-haspopup
                 as={Nav.Link}
-                data-toggle="dropdown"
-                id="navbarDropdownMenuLink"
-                variant="default"
-                className="m-0"
+                data-toggle='dropdown'
+                id='navbarDropdownMenuLink'
+                variant='default'
+                className='m-0'
               >
-                <span className="no-icon">Dropdown</span>
+                <span className='no-icon'>Dropdown</span>
               </Dropdown.Toggle>
-              <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+              <Dropdown.Menu aria-labelledby='navbarDropdownMenuLink'>
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Action
                 </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Another action
                 </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Something
                 </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Something else here
                 </Dropdown.Item>
-                <div className="divider"></div>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
+                <div className='divider' />
+                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
                   Separated link
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <Nav.Item>
-              <Nav.Link
-                className="m-0"
-                onClick={logout}
-              >
-                <span className="no-icon">Log out</span>
+              <Nav.Link className='m-0' onClick={logout}>
+                <span className='no-icon'>Log out</span>
               </Nav.Link>
             </Nav.Item>
           </Nav>
@@ -219,11 +187,11 @@ function Header({ logoutUser }) {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
-})
+  errors: state.errors,
+});
 
 const mapDispatchToProps = dispatch => ({
-  logoutUser: () => dispatch(logoutUser())
-})
+  logoutUser: () => dispatch(logoutUser()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -1,4 +1,4 @@
-import axios from "../api";
+import axios from '../api';
 import {
   ADD_EVENT,
   GET_EVENTS,
@@ -10,16 +10,17 @@ import {
   EDIT_EVENT,
   UNARCHIVE_EVENT,
   ARCHIVE_EVENT,
-  IS_MODIFIED_EVENT
-} from "../actions/types";
+  IS_MODIFIED_EVENT,
+} from '../actions/types';
 
-export const addEvent = (eventData) => dispatch => {
+export const addEvent = eventData => dispatch => {
   dispatch(clearErrors());
-  axios.post("/events/add", eventData)
+  axios
+    .post('/events/add', eventData)
     .then(res =>
       dispatch({
         type: ADD_EVENT,
-        payload: res.data
+        payload: res.data,
       })
     )
     .catch(error => {
@@ -28,20 +29,21 @@ export const addEvent = (eventData) => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
 
-export const editEvent = (eventData,id) => dispatch => {
+export const editEvent = (eventData, id) => dispatch => {
   dispatch(clearErrors());
-  axios.put(`/events/update/${id}`, eventData)
+  axios
+    .put(`/events/update/${id}`, eventData)
     .then(res => {
       dispatch({
         type: EDIT_EVENT,
-        payload: res.data
+        payload: res.data,
       });
     })
     .catch(error => {
@@ -50,20 +52,21 @@ export const editEvent = (eventData,id) => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
 
-export const archiveEvent = (id) => dispatch => {
+export const archiveEvent = id => dispatch => {
   dispatch(clearErrors());
-  axios.put(`/events/archive/${id}`)
+  axios
+    .put(`/events/archive/${id}`)
     .then(res =>
       dispatch({
         type: ARCHIVE_EVENT,
-        payload: res.data
+        payload: res.data,
       })
     )
     .catch(error => {
@@ -72,20 +75,21 @@ export const archiveEvent = (id) => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
 
-export const unarchiveEvent = (id) => dispatch => {
+export const unarchiveEvent = id => dispatch => {
   dispatch(clearErrors());
-  axios.put(`/events/unarchive/${id}`)
+  axios
+    .put(`/events/unarchive/${id}`)
     .then(res =>
       dispatch({
         type: UNARCHIVE_EVENT,
-        payload: res.data
+        payload: res.data,
       })
     )
     .catch(error => {
@@ -94,23 +98,21 @@ export const unarchiveEvent = (id) => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
-
-
 
 export const getEvents = () => dispatch => {
   dispatch(setEventLoading());
   axios
-    .get("/events/")
+    .get('/events/')
     .then(res => {
       dispatch({
         type: GET_EVENTS,
-        payload: res.data
+        payload: res.data,
       });
     })
     .catch(error => {
@@ -119,11 +121,11 @@ export const getEvents = () => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
 
 export const getEvent = id => dispatch => {
@@ -133,7 +135,7 @@ export const getEvent = id => dispatch => {
     .then(res =>
       dispatch({
         type: GET_EVENT,
-        payload: res.data
+        payload: res.data,
       })
     )
     .catch(error => {
@@ -142,11 +144,11 @@ export const getEvent = id => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
 
 export const deleteEvent = id => dispatch => {
@@ -156,7 +158,7 @@ export const deleteEvent = id => dispatch => {
     .then(res =>
       dispatch({
         type: DELETE_EVENT,
-        payload: id
+        payload: id,
       })
     )
     .catch(error => {
@@ -165,15 +167,12 @@ export const deleteEvent = id => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
-
-
-
 
 // export const searchEvents = (min, max) => dispatch => {
 //   const body = { min, max };
@@ -201,18 +200,18 @@ export const deleteEvent = id => dispatch => {
 // Set loading state
 export const setEventLoading = () => {
   return {
-    type: EVENT_LOADING
+    type: EVENT_LOADING,
   };
 };
 export const setIsModifiedEventLoading = () => {
   return {
-    type: IS_MODIFIED_EVENT
+    type: IS_MODIFIED_EVENT,
   };
 };
 
 // Clear errors
 export const clearErrors = () => {
   return {
-    type: CLEAR_ERRORS
+    type: CLEAR_ERRORS,
   };
 };

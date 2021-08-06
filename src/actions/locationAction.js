@@ -1,11 +1,10 @@
-import axios from "../api";
+import axios from '../api';
 import {
   GET_LOCATIONS,
   CLEAR_ERRORS,
   GET_ERRORS,
-  LOCATION_LOADING
-} from "./types";
-
+  LOCATION_LOADING,
+} from './types';
 
 // export const getLocations =  () => async dispatch => {
 //   // dispatch(setStationLoading());
@@ -28,7 +27,6 @@ import {
 //     }
 //   }
 
-
 // };
 
 // Set loading state
@@ -36,11 +34,11 @@ import {
 export const getLocations = () => dispatch => {
   dispatch(setStationLoading());
   axios
-    .get("/locations")
+    .get('/locations')
     .then(res => {
       dispatch({
         type: GET_LOCATIONS,
-        payload: res.data
+        payload: res.data,
       });
     })
     .catch(error => {
@@ -49,21 +47,21 @@ export const getLocations = () => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
 export const setStationLoading = () => {
   return {
-    type: LOCATION_LOADING
+    type: LOCATION_LOADING,
   };
 };
 
 // Clear errors
 export const clearErrors = () => {
   return {
-    type: CLEAR_ERRORS
+    type: CLEAR_ERRORS,
   };
 };

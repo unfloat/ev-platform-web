@@ -9,7 +9,7 @@ const useScript = url => {
 
     return () => {
       document.body.removeChild(script);
-    }
+    };
   }, [url]);
 };
 

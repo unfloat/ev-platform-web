@@ -1,7 +1,9 @@
-import React, {  useState } from 'react'
-import { connect } from 'react-redux'
-import { loginUser } from '../actions/authActions'
-import { useHistory } from "react-router-dom";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+
+import { loginUser } from '../actions/authActions';
 
 import {
   Button,
@@ -16,31 +18,35 @@ import {
   InputGroupAddon,
   InputGroupText,
   Row,
-  Alert,
-  Label
-} from 'reactstrap'
+} from 'reactstrap';
 
-function Login({ message, visible, loginUser }) {
+function Login({ isAuthenticated, loginUser }) {
   const history = useHistory();
-
+  const [redirectToReferrer, setRedirectToReferrer] = React.useState(false);
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
-  })
+  });
+
+  const { state } = useLocation();
 
   const handleInputChange = (value, fieldName) => {
-    setCredentials(prevState => ({ ...prevState, [fieldName]: value }))
-  }
+    setCredentials(prevState => ({ ...prevState, [fieldName]: value }));
+  };
 
   const login = () => {
     if (!credentials.password && !credentials.email) return;
     loginUser(credentials);
-    history.push("/admin/dashboard");
+    // history.push('/admin/dashboard');
+  };
+
+  if (isAuthenticated === true) {
+    return <Redirect to={state?.from || '/admin/dashboard'} />;
   }
 
   const register = () => {
-    history.push("/admin/register");
-  }
+    history.push('/register');
+  };
 
   return (
     <div className='app flex-row align-items-center'>
@@ -61,7 +67,9 @@ function Login({ message, visible, loginUser }) {
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        onChange={(e) => handleInputChange(e.target.value, e.target.name)}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
                         type='text'
                         placeholder='Email'
                         autoComplete='email'
@@ -76,41 +84,44 @@ function Login({ message, visible, loginUser }) {
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        onChange={(e) => handleInputChange(e.target.value, e.target.name)}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
                         type='password'
                         placeholder='Password'
                         autoComplete='current-password'
                         name='password'
                         value={credentials.password}
                       />
-                    </InputGroup>                    
+                    </InputGroup>
                     <Row>
                       <Col xs='6'>
                         <Button
                           color='primary'
                           className='px-4'
                           name='connectButton'
-                          onClick={login}
+                          onClick={e => login(e)}
                         >
                           Login
                         </Button>
                       </Col>
                     </Row>
-                    <p className='text-muted'>No account yet?</p>
-
-                    <Row>
-                      <Col xs='6'>
-                        <Button
-                          color='primary'
-                          className='px-4'
-                          name='connectButton'
-                          onClick={register}
-                        >
-                          Sign up
-                        </Button>
-                      </Col>
-                    </Row>
                   </Form>
+
+                  <p className='text-muted'>No account yet?</p>
+
+                  <Row>
+                    <Col xs='6'>
+                      <Button
+                        color='primary'
+                        className='px-4'
+                        name='connectButton'
+                        onClick={register}
+                      >
+                        Sign up
+                      </Button>
+                    </Col>
+                  </Row>
                 </CardBody>
               </Card>
             </CardGroup>
@@ -118,17 +129,16 @@ function Login({ message, visible, loginUser }) {
         </Row>
       </Container>
     </div>
-  )
+  );
 }
 
-
 const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors
-})
+  isAuthenticated: state.auth.isAuthenticated,
+  errors: state.errors,
+});
 
 const mapDispatchToProps = dispatch => ({
-  loginUser: (credentials) => dispatch(loginUser(credentials))
-})
+  loginUser: credentials => dispatch(loginUser(credentials)),
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

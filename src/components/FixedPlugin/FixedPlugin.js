@@ -16,14 +16,14 @@
 
 */
 /*eslint-disable*/
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { Dropdown, Badge, Button, Form } from "react-bootstrap";
+import { Dropdown, Badge, Button, Form } from 'react-bootstrap';
 
-import sideBarImage1 from "assets/img/sidebar-1.jpg";
-import sideBarImage2 from "assets/img/sidebar-2.jpg";
-import sideBarImage3 from "assets/img/sidebar-3.jpg";
-import sideBarImage4 from "assets/img/sidebar-4.jpg";
+import sideBarImage1 from 'assets/img/sidebar-1.jpg';
+import sideBarImage2 from 'assets/img/sidebar-2.jpg';
+import sideBarImage3 from 'assets/img/sidebar-3.jpg';
+import sideBarImage4 from 'assets/img/sidebar-4.jpg';
 
 function FixedPlugin({
   hasImage,
@@ -49,172 +49,172 @@ function FixedPlugin({
   //   this.setState({ bg_checked: !this.state.bg_checked });
   // };
   return (
-    <div className="fixed-plugin">
+    <div className='fixed-plugin'>
       <Dropdown>
         <Dropdown.Toggle
-          id="dropdown-fixed-plugin"
-          variant=""
-          className="text-white border-0 opacity-100"
+          id='dropdown-fixed-plugin'
+          variant=''
+          className='text-white border-0 opacity-100'
         >
-          <i className="fas fa-cogs fa-2x mt-1"></i>
+          <i className='fas fa-cogs fa-2x mt-1'></i>
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <li className="adjustments-line d-flex align-items-center justify-content-between">
+          <li className='adjustments-line d-flex align-items-center justify-content-between'>
             <p>Background Image</p>
             <Form.Check
-              type="switch"
-              id="custom-switch-1-image"
+              type='switch'
+              id='custom-switch-1-image'
               checked={hasImage}
               onChange={setHasImage}
             />
           </li>
-          <li className="adjustments-line mt-3">
+          <li className='adjustments-line mt-3'>
             <p>Filters</p>
-            <div className="pull-right">
+            <div className='pull-right'>
               <Badge
-                variant="secondary"
-                className={color === "black" ? "active" : ""}
-                onClick={() => setColor("black")}
+                variant='secondary'
+                className={color === 'black' ? 'active' : ''}
+                onClick={() => setColor('black')}
               ></Badge>
               <Badge
-                variant="azure"
-                className={color === "azure" ? "active" : ""}
-                onClick={() => setColor("azure")}
+                variant='azure'
+                className={color === 'azure' ? 'active' : ''}
+                onClick={() => setColor('azure')}
               ></Badge>
               <Badge
-                variant="green"
-                className={color === "green" ? "active" : ""}
-                onClick={() => setColor("green")}
+                variant='green'
+                className={color === 'green' ? 'active' : ''}
+                onClick={() => setColor('green')}
               ></Badge>
               <Badge
-                variant="orange"
-                className={color === "orange" ? "active" : ""}
-                onClick={() => setColor("orange")}
+                variant='orange'
+                className={color === 'orange' ? 'active' : ''}
+                onClick={() => setColor('orange')}
               ></Badge>
               <Badge
-                variant="red"
-                className={color === "red" ? "active" : ""}
-                onClick={() => setColor("red")}
+                variant='red'
+                className={color === 'red' ? 'active' : ''}
+                onClick={() => setColor('red')}
               ></Badge>
               <Badge
-                variant="purple"
-                className={color === "purple" ? "active" : ""}
-                onClick={() => setColor("purple")}
+                variant='purple'
+                className={color === 'purple' ? 'active' : ''}
+                onClick={() => setColor('purple')}
               ></Badge>
             </div>
-            <div className="clearfix"></div>
+            <div className='clearfix'></div>
           </li>
-          <li className="header-title">Sidebar Images</li>
-          <li className={image === sideBarImage1 ? "active" : ""}>
+          <li className='header-title'>Sidebar Images</li>
+          <li className={image === sideBarImage1 ? 'active' : ''}>
             <a
-              className="img-holder switch-trigger d-block"
-              href="#pablo"
-              onClick={(e) => {
+              className='img-holder switch-trigger d-block'
+              href='#pablo'
+              onClick={e => {
                 e.preventDefault();
                 setImage(sideBarImage1);
               }}
             >
-              <img alt="..." src={sideBarImage1}></img>
+              <img alt='...' src={sideBarImage1}></img>
             </a>
           </li>
-          <li className={image === sideBarImage2 ? "active" : ""}>
+          <li className={image === sideBarImage2 ? 'active' : ''}>
             <a
-              className="img-holder switch-trigger d-block"
-              href="#pablo"
-              onClick={(e) => {
+              className='img-holder switch-trigger d-block'
+              href='#pablo'
+              onClick={e => {
                 e.preventDefault();
                 setImage(sideBarImage2);
               }}
             >
-              <img alt="..." src={sideBarImage2}></img>
+              <img alt='...' src={sideBarImage2}></img>
             </a>
           </li>
-          <li className={image === sideBarImage3 ? "active" : ""}>
+          <li className={image === sideBarImage3 ? 'active' : ''}>
             <a
-              className="img-holder switch-trigger d-block"
-              href="#pablo"
-              onClick={(e) => {
+              className='img-holder switch-trigger d-block'
+              href='#pablo'
+              onClick={e => {
                 e.preventDefault();
                 setImage(sideBarImage3);
               }}
             >
-              <img alt="..." src={sideBarImage3}></img>
+              <img alt='...' src={sideBarImage3}></img>
             </a>
           </li>
-          <li className={image === sideBarImage4 ? "active" : ""}>
+          <li className={image === sideBarImage4 ? 'active' : ''}>
             <a
-              className="img-holder switch-trigger d-block"
-              href="#pablo"
-              onClick={(e) => {
+              className='img-holder switch-trigger d-block'
+              href='#pablo'
+              onClick={e => {
                 e.preventDefault();
                 setImage(sideBarImage4);
               }}
             >
-              <img alt="..." src={sideBarImage4}></img>
+              <img alt='...' src={sideBarImage4}></img>
             </a>
           </li>
-          <li className="button-container">
+          <li className='button-container'>
             <div>
               <Button
                 block
-                className="btn-fill"
-                href="http://www.creative-tim.com/product/light-bootstrap-dashboard-react"
-                rel="noopener noreferrer"
-                target="_blank"
-                variant="info"
+                className='btn-fill'
+                href='http://www.creative-tim.com/product/light-bootstrap-dashboard-react'
+                rel='noopener noreferrer'
+                target='_blank'
+                variant='info'
               >
                 Download, it's free!
               </Button>
             </div>
           </li>
-          <li className="button-container">
+          <li className='button-container'>
             <div>
               <Button
                 block
-                className="btn-fill"
-                href="http://www.creative-tim.com/product/light-bootstrap-dashboard-react"
-                rel="noopener noreferrer"
-                target="_blank"
-                variant="default"
+                className='btn-fill'
+                href='http://www.creative-tim.com/product/light-bootstrap-dashboard-react'
+                rel='noopener noreferrer'
+                target='_blank'
+                variant='default'
               >
                 Checkout docs.
               </Button>
             </div>
           </li>
-          <li className="header-title pro-title text-center">
+          <li className='header-title pro-title text-center'>
             Want more components?
           </li>
-          <li className="button-container">
+          <li className='button-container'>
             <div>
               <Button
                 block
-                className="btn-fill"
-                href="http://www.creative-tim.com/product/light-bootstrap-dashboard-pro-react"
-                rel="noopener noreferrer"
-                target="_blank"
-                variant="primary"
+                className='btn-fill'
+                href='http://www.creative-tim.com/product/light-bootstrap-dashboard-pro-react'
+                rel='noopener noreferrer'
+                target='_blank'
+                variant='primary'
               >
                 Get The PRO Version!
               </Button>
             </div>
           </li>
-          <li className="header-title" id="sharrreTitle">
+          <li className='header-title' id='sharrreTitle'>
             Thank you for sharing!
           </li>
-          <li className="button-container mb-4">
+          <li className='button-container mb-4'>
             <Button
-              className="btn-social btn-outline btn-round sharrre"
-              id="twitter"
-              variant="twitter"
+              className='btn-social btn-outline btn-round sharrre'
+              id='twitter'
+              variant='twitter'
             >
-              <i className="fab fa-twitter"></i>· 256
+              <i className='fab fa-twitter'></i>· 256
             </Button>
             <Button
-              className="btn-social btn-outline btn-round sharrre"
-              id="facebook"
-              variant="facebook"
+              className='btn-social btn-outline btn-round sharrre'
+              id='facebook'
+              variant='facebook'
             >
-              <i className="fab fa-facebook-square"></i>· 426
+              <i className='fab fa-facebook-square'></i>· 426
             </Button>
           </li>
         </Dropdown.Menu>

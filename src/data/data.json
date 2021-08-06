@@ -1,1 +1,102 @@
-[{"lat":47.179,"lng":8.518,"name":"Station 1","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.18,"lng":8.518,"name":"Station 2","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.181,"lng":8.518,"name":"Station 3","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.182,"lng":8.518,"name":"Station 4","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.183,"lng":8.518,"name":"Station 5","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.184,"lng":8.518,"name":"Station 6","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.185,"lng":8.518,"name":"Station 7","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.186,"lng":8.518,"name":"Station 8","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.187,"lng":8.518,"name":"Station 9","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16},{"lat":47.188,"lng":8.518,"name":"Station 10","status":"AVAILABLE","format":"SOCKET","power_type":"AC_3_PHASE","max_voltage":220,"max_amperage":16}]
+[
+  {
+    "lat": 47.179,
+    "lng": 8.518,
+    "name": "Station 1",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.18,
+    "lng": 8.518,
+    "name": "Station 2",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.181,
+    "lng": 8.518,
+    "name": "Station 3",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.182,
+    "lng": 8.518,
+    "name": "Station 4",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.183,
+    "lng": 8.518,
+    "name": "Station 5",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.184,
+    "lng": 8.518,
+    "name": "Station 6",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.185,
+    "lng": 8.518,
+    "name": "Station 7",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.186,
+    "lng": 8.518,
+    "name": "Station 8",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.187,
+    "lng": 8.518,
+    "name": "Station 9",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  },
+  {
+    "lat": 47.188,
+    "lng": 8.518,
+    "name": "Station 10",
+    "status": "AVAILABLE",
+    "format": "SOCKET",
+    "power_type": "AC_3_PHASE",
+    "max_voltage": 220,
+    "max_amperage": 16
+  }
+]

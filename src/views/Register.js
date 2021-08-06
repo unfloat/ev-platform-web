@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { connect } from 'react-redux'
-import { registerUser } from '../actions/authActions'
-import { useHistory } from "react-router-dom";
-
+import React, { useEffect, useRef, useState } from 'react';
+import { connect } from 'react-redux';
+import { registerUser } from '../actions/authActions';
+import { Redirect } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -17,28 +17,30 @@ import {
   InputGroupText,
   Row,
   Alert,
-  Label
-} from 'reactstrap'
+  Label,
+} from 'reactstrap';
 
-function Register({ registerUser }) {
-  const history = useHistory();
-
+function Register({ isAuthenticated, registerUser }) {
   const [credentials, setCredentials] = useState({
     name: '',
     email: '',
     password: '',
-    role: 'MSP'
-  })
+    role: 'MSP',
+  });
 
   const handleInputChange = (value, fieldName) => {
-    setCredentials(prevState => ({ ...prevState, [fieldName]: value }))
-  }
+    setCredentials(prevState => ({ ...prevState, [fieldName]: value }));
+  };
 
   const register = () => {
-    if (!credentials.email && !credentials.name && !credentials.password) return;
+    if (!credentials.email && !credentials.name && !credentials.password)
+      return;
     registerUser(credentials);
-    history.push("/admin/dashboard");
+  };
+  const { state } = useLocation();
 
+  if (isAuthenticated === true) {
+    return <Redirect to={state?.from || '/admin/dashboard'} />;
   }
 
   return (
@@ -60,7 +62,9 @@ function Register({ registerUser }) {
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        onChange={(e) => handleInputChange(e.target.value, e.target.name)}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
                         type='text'
                         placeholder='Email'
                         autoComplete='email'
@@ -75,7 +79,9 @@ function Register({ registerUser }) {
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        onChange={(e) => handleInputChange(e.target.value, e.target.name)}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
                         type='text'
                         placeholder='Name'
                         autoComplete='name'
@@ -90,7 +96,9 @@ function Register({ registerUser }) {
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        onChange={(e) => handleInputChange(e.target.value, e.target.name)}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
                         type='password'
                         placeholder='Password'
                         autoComplete='current-password'
@@ -100,10 +108,14 @@ function Register({ registerUser }) {
                     </InputGroup>
                     <InputGroup className='mb-4'>
                       <Label check>
-                        <Input type="checkbox"
-                          name="role"
-                          onChange={(e) => handleInputChange(e.target.value, e.target.name)}
-                          value={credentials.role} />
+                        <Input
+                          type='checkbox'
+                          name='role'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
+                          value={credentials.role}
+                        />
                         Je suis CPO
                       </Label>
                     </InputGroup>
@@ -127,17 +139,16 @@ function Register({ registerUser }) {
         </Row>
       </Container>
     </div>
-  )
+  );
 }
 
-
 const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors
-})
+  isAuthenticated: state.auth.isAuthenticated,
+  errors: state.errors,
+});
 
 const mapDispatchToProps = dispatch => ({
-  registerUser: (credentials) => dispatch(registerUser(credentials))
-})
+  registerUser: credentials => dispatch(registerUser(credentials)),
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register)
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

@@ -1,22 +1,17 @@
-import axios from "../api";
-import {
-  GET_EVSES,
-  CLEAR_ERRORS,
-  GET_ERRORS,
-  EVSE_LOADING
-} from "./types";
+import axios from '../api';
+import { GET_EVSES, CLEAR_ERRORS, GET_ERRORS, EVSE_LOADING } from './types';
 
 export const getEvses = () => dispatch => {
   dispatch(setStationLoading());
   axios
-    .get("/stations/")
+    .get('/stations/')
     .then(res => {
       console.log(res);
       console.log(res.data);
 
       dispatch({
         type: GET_EVSES,
-        payload: res.data
+        payload: res.data,
       });
     })
     .catch(error => {
@@ -25,24 +20,23 @@ export const getEvses = () => dispatch => {
           type: GET_ERRORS,
           payload: {
             message: error.response.data,
-            visible: true
-          }
-        })
+            visible: true,
+          },
+        });
       }
-    })
+    });
 };
 
 // Set loading state
 export const setEvseLoading = () => {
   return {
-    type: EVSE_LOADING
+    type: EVSE_LOADING,
   };
 };
 
 // Clear errors
 export const clearErrors = () => {
   return {
-    type: CLEAR_ERRORS
+    type: CLEAR_ERRORS,
   };
 };
-    
