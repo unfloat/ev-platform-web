@@ -20,24 +20,24 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Navbar, Container, Nav, Dropdown, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { logoutUser } from '../../actions/authActions';
+import { loginUser, registerUser } from '../../actions/authActions';
 
 import routes from 'routes.js';
 
-function Header({ logoutUser }) {
+function GuestHeader() {
   const history = useHistory();
   const location = useLocation();
-  const mobileSidebarToggle = e => {
-    e.preventDefault();
-    document.documentElement.classList.toggle('nav-open');
-    let node = document.createElement('div');
-    node.id = 'bodyClick';
-    node.onclick = function () {
-      this.parentElement.removeChild(this);
-      document.documentElement.classList.toggle('nav-open');
-    };
-    document.body.appendChild(node);
-  };
+  // const mobileSidebarToggle = e => {
+  //   e.preventDefault();
+  //   document.documentElement.classList.toggle('nav-open');
+  //   let node = document.createElement('div');
+  //   node.id = 'bodyClick';
+  //   node.onclick = function () {
+  //     this.parentElement.removeChild(this);
+  //     document.documentElement.classList.toggle('nav-open');
+  //   };
+  //   document.body.appendChild(node);
+  // };
 
   const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
@@ -48,22 +48,30 @@ function Header({ logoutUser }) {
     return 'EV Charging';
   };
 
-  const logout = () => {
-    logoutUser();
+  const login = () => {
+    loginUser();
     history.push('/guest/login');
+  };
+
+  const register = () => {
+    registerUser();
+    history.push('/guest/register');
+  };
+  const map = () => {
+    history.push('/guest/map');
   };
 
   return (
     <Navbar bg='light' expand='lg'>
       <Container fluid>
         <div className='d-flex justify-content-center align-items-center ml-2 ml-lg-0'>
-          <Button
+          {/* <Button
             variant='dark'
             className='d-lg-none btn-fill d-flex justify-content-center align-items-center rounded-circle p-2'
             onClick={mobileSidebarToggle}
           >
             <i className='fas fa-ellipsis-v' />
-          </Button>
+          </Button> */}
           <Navbar.Brand
             href='#home'
             onClick={e => e.preventDefault()}
@@ -86,55 +94,25 @@ function Header({ logoutUser }) {
                 onClick={e => e.preventDefault()}
                 className='m-0'
               >
-                {/* <i className='nc-icon nc-palette' /> */}
                 <span className='d-lg-none ml-1'>Dashboard</span>
               </Nav.Link>
             </Nav.Item>
           </Nav>
           <Nav className='ml-auto' navbar>
             <Nav.Item>
-              <Nav.Link
-                className='m-0'
-                href='#pablo'
-                onClick={e => e.preventDefault()}
-              >
-                <span className='no-icon'>Account</span>
+              <Nav.Link className='m-0' onClick={map}>
+                <span className='no-icon'>Carte</span>
               </Nav.Link>
             </Nav.Item>
-            <Dropdown as={Nav.Item}>
-              <Dropdown.Toggle
-                aria-expanded={false}
-                aria-haspopup
-                as={Nav.Link}
-                data-toggle='dropdown'
-                id='navbarDropdownMenuLink'
-                variant='default'
-                className='m-0'
-              >
-                <span className='no-icon'>Dropdown</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu aria-labelledby='navbarDropdownMenuLink'>
-                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
-                  Action
-                </Dropdown.Item>
-                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
-                  Another action
-                </Dropdown.Item>
-                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
-                  Something
-                </Dropdown.Item>
-                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
-                  Something else here
-                </Dropdown.Item>
-                <div className='divider' />
-                <Dropdown.Item href='#pablo' onClick={e => e.preventDefault()}>
-                  Separated link
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
             <Nav.Item>
-              <Nav.Link className='m-0' onClick={logout}>
-                <span className='no-icon'>Log out</span>
+              <Nav.Link className='m-0' onClick={register}>
+                <span className='no-icon'>S'inscrire</span>
+              </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link className='m-0' onClick={login}>
+                <span className='no-icon'>S'identifier</span>
               </Nav.Link>
             </Nav.Item>
           </Nav>
@@ -150,7 +128,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  logoutUser: () => dispatch(logoutUser()),
+  loginUser: () => dispatch(loginUser()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(GuestHeader);

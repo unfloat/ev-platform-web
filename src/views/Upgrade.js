@@ -26,12 +26,10 @@ function Upgrade() {
                   Are you looking for more components? Please check our Premium
                   Version of Light Bootstrap Dashboard React.
                 </p>
-                <br></br>
               </div>
               <Table responsive>
                 <thead>
                   <tr>
-                    <th></th>
                     <th className='text-center'>Free</th>
                     <th className='text-center'>PRO</th>
                   </tr>
@@ -55,46 +53,44 @@ function Upgrade() {
                   <tr>
                     <td>Documentation</td>
                     <td>
-                      <i className='fas fa-times text-danger'></i>
+                      <i className='fas fa-times text-danger' />
                     </td>
                     <td>
-                      <i className='fas fa-check text-success'></i>
+                      <i className='fas fa-check text-success' />
                     </td>
                   </tr>
                   <tr>
                     <td>SASS Files</td>
                     <td>
-                      <i className='fas fa-times text-danger'></i>
+                      <i className='fas fa-times text-danger' />
                     </td>
                     <td>
-                      <i className='fas fa-check text-success'></i>
+                      <i className='fas fa-check text-success' />
                     </td>
                   </tr>
                   <tr>
                     <td>Login/Register/Lock Pages</td>
                     <td>
-                      <i className='fas fa-times text-danger'></i>
+                      <i className='fas fa-times text-danger' />
                     </td>
                     <td>
-                      <i className='fas fa-check text-success'></i>
+                      <i className='fas fa-check text-success' />
                     </td>
                   </tr>
                   <tr>
                     <td>Premium Support</td>
                     <td>
-                      <i className='fas fa-times text-danger'></i>
+                      <i className='fas fa-times text-danger' />
                     </td>
                     <td>
-                      <i className='fas fa-check text-success'></i>
+                      <i className='fas fa-check text-success' />
                     </td>
                   </tr>
                   <tr>
-                    <td></td>
                     <td>Free</td>
                     <td>Just $49</td>
                   </tr>
                   <tr className='last-row'>
-                    <td></td>
                     <td>
                       <Button
                         className='btn-round btn-fill disabled'

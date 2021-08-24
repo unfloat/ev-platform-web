@@ -1,6 +1,10 @@
 import React from 'react';
 import ChartistGraph from 'react-chartist';
 // react-bootstrap components
+import { Redirect } from 'react-router-dom';
+
+import { useHistory, useLocation } from 'react-router-dom';
+
 import {
   Badge,
   Button,
@@ -16,7 +20,7 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 
-function Dashboard() {
+function Dashboard({ isAuthenticated }) {
   return (
     <>
       <Container fluid>

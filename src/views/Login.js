@@ -22,7 +22,6 @@ import {
 
 function Login({ isAuthenticated, loginUser }) {
   const history = useHistory();
-  const [redirectToReferrer, setRedirectToReferrer] = React.useState(false);
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -41,7 +40,8 @@ function Login({ isAuthenticated, loginUser }) {
   };
 
   if (isAuthenticated === true) {
-    return <Redirect to={state?.from || '/admin/dashboard'} />;
+    // console.log('state.from', state.from);
+    return <Redirect to={state?.from || '/admin/maps'} />;
   }
 
   const register = () => {
@@ -107,9 +107,7 @@ function Login({ isAuthenticated, loginUser }) {
                       </Col>
                     </Row>
                   </Form>
-
                   <p className='text-muted'>No account yet?</p>
-
                   <Row>
                     <Col xs='6'>
                       <Button

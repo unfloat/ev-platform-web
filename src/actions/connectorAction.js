@@ -1,18 +1,18 @@
 import axios from '../api';
 import {
-  GET_LOCATIONS,
+  GET_CONNECTORS,
   CLEAR_ERRORS,
   GET_ERRORS,
-  LOCATION_LOADING,
+  CONNECTOR_LOADING,
 } from './types';
 
-export const getLocations = () => dispatch => {
-  dispatch(setLocationLoading());
+export const getConnectors = () => dispatch => {
+  dispatch(setConnectorLoading());
   axios
-    .get('/locations')
+    .get('/connectors')
     .then(res => {
       dispatch({
-        type: GET_LOCATIONS,
+        type: GET_CONNECTORS,
         payload: res.data,
       });
     })
@@ -31,9 +31,9 @@ export const getLocations = () => dispatch => {
 
 // Set station loading
 
-export const setLocationLoading = () => {
+export const setConnectorLoading = () => {
   return {
-    type: LOCATION_LOADING,
+    type: CONNECTOR_LOADING,
   };
 };
 

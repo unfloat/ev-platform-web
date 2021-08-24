@@ -9,7 +9,7 @@ export const registerUser = userData => dispatch => {
       const { token, user } = res.data;
       localStorage.setItem('token', token.accessToken);
       dispatch(clearErrors());
-      dispatch(setCurrentUser(user));
+      dispatch(setCurrentUser(user, token));
     })
     .catch(err =>
       dispatch({
@@ -29,7 +29,7 @@ export const loginUser = userData => dispatch => {
     .then(res => {
       const { token, user } = res.data;
       localStorage.setItem('token', token.accessToken);
-      console.log('HERE');
+      console.log(localStorage.getItem('token'));
       dispatch(clearErrors());
       dispatch(setCurrentUser(user));
     })

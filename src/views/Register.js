@@ -37,10 +37,10 @@ function Register({ isAuthenticated, registerUser }) {
       return;
     registerUser(credentials);
   };
-  const { state } = useLocation();
+  // const { state } = useLocation();
 
   if (isAuthenticated === true) {
-    return <Redirect to={state?.from || '/admin/dashboard'} />;
+    return <Redirect to={'/admin/dashboard'} />;
   }
 
   return (
@@ -51,87 +51,86 @@ function Register({ isAuthenticated, registerUser }) {
             <CardGroup>
               <Card className='p-4'>
                 <CardBody>
-                  <Form>
-                    <h1>Sign Up</h1>
-                    <p className='text-muted'>Create your account</p>
+                  <Form afterSubmit={() => history.push('/admin/dashboard')} />
+                  <h1>Sign Up</h1>
+                  <p className='text-muted'>Create your account</p>
 
-                    <InputGroup className='mb-3'>
-                      <InputGroupAddon addonType='prepend'>
-                        <InputGroupText>
-                          <i className='icon-user' />
-                        </InputGroupText>
-                      </InputGroupAddon>
+                  <InputGroup className='mb-3'>
+                    <InputGroupAddon addonType='prepend'>
+                      <InputGroupText>
+                        <i className='icon-user' />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      onChange={e =>
+                        handleInputChange(e.target.value, e.target.name)
+                      }
+                      type='text'
+                      placeholder='Email'
+                      autoComplete='email'
+                      name='email'
+                      value={credentials.email}
+                    />
+                  </InputGroup>
+                  <InputGroup className='mb-3'>
+                    <InputGroupAddon addonType='prepend'>
+                      <InputGroupText>
+                        <i className='icon-user' />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      onChange={e =>
+                        handleInputChange(e.target.value, e.target.name)
+                      }
+                      type='text'
+                      placeholder='Name'
+                      autoComplete='name'
+                      name='name'
+                      value={credentials.name}
+                    />
+                  </InputGroup>
+                  <InputGroup className='mb-4'>
+                    <InputGroupAddon addonType='prepend'>
+                      <InputGroupText>
+                        <i className='icon-lock' />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      onChange={e =>
+                        handleInputChange(e.target.value, e.target.name)
+                      }
+                      type='password'
+                      placeholder='Password'
+                      autoComplete='current-password'
+                      name='password'
+                      value={credentials.password}
+                    />
+                  </InputGroup>
+                  <InputGroup className='mb-4'>
+                    <Label check>
                       <Input
+                        type='checkbox'
+                        name='role'
                         onChange={e =>
                           handleInputChange(e.target.value, e.target.name)
                         }
-                        type='text'
-                        placeholder='Email'
-                        autoComplete='email'
-                        name='email'
-                        value={credentials.email}
+                        value={credentials.role}
                       />
-                    </InputGroup>
-                    <InputGroup className='mb-3'>
-                      <InputGroupAddon addonType='prepend'>
-                        <InputGroupText>
-                          <i className='icon-user' />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        onChange={e =>
-                          handleInputChange(e.target.value, e.target.name)
-                        }
-                        type='text'
-                        placeholder='Name'
-                        autoComplete='name'
-                        name='name'
-                        value={credentials.name}
-                      />
-                    </InputGroup>
-                    <InputGroup className='mb-4'>
-                      <InputGroupAddon addonType='prepend'>
-                        <InputGroupText>
-                          <i className='icon-lock' />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        onChange={e =>
-                          handleInputChange(e.target.value, e.target.name)
-                        }
-                        type='password'
-                        placeholder='Password'
-                        autoComplete='current-password'
-                        name='password'
-                        value={credentials.password}
-                      />
-                    </InputGroup>
-                    <InputGroup className='mb-4'>
-                      <Label check>
-                        <Input
-                          type='checkbox'
-                          name='role'
-                          onChange={e =>
-                            handleInputChange(e.target.value, e.target.name)
-                          }
-                          value={credentials.role}
-                        />
-                        Je suis CPO
-                      </Label>
-                    </InputGroup>
-                    <Row>
-                      <Col xs='6'>
-                        <Button
-                          color='primary'
-                          className='px-4'
-                          name='connectButton'
-                          onClick={register}
-                        >
-                          Sign up
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form>
+                      Je suis CPO
+                    </Label>
+                  </InputGroup>
+                  <Row>
+                    <Col xs='6'>
+                      <Button
+                        color='primary'
+                        className='px-4'
+                        name='connectButton'
+                        onClick={register}
+                      >
+                        Sign up
+                      </Button>
+                    </Col>
+                  </Row>
                 </CardBody>
               </Card>
             </CardGroup>

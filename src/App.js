@@ -28,23 +28,27 @@ import './assets/css/demo.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import AdminLayout from 'layouts/Admin';
+import GuestLayout from 'layouts/Guest';
 import Login from 'views/Login';
 import Register from 'views/Register';
 import PrivateRoute from 'components/PrivateRoute';
-// import { ProvideAuth } from './hooks/use-auth';
 
 function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route path='/login' render={props => <Login {...props} />} />
+          {/* <Route path='/login' render={props => <Login {...props} />} /> */}
+          <Route exact path='/'>
+            <Redirect to='/admin/dashboard' />
+          </Route>
+          <Route path='/guest' render={props => <GuestLayout {...props} />} />
 
           <PrivateRoute
-            path='/admin/dashboard'
+            path='/admin'
             render={props => <AdminLayout {...props} />}
           />
-          <Route path='/register' render={props => <Register {...props} />} />
+          {/* <Route path='/register' render={props => <Register {...props} />} /> */}
         </Switch>
       </BrowserRouter>
     </Provider>

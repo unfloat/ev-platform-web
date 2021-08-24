@@ -6,9 +6,6 @@ export const getEvses = () => dispatch => {
   axios
     .get('/stations/')
     .then(res => {
-      console.log(res);
-      console.log(res.data);
-
       dispatch({
         type: GET_EVSES,
         payload: res.data,

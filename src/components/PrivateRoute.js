@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router';
 
 const PrivateRoute = ({ isAuthenticated, children, ...rest }) => {
-  if (!isAuthenticated)
-    return <Redirect to={{ pathname: '/login', state: { from: location } }} />;
+  if (!isAuthenticated) return <Redirect to={{ pathname: '/guest/login' }} />;
+  // console.log('location', location);
   // TODO: redirect by user role
   // if (type === 'MSP' && !isAuthUser)
   //   return <Redirect to={{ pathname: '/login', state: { from: location } }} />;

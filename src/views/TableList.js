@@ -16,7 +16,6 @@ import {
 } from 'react-bootstrap';
 
 function TableList({ loading, locations, getLocations }) {
-  const mapRef = React.useRef(null);
   const mountRef = React.useRef(false);
   useEffect(() => {
     getLocations();

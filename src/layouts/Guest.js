@@ -18,26 +18,22 @@
 import React from 'react';
 import { useLocation, Route, Switch } from 'react-router-dom';
 
-import AdminNavbar from 'components/Navbars/AdminNavbar';
-import Footer from 'components/Footer/Footer';
-import Sidebar from 'components/Sidebar/Sidebar';
-
+import FixedPlugin from 'components/FixedPlugin/FixedPlugin.js';
 import routes from 'routes.js';
 
-// import sidebarImage from 'assets/img/ev-sidebar.jpg';
-import sidebarImage from 'assets/img/EV.png';
+import GuestFooter from 'components/Footer/GuestFooter';
+import GuestNavbar from 'components/Navbars/GuestNavbar';
 
 import { connect } from 'react-redux';
 
-function Admin({ isAuthenticated }) {
-  const [image, setImage] = React.useState(sidebarImage);
+function Guest({ isAuthenticated }) {
   const [color, setColor] = React.useState('black');
-  const [hasImage, setHasImage] = React.useState(true);
   const location = useLocation();
   const mainPanel = React.useRef(null);
+
   const getRoutes = routes => {
     return routes.map((prop, key) => {
-      if (prop.layout === '/admin') {
+      if (prop.layout === '/guest') {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -51,30 +47,28 @@ function Admin({ isAuthenticated }) {
     });
   };
 
-  React.useEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    mainPanel.current.scrollTop = 0;
-    if (
-      window.innerWidth < 993 &&
-      document.documentElement.className.indexOf('nav-open') !== -1
-    ) {
-      document.documentElement.classList.toggle('nav-open');
-      let element = document.getElementById('bodyClick');
-      element.parentNode.removeChild(element);
-    }
-  }, [location]);
-
+  // React.useEffect(() => {
+  //   document.documentElement.scrollTop = 0;
+  //   document.scrollingElement.scrollTop = 0;
+  //   mainPanel.current.scrollTop = 0;
+  //   if (
+  //     window.innerWidth < 993 &&
+  //     document.documentElement.className.indexOf('nav-open') !== -1
+  //   ) {
+  //     document.documentElement.classList.toggle('nav-open');
+  //     let element = document.getElementById('bodyClick');
+  //     element.parentNode.removeChild(element);
+  //   }
+  // }, [location]);
   return (
     <>
       <div className='wrapper'>
-        <Sidebar color={color} image={hasImage ? image : ''} routes={routes} />
-        <div className='main-panel' ref={mainPanel}>
-          <AdminNavbar />
-          <div className='content'>
+        <div className='main-panel' style={{ width: '100%' }} ref={mainPanel}>
+          <GuestNavbar />
+          <div className='content' style={{ marginTop: -20 }}>
             <Switch>{getRoutes(routes)}</Switch>
           </div>
-          <Footer />
+          <GuestFooter />
         </div>
       </div>
     </>
@@ -83,4 +77,4 @@ function Admin({ isAuthenticated }) {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
-export default connect(mapStateToProps)(Admin);
+export default connect(mapStateToProps)(Guest);
