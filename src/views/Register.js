@@ -2,42 +2,50 @@ import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { registerUser } from '../actions/authActions';
 import { Redirect } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+// react-bootstrap components
 import {
+  ToggleButton,
   Button,
   Card,
-  CardBody,
-  CardGroup,
-  Col,
-  Container,
   Form,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
+  ButtonGroup,
+  Nav,
+  Container,
   Row,
-  Alert,
-  Label,
-} from 'reactstrap';
+  Col,
+} from 'react-bootstrap';
 
 function Register({ isAuthenticated, registerUser }) {
   const [credentials, setCredentials] = useState({
-    name: '',
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
-    role: 'MSP',
+    role: '',
   });
+  const [role, setRole] = useState('');
+
+  const roles = [
+    { name: 'CPO', value: 'CPO' },
+    { name: 'MSP', value: 'MSP' },
+  ];
 
   const handleInputChange = (value, fieldName) => {
     setCredentials(prevState => ({ ...prevState, [fieldName]: value }));
   };
 
   const register = () => {
-    if (!credentials.email && !credentials.name && !credentials.password)
+    if (
+      !credentials.email &&
+      !credentials.password &&
+      !credentials.firstname &&
+      !credentials.lastname
+    )
       return;
+    console.log('submitted role', role);
+    credentials.role = role;
     registerUser(credentials);
   };
-  // const { state } = useLocation();
 
   if (isAuthenticated === true) {
     return <Redirect to={'/admin/dashboard'} />;
@@ -48,92 +56,102 @@ function Register({ isAuthenticated, registerUser }) {
       <Container>
         <Row className='justify-content-center'>
           <Col md='8'>
-            <CardGroup>
-              <Card className='p-4'>
-                <CardBody>
-                  <Form afterSubmit={() => history.push('/admin/dashboard')} />
-                  <h1>Sign Up</h1>
-                  <p className='text-muted'>Create your account</p>
-
-                  <InputGroup className='mb-3'>
-                    <InputGroupAddon addonType='prepend'>
-                      <InputGroupText>
-                        <i className='icon-user' />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      onChange={e =>
-                        handleInputChange(e.target.value, e.target.name)
-                      }
-                      type='text'
-                      placeholder='Email'
-                      autoComplete='email'
-                      name='email'
-                      value={credentials.email}
-                    />
-                  </InputGroup>
-                  <InputGroup className='mb-3'>
-                    <InputGroupAddon addonType='prepend'>
-                      <InputGroupText>
-                        <i className='icon-user' />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      onChange={e =>
-                        handleInputChange(e.target.value, e.target.name)
-                      }
-                      type='text'
-                      placeholder='Name'
-                      autoComplete='name'
-                      name='name'
-                      value={credentials.name}
-                    />
-                  </InputGroup>
-                  <InputGroup className='mb-4'>
-                    <InputGroupAddon addonType='prepend'>
-                      <InputGroupText>
-                        <i className='icon-lock' />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      onChange={e =>
-                        handleInputChange(e.target.value, e.target.name)
-                      }
-                      type='password'
-                      placeholder='Password'
-                      autoComplete='current-password'
-                      name='password'
-                      value={credentials.password}
-                    />
-                  </InputGroup>
-                  <InputGroup className='mb-4'>
-                    <Label check>
-                      <Input
-                        type='checkbox'
-                        name='role'
+            <Card>
+              <Card.Header>
+                <Card.Title as='h4'>Inscription</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <Form onSubmit={() => history.push('/admin/dashboard')} />
+                <Row>
+                  <Col md='12'>
+                    <Form.Group>
+                      <Form.Control
+                        placeholder='E-mail'
+                        type='email'
                         onChange={e =>
                           handleInputChange(e.target.value, e.target.name)
                         }
-                        value={credentials.role}
+                        name='email'
+                        value={credentials.email}
                       />
-                      Je suis CPO
-                    </Label>
-                  </InputGroup>
-                  <Row>
-                    <Col xs='6'>
-                      <Button
-                        color='primary'
-                        className='px-4'
-                        name='connectButton'
-                        onClick={register}
-                      >
-                        Sign up
-                      </Button>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </CardGroup>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md='12'>
+                    <Form.Group>
+                      <Form.Control
+                        placeholder='Mot de passe'
+                        type='password'
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
+                        name='password'
+                        value={credentials.password}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md='12'>
+                    <Form.Group>
+                      <Form.Control
+                        type='text'
+                        placeholder='Prénom'
+                        autoComplete='name'
+                        name='firstname'
+                        value={credentials.firstname}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md='12'>
+                    <Form.Group>
+                      <Form.Control
+                        type='text'
+                        placeholder='Nom'
+                        autoComplete='name'
+                        name='lastname'
+                        value={credentials.lastname}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <ButtonGroup>
+                  {roles.map((role, idx) => (
+                    <ToggleButton
+                      key={idx}
+                      id={`role-${idx}`}
+                      type='radio'
+                      name='role'
+                      value={role.value}
+                      onChange={e => setRole(e.currentTarget.value)}
+                    >
+                      {role.name}
+                    </ToggleButton>
+                  ))}
+                </ButtonGroup>
+                <Row>
+                  <Col xs='6'>
+                    <Button
+                      color='primary'
+                      className='px-4'
+                      name='connectButton'
+                      onClick={register}
+                    >
+                      S'inscrire
+                    </Button>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
       </Container>

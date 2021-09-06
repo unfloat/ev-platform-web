@@ -29,8 +29,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import AdminLayout from 'layouts/Admin';
 import GuestLayout from 'layouts/Guest';
-import Login from 'views/Login';
-import Register from 'views/Register';
 import PrivateRoute from 'components/PrivateRoute';
 
 function App() {

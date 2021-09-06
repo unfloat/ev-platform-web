@@ -29,18 +29,15 @@ export const getVehicules = () => dispatch => {
     });
 };
 
-export const addVehicule = () => dispatch => {
-  dispatch(setVehiculeLoading());
+export const addVehicule = vehiculeData => dispatch => {
   axios
-    .get('/vehicules')
+    .post('/vehicules/', { vehiculeData })
     .then(res => {
-      dispatch({
-        type: GET_VEHICULES,
-        payload: res.data,
-      });
+      console.log(res);
     })
     .catch(error => {
       if (error.response && error.response.data) {
+        console.log(error.response.data);
         dispatch({
           type: GET_ERRORS,
           payload: {
@@ -51,7 +48,6 @@ export const addVehicule = () => dispatch => {
       }
     });
 };
-addVehicule;
 export const setVehiculeLoading = () => {
   return {
     type: VEHICULE_LOADING,

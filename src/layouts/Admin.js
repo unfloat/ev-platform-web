@@ -24,12 +24,11 @@ import Sidebar from 'components/Sidebar/Sidebar';
 
 import routes from 'routes.js';
 
-// import sidebarImage from 'assets/img/ev-sidebar.jpg';
-import sidebarImage from 'assets/img/EV.png';
+import sidebarImage from 'assets/img/ev-sidebar.jpg';
 
 import { connect } from 'react-redux';
 
-function Admin({ isAuthenticated }) {
+function Admin({ isAuthenticated, user }) {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState('black');
   const [hasImage, setHasImage] = React.useState(true);
@@ -82,5 +81,6 @@ function Admin({ isAuthenticated }) {
 }
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
 });
 export default connect(mapStateToProps)(Admin);

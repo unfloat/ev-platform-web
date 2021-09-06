@@ -5,11 +5,24 @@ import { Redirect, Route } from 'react-router';
 
 const PrivateRoute = ({ isAuthenticated, children, ...rest }) => {
   if (!isAuthenticated) return <Redirect to={{ pathname: '/guest/login' }} />;
-  // console.log('location', location);
-  // TODO: redirect by user role
-  // if (type === 'MSP' && !isAuthUser)
-  //   return <Redirect to={{ pathname: '/login', state: { from: location } }} />;
+  // if (user.role === 'CPO' && isAuthenticated) console.log(rest);
   return <Route {...rest} />;
+
+  //   <Route
+  //   {...rest}
+  //   render={({ location }) =>
+  //     auth.user ? (
+  //       children
+  //     ) : (
+  //       <Redirect
+  //         to={{
+  //           pathname: "/login",
+  //           state: { from: location }
+  //         }}
+  //       />
+  //     )
+  //   }
+  // />
 };
 
 const mapStateToProps = state => ({

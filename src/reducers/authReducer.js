@@ -3,9 +3,11 @@ import { SET_CURRENT_USER } from '../actions/types';
 
 const initialState = {
   isAuthenticated: !!localStorage.getItem('token'),
-  user: {},
+  user: localStorage.getItem('user'),
   profile: {},
 };
+
+// localStorage.getItem('user')
 
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -14,6 +16,7 @@ export default function (state = initialState, action) {
         ...state,
         isAuthenticated: !isEmpty(action.payload),
         user: action.payload,
+        profile: action.payload,
       };
     default:
       return state;

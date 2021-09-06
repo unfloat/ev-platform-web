@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { updateProfile } from '../actions/authActions';
+import { connect } from 'react-redux';
 
 // react-bootstrap components
 import {
@@ -13,7 +15,36 @@ import {
   Col,
 } from 'react-bootstrap';
 
-function User() {
+function User({ user }) {
+  const [role, setRole] = useState('1');
+  const [localUser, setlocalUser] = useState(user);
+  const [profileProperties, setprofileProperties] = useState({
+    // email: '',
+    firstname: '',
+    // lastname: '',
+    // address: '',
+    // city: '',
+    // country: '',
+    // about: '',
+  });
+  console.log(user);
+
+  const roles = [
+    { name: 'CPO', value: 'CPO' },
+    { name: 'MSP', value: 'MSP' },
+  ];
+
+  const handleInputChange = (value, fieldName) => {
+    setprofileProperties(prevState => ({ ...prevState, [fieldName]: value }));
+  };
+
+  const _updateProfile = localUser => {
+    // !Profile.email && !Profile.password &&
+    if (!profileProperties.firstname) return;
+    console.log('profileProperties', profileProperties, 'local', localUser);
+    updateProfile(profileProperties);
+  };
+
   return (
     <>
       <Container fluid>
@@ -21,59 +52,98 @@ function User() {
           <Col md='8'>
             <Card>
               <Card.Header>
-                <Card.Title as='h4'>Edit Profile</Card.Title>
+                <Card.Title as='h4'>Modifier profil</Card.Title>
               </Card.Header>
               <Card.Body>
                 <Form>
                   <Row>
-                    <Col className='pr-1' md='5'>
+                    <Col md='12'>
                       <Form.Group>
-                        <label>Company (disabled)</label>
+                        <label htmlFor='exampleInputEmail1'>E-mail</label>
                         <Form.Control
-                          defaultValue='Creative Code Inc.'
-                          disabled
-                          placeholder='Company'
-                          type='text'
+                          defaultValue={user.email}
+                          placeholder='E-mail'
+                          type='email'
+                          name='email'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
                         />
-                      </Form.Group>
-                    </Col>
-                    <Col className='px-1' md='3'>
-                      <Form.Group>
-                        <label>Username</label>
-                        <Form.Control
-                          defaultValue='michael23'
-                          placeholder='Username'
-                          type='text'
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col className='pl-1' md='4'>
-                      <Form.Group>
-                        <label htmlFor='exampleInputEmail1'>
-                          Email address
-                        </label>
-                        <Form.Control placeholder='Email' type='email' />
                       </Form.Group>
                     </Col>
                   </Row>
                   <Row>
                     <Col className='pr-1' md='6'>
                       <Form.Group>
-                        <label>First Name</label>
+                        <label>Prénom</label>
                         <Form.Control
-                          defaultValue='Mike'
-                          placeholder='Company'
+                          defaultValue={user.firstname}
+                          placeholder='Prénom'
                           type='text'
+                          name='firstname'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
                         />
                       </Form.Group>
                     </Col>
-                    <Col className='pl-1' md='6'>
+                    {/* <Col className='pl-1' md='6'>
                       <Form.Group>
-                        <label>Last Name</label>
+                        <label>Nom</label>
                         <Form.Control
-                          defaultValue='Andrew'
-                          placeholder='Last Name'
+                          defaultValue={user.lastname}
+                          placeholder='Nom'
                           type='text'
+                          name='lastname'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
+                        />
+                      </Form.Group>
+                    </Col> */}
+                  </Row>
+                  {/* <Row>
+                    <Col md='12'>
+                      <Form.Group>
+                        <label>Addresse</label>
+                        <Form.Control
+                          defaultValue={user.adress}
+                          placeholder='Addresse'
+                          type='text'
+                          name='adress'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className='pr-1' md='6'>
+                      <Form.Group>
+                        <label>Ville</label>
+                        <Form.Control
+                          defaultValue={user.city}
+                          placeholder='Ville'
+                          type='text'
+                          name='city'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col className='px-1' md='6'>
+                      <Form.Group>
+                        <label>Pays</label>
+                        <Form.Control
+                          defaultValue={user.country}
+                          placeholder='Pays'
+                          type='text'
+                          name='country'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
                         />
                       </Form.Group>
                     </Col>
@@ -81,66 +151,31 @@ function User() {
                   <Row>
                     <Col md='12'>
                       <Form.Group>
-                        <label>Address</label>
-                        <Form.Control
-                          defaultValue='Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09'
-                          placeholder='Home Address'
-                          type='text'
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className='pr-1' md='4'>
-                      <Form.Group>
-                        <label>City</label>
-                        <Form.Control
-                          defaultValue='Mike'
-                          placeholder='City'
-                          type='text'
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col className='px-1' md='4'>
-                      <Form.Group>
-                        <label>Country</label>
-                        <Form.Control
-                          defaultValue='Andrew'
-                          placeholder='Country'
-                          type='text'
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col className='pl-1' md='4'>
-                      <Form.Group>
-                        <label>Postal Code</label>
-                        <Form.Control placeholder='ZIP Code' type='number' />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md='12'>
-                      <Form.Group>
-                        <label>About Me</label>
+                        <label>A propos de moi</label>
                         <Form.Control
                           cols='80'
-                          defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                          that two seat Lambo."
-                          placeholder='Here can be your description'
+                          defaultValue={user.about}
+                          placeholder='Quelques mots à propos de vous'
                           rows='4'
                           as='textarea'
+                          name='about'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
                         />
                       </Form.Group>
                     </Col>
-                  </Row>
+                  </Row> */}
+
+                  <div className='clearfix' />
                   <Button
                     className='btn-fill pull-right'
                     type='submit'
                     variant='info'
+                    onClick={_updateProfile}
                   >
-                    Update Profile
+                    Enregistrer
                   </Button>
-                  <div className='clearfix' />
                 </Form>
               </Card.Body>
             </Card>
@@ -164,9 +199,9 @@ function User() {
                       className='avatar border-gray'
                       src={require('assets/img/faces/face-3.jpg').default}
                     />
-                    <h5 className='title'>Mike Andrew</h5>
+                    <h5 className='title'>{user.firstname}</h5>
                   </a>
-                  <p className='description'>michael24</p>
+                  <p className='description'>{user.firstname}</p>
                 </div>
                 <p className='description text-center'>
                   "Lamborghini Mercy <br />
@@ -209,4 +244,13 @@ function User() {
   );
 }
 
-export default User;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  updateProfile: profileProperties =>
+    dispatch(updateProfile(profileProperties)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(User);

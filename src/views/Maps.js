@@ -1,110 +1,119 @@
-import React, { useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
-import { getLocations } from '../actions/locationAction';
-import { Dropdown, Row, Col, Form } from 'react-bootstrap';
-import { getConnectors } from '../actions/connectorAction';
-import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
+import React, { useRef, useState } from 'react';
+// data
 
-import { InfoBox } from '@react-google-maps/api';
+// UI components
+import { Form, Card, Container, Row, Col } from 'react-bootstrap';
+import Map from './../components/Map';
+// constants
+import greenEnergyTypeOptions from './../constants/greenEnergyTypes';
+import connectorTypeOptions from './../constants/connectorTypes';
+import connectorFormatOptions from './../constants/connectorFormat';
 
-function Maps({ locations, getLocations, connectors, getConnectors }) {
+function Maps() {
   const mapRef = useRef(null);
-  const mountRef = useRef(false);
-
-  function handleLoad() {}
-
-  function hanldePlacesChanged() {}
-
-  function filterByConnectorFormat() {}
-
-  useEffect(() => {
-    getLocations();
-    getConnectors();
-
-    const google = window.google;
-    let map = mapRef.current;
-    const lat = '47.188';
-    const lng = '8.518';
-    const myLatlng = new google.maps.LatLng(lat, lng);
-    const mapOptions = {
-      zoom: 8,
-      center: myLatlng,
-      scrollwheel: false,
-      zoomControl: true,
-    };
-    mapRef.current = new google.maps.Map(map, mapOptions);
-  }, [getLocations, getConnectors, mapRef]);
-
-  useEffect(() => {
-    if (mountRef.current) {
-      const google = window.google;
-      let map = mapRef.current;
-      console.log('Mounted map', map);
-
-      const markers = [];
-      console.log('locations', locations, 'connectors', connectors);
-      for (const location of locations) {
-        markers.push(
-          new google.maps.Marker({
-            position: new window.google.maps.LatLng(
-              location.coordinates.latitude,
-              location.coordinates.longitude
-            ),
-            map: map,
-            animation: google.maps.Animation.DROP,
-            title: location.station_name,
-            info: `Status: ${location.station_name}`,
-            // label: location.is_green_energy
-            //   ? google.maps.MarkerLabel('green')
-            //   : google.maps.MarkerLabel('red'),
-          })
-        );
-        // ? 'green' : 'non green',
-      }
-      // for (const marker of markers) {
-      //   const infoBox = new google.maps.InfoBox(marker.info);
-      //   google.maps.event.addListener(marker, 'click', function () {
-      //     infoBox.open(map, marker);
-      //   });
-      // }
-    } else {
-      mountRef.current = true;
-    }
-  }, [locations, connectors]);
+  const [filterName, setFilterName] = useState('');
+  const [selectedStation, setSelectedStation] = useState(null);
 
   return (
     <>
-      <Row>
-        <Dropdown className='mr-2 ml-2 mb-1'>
-          <Dropdown.Toggle variant='default' id='dropdown-basic'>
-            Pays
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {locations.map(location => {
-              return (
-                <Dropdown.Item
-                  value={location.is_green_energy}
-                  onClick={filterByConnectorFormat}
-                >
-                  {location.is_green_energy}
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Menu>
-        </Dropdown>
-      </Row>
-      <div className='map-container'>
-        <div id='map' ref={mapRef} />
-      </div>
+      <Container fluid>
+        <Row>
+          <Col>
+            <Card>
+              <Card.Header>
+                <Card.Title as='h4'>Filtrer les stations par:</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <Row>
+                  {/* <Col md='4'>
+                    <Form.Control
+                      aria-label='Connector select'
+                      as='select'
+                      custom
+                      onChange={e => setFilterName(e.target.value)}
+                    >
+                      <option defaultValue=''>Type d'Energie</option>
+                      {greenEnergyTypeOptions.map((option, idx) => (
+                        <option key={idx} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Col> */}
+                  <Col md='4'>
+                    <Form.Control
+                      aria-label='Connector select'
+                      as='select'
+                      custom
+                      name='format'
+                      onChange={e =>
+                        setFilterName(e.target.value, e.target.name)
+                      }
+                    >
+                      <option defaultValue=''>Type de format</option>
+                      {connectorFormatOptions.map((option, idx) => (
+                        <option key={idx} value={option.value}>
+                          {option.value}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Col>
+                  {/* <Row>
+                    <Col md='6'>
+                      <Form.Control
+                        aria-label='Connector select'
+                        as='select'
+                        custom
+                        name='format'
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
+                      >
+                        <option defaultValue=''>Type de format</option>
+                        {connectorFormatOptions.map((option, idx) => (
+                          <option key={idx} value={option.value}>
+                            {option.value}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Col>
+                  </Row> */}
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        <Map filterName={filterName}>
+          {/* {selectedStation && (
+          <InfoBox
+            onCloseClick={() => {
+              setSelectedStation(null);
+            }}
+            position={{
+              lat: parseFloat(selectedStation.coordinates.latitude),
+              lng: parseFloat(selectedStation.coordinates.longitude),
+            }}
+          >
+            <Card style={{ width: '18rem' }}>
+              <Card.Img
+                variant='top'
+                src={require('assets/img/station.png').default}
+              />
+              <Card.Body>
+                <Card.Title>{selectedStation.station_name}</Card.Title>
+                <Card.Text>
+                  {selectedStation.address + ' ' + selectedStation.address}
+                </Card.Text>
+                <Button variant='primary'>Go somewhere</Button>
+              </Card.Body>
+            </Card>
+          </InfoBox>
+        )} */}
+        </Map>
+      </Container>
     </>
   );
 }
 
-const mapStateToProps = state => ({
-  errors: state.errors,
-  locations: state.location.locations,
-  connectors: state.connector.connectors,
-  loading: state.location.loading,
-});
-
-export default connect(mapStateToProps, { getLocations, getConnectors })(Maps);
+export default Maps;

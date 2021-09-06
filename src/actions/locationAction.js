@@ -9,7 +9,7 @@ import {
 export const getLocations = () => dispatch => {
   dispatch(setLocationLoading());
   axios
-    .get('/locations')
+    .get('/locations/')
     .then(res => {
       dispatch({
         type: GET_LOCATIONS,
@@ -28,6 +28,8 @@ export const getLocations = () => dispatch => {
       }
     });
 };
+
+//     .get('/locations/saveLocations')
 
 // Set station loading
 

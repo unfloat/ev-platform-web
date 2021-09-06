@@ -9,13 +9,13 @@ export const registerUser = userData => dispatch => {
       const { token, user } = res.data;
       localStorage.setItem('token', token.accessToken);
       dispatch(clearErrors());
-      dispatch(setCurrentUser(user, token));
+      dispatch(setCurrentUser(user));
     })
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
         payload: {
-          message: err.response.data,
+          message: err.response,
           visible: true,
           success: false,
         },
@@ -26,6 +26,32 @@ export const registerUser = userData => dispatch => {
 export const loginUser = userData => dispatch => {
   axios
     .post('/auth/login', userData)
+    .then(res => {
+      const { token, user } = res.data;
+      localStorage.setItem('token', token.accessToken);
+      localStorage.setItem('user', user);
+      console.log(localStorage.getItem('user'));
+      dispatch(clearErrors());
+      dispatch(setCurrentUser(user));
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: {
+          message: err.message,
+          visible: true,
+        },
+      })
+    );
+};
+
+export const updateProfile = (userData, id) => dispatch => {
+  axios
+    .put('/users/', userData, {
+      params: {
+        userId: id,
+      },
+    })
     .then(res => {
       const { token, user } = res.data;
       localStorage.setItem('token', token.accessToken);
