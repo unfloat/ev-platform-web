@@ -8,6 +8,8 @@ export const registerUser = userData => dispatch => {
     .then(res => {
       const { token, user } = res.data;
       localStorage.setItem('token', token.accessToken);
+      localStorage.setItem('user', JSON.stringify(user));
+
       dispatch(clearErrors());
       dispatch(setCurrentUser(user));
     })
@@ -28,9 +30,10 @@ export const loginUser = userData => dispatch => {
     .post('/auth/login', userData)
     .then(res => {
       const { token, user } = res.data;
-      localStorage.setItem('token', token.accessToken);
-      localStorage.setItem('user', user);
-      console.log(localStorage.getItem('user'));
+      localStorage.setItem('token', JSON.stringify(token.accessToken));
+      localStorage.setItem('user', JSON.stringify(user));
+
+      console.log('USER', localStorage.getItem('user'));
       dispatch(clearErrors());
       dispatch(setCurrentUser(user));
     })
@@ -55,7 +58,8 @@ export const updateProfile = (userData, id) => dispatch => {
     .then(res => {
       const { token, user } = res.data;
       localStorage.setItem('token', token.accessToken);
-      console.log(localStorage.getItem('token'));
+
+      localStorage.setItem('user', JSON.stringify(user));
       dispatch(clearErrors());
       dispatch(setCurrentUser(user));
     })
@@ -81,7 +85,8 @@ export const setCurrentUser = decoded => {
 // Log user out
 export const logoutUser = () => dispatch => {
   localStorage.removeItem('token');
-  dispatch(setCurrentUser({}));
+  localStorage.removeItem('user');
+  dispatch(setCurrentUser(null));
 };
 
 // Clear errors

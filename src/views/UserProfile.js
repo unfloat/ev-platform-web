@@ -61,7 +61,6 @@ function User({ user }) {
                       <Form.Group>
                         <label htmlFor='exampleInputEmail1'>E-mail</label>
                         <Form.Control
-                          defaultValue={user.email}
                           placeholder='E-mail'
                           type='email'
                           name='email'
@@ -77,7 +76,6 @@ function User({ user }) {
                       <Form.Group>
                         <label>Prénom</label>
                         <Form.Control
-                          defaultValue={user.firstname}
                           placeholder='Prénom'
                           type='text'
                           name='firstname'
@@ -91,7 +89,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Nom</label>
                         <Form.Control
-                          defaultValue={user.lastname}
+                          
                           placeholder='Nom'
                           type='text'
                           name='lastname'
@@ -107,7 +105,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Addresse</label>
                         <Form.Control
-                          defaultValue={user.adress}
+                          
                           placeholder='Addresse'
                           type='text'
                           name='adress'
@@ -123,7 +121,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Ville</label>
                         <Form.Control
-                          defaultValue={user.city}
+                          
                           placeholder='Ville'
                           type='text'
                           name='city'
@@ -137,7 +135,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Pays</label>
                         <Form.Control
-                          defaultValue={user.country}
+                          
                           placeholder='Pays'
                           type='text'
                           name='country'
@@ -154,7 +152,7 @@ function User({ user }) {
                         <label>A propos de moi</label>
                         <Form.Control
                           cols='80'
-                          defaultValue={user.about}
+                          
                           placeholder='Quelques mots à propos de vous'
                           rows='4'
                           as='textarea'
@@ -197,17 +195,12 @@ function User({ user }) {
                     <img
                       alt='...'
                       className='avatar border-gray'
-                      src={require('assets/img/faces/face-3.jpg').default}
+                      src={require('assets/img/default-avatar.png').default}
                     />
-                    <h5 className='title'>{user.firstname}</h5>
+                    <h5 className='title' />
                   </a>
-                  <p className='description'>{user.firstname}</p>
                 </div>
-                <p className='description text-center'>
-                  "Lamborghini Mercy <br />
-                  Your chick she so thirsty <br />
-                  I'm in that two seat Lambo"
-                </p>
+                <p className='description text-center'>description</p>
               </Card.Body>
               <hr />
               <div className='button-container mr-auto ml-auto'>

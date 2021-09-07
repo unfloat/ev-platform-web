@@ -3,7 +3,9 @@ import { SET_CURRENT_USER } from '../actions/types';
 
 const initialState = {
   isAuthenticated: !!localStorage.getItem('token'),
-  user: localStorage.getItem('user'),
+  user: localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user'))
+    : null,
   profile: {},
 };
 

@@ -18,8 +18,9 @@ import {
   Col,
 } from 'react-bootstrap';
 
-function Vehicule({ vehicules, loading, addVehicule }) {
-  const [vehiculeProperties, setvehiculeProperties] = useState({
+function Vehicule({ vehicules, loading, addVehicule, user }) {
+  const initalValues = {
+    id: '',
     brand: '',
     model: '',
     standard: '',
@@ -27,17 +28,19 @@ function Vehicule({ vehicules, loading, addVehicule }) {
     power_type: '',
     max_voltage: '',
     max_amperage: '',
-  });
+  };
+  const [vehiculeProperties, setvehiculeProperties] = useState(initalValues);
 
   const handleInputChange = (value, fieldName) => {
     setvehiculeProperties(prevState => ({ ...prevState, [fieldName]: value }));
   };
 
-  const add = () => {
-    console.log(vehiculeProperties);
-    if (vehiculeProperties.brand !== '' && vehiculeProperties.model !== '')
-      addVehicule(vehiculeProperties);
-    else return;
+  const add = _user => {
+    if (vehiculeProperties.brand !== '' && vehiculeProperties.model !== '') {
+      addVehicule({ ...vehiculeProperties, id: _user._id });
+      console.log(_user);
+      setvehiculeProperties(initalValues);
+    } else return;
   };
 
   return (
@@ -167,7 +170,7 @@ function Vehicule({ vehicules, loading, addVehicule }) {
           className='btn-fill pull-right'
           type='submit'
           variant='info'
-          onClick={add}
+          onClick={() => add(user)}
         >
           Ajouter
         </Button>
@@ -180,6 +183,7 @@ const mapStateToProps = state => ({
   errors: state.errors,
   vehicules: state.vehicule.vehicules,
   loading: state.vehicule.loading,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { addVehicule })(Vehicule);
