@@ -10,12 +10,22 @@ function Map({
   locations,
   getLocations,
   filterName,
+  filters,
   selectedStation,
 }) {
   const ref = useRef();
   const [map, setMap] = useState();
+  const [markers, setMarkers] = useState();
 
   const addMarkers = (locations, mapInstance) => {
+    // Deleting previous markers before adding the new list of markers
+    if (markers){
+      for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
+      setMarkers([]);
+    }    
+    let tmp = [];
     locations.forEach(location => {
       const marker = new window.google.maps.Marker({
         mapInstance,
@@ -39,7 +49,10 @@ function Map({
       marker.addListener(`mouseout`, () => {
         infowindow.close(mapInstance, marker);
       });
+
+      tmp.push(marker);
     });
+    setMarkers(tmp);
   };
 
   useEffect(() => {
@@ -69,15 +82,46 @@ function Map({
     console.log('locations from the server', locations);
   }, [locations, map]);
 
+  // filter location according to our choices
   useEffect(() => {
-    if (filterName != '') {
-      const filteredLocations = locations.filter(
-        loc => loc.is_green_energy.toString() == filterName
-      );
+    console.log(filters);
+    if (filters.length != 0) {
+      let filteredLocations = locations;
+      if (filters.energy != ''){
+        filteredLocations = filteredLocations.filter(
+          loc => loc.is_green_energy.toString() == filters.energy
+        );
+      }
+      if (filters.format != ''){
+        console.log('format loop');
+        console.log(filters.format);
+        filteredLocations = filteredLocations.map(loc => loc.evses ? 
+          {...loc, evses: loc.evses.filter(item => item.connectors[0].format == filters.format)}:
+          loc
+        );
+      }
+      if (filters.standard != ''){
+        console.log('standard loop');
+        console.log(filters.standard);
+        filteredLocations = filteredLocations.map(loc => loc.evses ? 
+          {...loc, evses: loc.evses.filter(item => item.connectors[0].standard == filters.standard)}:
+          loc
+        );
+      }
       console.log(filteredLocations);
       addMarkers(filteredLocations, map);
     }
-  }, [map, filterName]);
+  }, [map, filters]);
+
+  // useEffect(() => {
+  //   if (filterName != '') {
+  //     const filteredLocations = locations.filter(
+  //       loc => loc.is_green_energy.toString() == filterName
+  //     );
+  //     console.log(filteredLocations);
+  //     addMarkers(filteredLocations, map);
+  //   }
+  // }, [map, filterName]);
 
   // if (map && typeof onMount === `function`) onMount(map, onMountProps);
 

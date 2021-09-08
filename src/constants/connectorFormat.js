@@ -1,4 +1,5 @@
 const connectorFormat = [
+  // { value: '', label: 'Type de format'},
   {
     value: 'SOCKET',
     label:
