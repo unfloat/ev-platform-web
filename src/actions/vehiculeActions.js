@@ -31,7 +31,7 @@ export const getVehicules = () => dispatch => {
 
 export const addVehicule = vehiculeData => dispatch => {
   axios
-    .post('/vehicules', vehiculeData)
+    .post('/vehicules/add', vehiculeData)
     .then(res => {
       console.log(res);
     })

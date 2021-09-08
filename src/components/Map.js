@@ -48,8 +48,6 @@ function Map({
       if (map) {
         setMap(map);
         getLocations();
-
-        // addMarkers(getLocations(), map);
       }
     };
 
@@ -74,12 +72,12 @@ function Map({
   useEffect(() => {
     if (filterName != '') {
       const filteredLocations = locations.filter(
-        loc => loc.evses.connector == filterName
+        loc => loc.is_green_energy.toString() == filterName
       );
       console.log(filteredLocations);
       addMarkers(filteredLocations, map);
     }
-  }, [map, filterName, locations]);
+  }, [map, filterName]);
 
   // if (map && typeof onMount === `function`) onMount(map, onMountProps);
 

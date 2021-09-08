@@ -8,6 +8,7 @@ import Map from './../components/Map';
 import greenEnergyTypeOptions from './../constants/greenEnergyTypes';
 import connectorTypeOptions from './../constants/connectorTypes';
 import connectorFormatOptions from './../constants/connectorFormat';
+import connectorTypes from './../constants/connectorTypes';
 
 function Maps() {
   const mapRef = useRef(null);
@@ -25,7 +26,7 @@ function Maps() {
               </Card.Header>
               <Card.Body>
                 <Row>
-                  {/* <Col md='4'>
+                  <Col md='4'>
                     <Form.Control
                       aria-label='Connector select'
                       as='select'
@@ -39,7 +40,28 @@ function Maps() {
                         </option>
                       ))}
                     </Form.Control>
-                  </Col> */}
+                  </Col>
+                  <Col md='4'>
+                    <Form.Control
+                      aria-label='Connector select'
+                      as='select'
+                      custom
+                      name='format'
+                      onChange={e =>
+                        setFilterName(e.target.value, e.target.name)
+                      }
+                    >
+                      <option defaultValue=''>Type de connecteur</option>
+                      {connectorTypes.map((option, idx) => (
+                        <option key={idx} value={option.value}>
+                          {option.value}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Col>
+                </Row>
+
+                <Row>
                   <Col md='4'>
                     <Form.Control
                       aria-label='Connector select'
@@ -58,26 +80,6 @@ function Maps() {
                       ))}
                     </Form.Control>
                   </Col>
-                  {/* <Row>
-                    <Col md='6'>
-                      <Form.Control
-                        aria-label='Connector select'
-                        as='select'
-                        custom
-                        name='format'
-                        onChange={e =>
-                          handleInputChange(e.target.value, e.target.name)
-                        }
-                      >
-                        <option defaultValue=''>Type de format</option>
-                        {connectorFormatOptions.map((option, idx) => (
-                          <option key={idx} value={option.value}>
-                            {option.value}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Col>
-                  </Row> */}
                 </Row>
               </Card.Body>
             </Card>

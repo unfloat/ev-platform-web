@@ -48,11 +48,11 @@ export const loginUser = userData => dispatch => {
     );
 };
 
-export const updateProfile = (userData, id) => dispatch => {
+export const updateProfile = userData => dispatch => {
   axios
-    .put('/users/', userData, {
+    .patch('/users/', userData, {
       params: {
-        userId: id,
+        userId: userData.id,
       },
     })
     .then(res => {

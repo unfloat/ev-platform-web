@@ -27,7 +27,6 @@ function User({ user }) {
     // country: '',
     // about: '',
   });
-  console.log(user);
 
   const roles = [
     { name: 'CPO', value: 'CPO' },
@@ -38,11 +37,10 @@ function User({ user }) {
     setprofileProperties(prevState => ({ ...prevState, [fieldName]: value }));
   };
 
-  const _updateProfile = localUser => {
+  const _updateProfile = _user => {
     // !Profile.email && !Profile.password &&
-    if (!profileProperties.firstname) return;
-    console.log('profileProperties', profileProperties, 'local', localUser);
-    updateProfile(profileProperties);
+    updateProfile({ ...profileProperties, id: _user._id });
+    console.log('profileProperties', profileProperties);
   };
 
   return (
@@ -85,11 +83,10 @@ function User({ user }) {
                         />
                       </Form.Group>
                     </Col>
-                    {/* <Col className='pl-1' md='6'>
+                    <Col className='pl-1' md='6'>
                       <Form.Group>
                         <label>Nom</label>
                         <Form.Control
-                          
                           placeholder='Nom'
                           type='text'
                           name='lastname'
@@ -98,14 +95,13 @@ function User({ user }) {
                           }
                         />
                       </Form.Group>
-                    </Col> */}
+                    </Col>
                   </Row>
-                  {/* <Row>
+                  <Row>
                     <Col md='12'>
                       <Form.Group>
                         <label>Addresse</label>
                         <Form.Control
-                          
                           placeholder='Addresse'
                           type='text'
                           name='adress'
@@ -121,7 +117,6 @@ function User({ user }) {
                       <Form.Group>
                         <label>Ville</label>
                         <Form.Control
-                          
                           placeholder='Ville'
                           type='text'
                           name='city'
@@ -135,7 +130,6 @@ function User({ user }) {
                       <Form.Group>
                         <label>Pays</label>
                         <Form.Control
-                          
                           placeholder='Pays'
                           type='text'
                           name='country'
@@ -152,7 +146,6 @@ function User({ user }) {
                         <label>A propos de moi</label>
                         <Form.Control
                           cols='80'
-                          
                           placeholder='Quelques mots à propos de vous'
                           rows='4'
                           as='textarea'
@@ -163,14 +156,14 @@ function User({ user }) {
                         />
                       </Form.Group>
                     </Col>
-                  </Row> */}
+                  </Row>
 
                   <div className='clearfix' />
                   <Button
                     className='btn-fill pull-right'
                     type='submit'
                     variant='info'
-                    onClick={_updateProfile}
+                    onClick={() => _updateProfile(user)}
                   >
                     Enregistrer
                   </Button>
