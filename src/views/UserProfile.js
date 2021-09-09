@@ -19,13 +19,13 @@ function User({ user }) {
   const [role, setRole] = useState('1');
   const [localUser, setlocalUser] = useState(user);
   const [profileProperties, setprofileProperties] = useState({
-    // email: '',
+    email: '',
     firstname: '',
-    // lastname: '',
-    // address: '',
-    // city: '',
-    // country: '',
-    // about: '',
+    lastname: '',
+    address: '',
+    city: '',
+    country: '',
+    about: '',
   });
 
   const roles = [
@@ -39,8 +39,9 @@ function User({ user }) {
 
   const _updateProfile = _user => {
     // !Profile.email && !Profile.password &&
-    updateProfile({ ...profileProperties, id: _user._id });
-    console.log('profileProperties', profileProperties);
+    console.log('profileProperties', { ...profileProperties, user: _user });
+
+    updateProfile(profileProperties, _user);
   };
 
   return (
@@ -59,7 +60,7 @@ function User({ user }) {
                       <Form.Group>
                         <label htmlFor='exampleInputEmail1'>E-mail</label>
                         <Form.Control
-                          placeholder='E-mail'
+                          placeholder={user.email}
                           type='email'
                           name='email'
                           onChange={e =>
@@ -74,7 +75,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Prénom</label>
                         <Form.Control
-                          placeholder='Prénom'
+                          placeholder={user.firstname}
                           type='text'
                           name='firstname'
                           onChange={e =>
@@ -87,7 +88,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Nom</label>
                         <Form.Control
-                          placeholder='Nom'
+                          placeholder={user.lastname}
                           type='text'
                           name='lastname'
                           onChange={e =>
@@ -102,7 +103,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Addresse</label>
                         <Form.Control
-                          placeholder='Addresse'
+                          placeholder={user.adress}
                           type='text'
                           name='adress'
                           onChange={e =>
@@ -117,7 +118,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Ville</label>
                         <Form.Control
-                          placeholder='Ville'
+                          placeholder={user.city}
                           type='text'
                           name='city'
                           onChange={e =>
@@ -130,7 +131,7 @@ function User({ user }) {
                       <Form.Group>
                         <label>Pays</label>
                         <Form.Control
-                          placeholder='Pays'
+                          placeholder={user.country}
                           type='text'
                           name='country'
                           onChange={e =>
@@ -146,7 +147,7 @@ function User({ user }) {
                         <label>A propos de moi</label>
                         <Form.Control
                           cols='80'
-                          placeholder='Quelques mots à propos de vous'
+                          placeholder={user.about}
                           rows='4'
                           as='textarea'
                           name='about'

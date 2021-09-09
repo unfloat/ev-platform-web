@@ -48,16 +48,15 @@ export const loginUser = userData => dispatch => {
     );
 };
 
-export const updateProfile = userData => dispatch => {
+export const updateProfile = (userData, user) => dispatch => {
   axios
-    .patch('/users/', userData, {
+    .put('/users/', userData, {
       params: {
-        userId: userData.id,
+        id: user._id,
       },
     })
     .then(res => {
-      const { token, user } = res.data;
-      localStorage.setItem('token', token.accessToken);
+      const { user } = res.data;
 
       localStorage.setItem('user', JSON.stringify(user));
       dispatch(clearErrors());
