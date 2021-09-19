@@ -9,6 +9,8 @@ function Map({
   onMountProps,
   locations,
   getCPOLocations,
+  getLocations,
+  filterName,
   filters,
   selectedStation,
 }) {
@@ -90,6 +92,59 @@ function Map({
     }
     console.log('locations from the server', locations);
   }, [locations, map]);
+
+  // filter location according to our choices
+  useEffect(() => {
+    console.log(filters);
+    if (filters.length != 0) {
+      let filteredLocations = locations;
+      if (filters.energy != '') {
+        filteredLocations = filteredLocations.filter(
+          loc => loc.is_green_energy.toString() == filters.energy
+        );
+      }
+      if (filters.format != '') {
+        console.log('format loop');
+        console.log(filters.format);
+        filteredLocations = filteredLocations.map(loc =>
+          loc.evses
+            ? {
+                ...loc,
+                evses: loc.evses.filter(
+                  item => item.connectors[0].format == filters.format
+                ),
+              }
+            : loc
+        );
+      }
+      if (filters.standard != '') {
+        console.log('standard loop');
+        console.log(filters.standard);
+        filteredLocations = filteredLocations.map(loc =>
+          loc.evses
+            ? {
+                ...loc,
+                evses: loc.evses.filter(
+                  item => item.connectors[0].standard == filters.standard
+                ),
+              }
+            : loc
+        );
+      }
+      console.log(filteredLocations);
+      addMarkers(filteredLocations, map);
+    }
+  }, [map, filters]);
+
+  // useEffect(() => {
+  //   if (filterName != '') {
+  //     const filteredLocations = locations.filter(
+  //       loc => loc.is_green_energy.toString() == filterName
+  //     );
+  //     console.log(filteredLocations);
+  //     addMarkers(filteredLocations, map);
+  //   }
+  // }, [map, filterName]);
 
   // if (map && typeof onMount === `function`) onMount(map, onMountProps);
 

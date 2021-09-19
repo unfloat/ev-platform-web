@@ -1,4 +1,5 @@
 const connectorTypes = [
+  // { value: '', label:'Type de connecteur'},
   { value: 'CHADEMO', label: 'The connector type is CHAdeMO, DC' },
   {
     value: 'DOMESTIC_A',

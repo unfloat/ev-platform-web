@@ -12,6 +12,8 @@ import {
   Button,
 } from 'react-bootstrap';
 
+import { Form, Card, Container, Row, Col, Button } from 'react-bootstrap';
+import Map from './../components/Map';
 // constants
 import greenEnergyTypeOptions from './../constants/greenEnergyTypes';
 import bookableOptions from './../constants/bookable';
@@ -59,6 +61,10 @@ function Maps() {
       return () => script.removeEventListener(`load`, onLoad);
     } else onLoad();
   });
+  const mapRef = useRef(null);
+  const [filterName, setFilterName] = useState('');
+  const [filters, setFilters] = useState({});
+  const [selectedStation, setSelectedStation] = useState(null);
 
   return (
     <>
