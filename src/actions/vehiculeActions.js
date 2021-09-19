@@ -9,7 +9,7 @@ import {
 export const getVehicules = () => dispatch => {
   dispatch(setVehiculeLoading());
   axios
-    .get('/vehicules')
+    .get('/vehicules/')
     .then(res => {
       dispatch({
         type: GET_VEHICULES,

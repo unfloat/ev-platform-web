@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getLocations } from '../actions/locationAction';
+import { getCPOLocations } from '../../actions/locationAction';
 import { connect } from 'react-redux';
 
 function Map({
@@ -8,14 +8,23 @@ function Map({
   className,
   onMountProps,
   locations,
-  getLocations,
-  filterName,
+  getCPOLocations,
+  filters,
   selectedStation,
 }) {
   const ref = useRef();
   const [map, setMap] = useState();
+  const [markers, setMarkers] = useState();
 
-  const addMarkers = (locations, mapInstance) => {
+  const addBornes = (locations, mapInstance, stations) => {
+    // Deleting previous markers before adding the new list of markers
+    if (markers) {
+      for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
+      setMarkers([]);
+    }
+    let tmp = [];
     locations.forEach(location => {
       const marker = new window.google.maps.Marker({
         mapInstance,
@@ -39,15 +48,28 @@ function Map({
       marker.addListener(`mouseout`, () => {
         infowindow.close(mapInstance, marker);
       });
+
+      tmp.push(marker);
     });
+    setMarkers(tmp);
   };
 
   useEffect(() => {
     const onLoad = () => {
-      const map = new window.google.maps.Map(ref.current, options);
+      const options = {
+        lat: 47.179,
+        lng: 8.518,
+        zoom: 10,
+      };
+
+      const map = new window.google.maps.Map(ref.current, {
+        center: options,
+        zoom: 15,
+      });
+
       if (map) {
         setMap(map);
-        getLocations();
+        //getCPOLocations();
       }
     };
 
@@ -60,24 +82,14 @@ function Map({
 
       return () => script.removeEventListener(`load`, onLoad);
     } else onLoad();
-  }, [options, getLocations]);
+  }, [options, getCPOLocations]);
 
   useEffect(() => {
-    if (locations.length && map) {
-      addMarkers(locations, map);
+    if (map) {
+      addBornes(locations, map);
     }
     console.log('locations from the server', locations);
   }, [locations, map]);
-
-  useEffect(() => {
-    if (filterName != '') {
-      const filteredLocations = locations.filter(
-        loc => loc.is_green_energy.toString() == filterName
-      );
-      console.log(filteredLocations);
-      addMarkers(filteredLocations, map);
-    }
-  }, [map, filterName]);
 
   // if (map && typeof onMount === `function`) onMount(map, onMountProps);
 
@@ -89,16 +101,11 @@ function Map({
   );
 }
 
-Map.defaultProps = {
-  options: {
-    center: { lat: 47.179, lng: 8.518 },
-    zoom: 15,
-  },
-};
+// Map.defaultProps = mapOptions;
 const mapStateToProps = state => ({
   errors: state.errors,
   locations: state.location.locations,
   loading: state.location.loading,
 });
 
-export default connect(mapStateToProps, { getLocations })(Map);
+export default connect(mapStateToProps, { getCPOLocations })(Map);

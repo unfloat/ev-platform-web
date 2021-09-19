@@ -24,7 +24,7 @@ function Dashboard({ isAuthenticated }) {
   return (
     <>
       <Container fluid>
-        <Row>
+        {/* <Row>
           <Col lg='3' sm='6'>
             <Card className='card-stats'>
               <Card.Body>
@@ -129,13 +129,13 @@ function Dashboard({ isAuthenticated }) {
               </Card.Footer>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
         <Row>
           <Col md='8'>
             <Card>
               <Card.Header>
-                <Card.Title as='h4'>Users Behavior</Card.Title>
-                <p className='card-category'>24 Hours performance</p>
+                <Card.Title as='h4'>Nouvelles Stations</Card.Title>
+                <p className='card-category'>Pendant les dernières 24h</p>
               </Card.Header>
               <Card.Body>
                 <div className='ct-chart' id='chartHours'>
@@ -192,9 +192,9 @@ function Dashboard({ isAuthenticated }) {
               <Card.Footer>
                 <div className='legend'>
                   <i className='fas fa-circle text-info' />
-                  Open <i className='fas fa-circle text-danger' />
-                  Click <i className='fas fa-circle text-warning' />
-                  Click Second Time
+                  Disponible <i className='fas fa-circle text-danger' />
+                  Réservée <i className='fas fa-circle text-warning' />
+                  Défectueuse
                 </div>
                 <hr />
                 <div className='stats'>
@@ -207,8 +207,10 @@ function Dashboard({ isAuthenticated }) {
           <Col md='4'>
             <Card>
               <Card.Header>
-                <Card.Title as='h4'>Email Statistics</Card.Title>
-                <p className='card-category'>Last Campaign Performance</p>
+                <Card.Title as='h4'>Connecteurs</Card.Title>
+                <p className='card-category'>
+                  Par puissance, standard et format
+                </p>
               </Card.Header>
               <Card.Body>
                 <div
@@ -225,9 +227,9 @@ function Dashboard({ isAuthenticated }) {
                 </div>
                 <div className='legend'>
                   <i className='fas fa-circle text-info' />
-                  Open <i className='fas fa-circle text-danger' />
-                  Bounce <i className='fas fa-circle text-warning' />
-                  Unsubscribe
+                  Puissance <i className='fas fa-circle text-danger' />
+                  Standard <i className='fas fa-circle text-warning' />
+                  Format
                 </div>
                 <hr />
                 <div className='stats'>
@@ -239,80 +241,7 @@ function Dashboard({ isAuthenticated }) {
           </Col>
         </Row>
         <Row>
-          <Col md='6'>
-            <Card>
-              <Card.Header>
-                <Card.Title as='h4'>2017 Sales</Card.Title>
-                <p className='card-category'>All products including Taxes</p>
-              </Card.Header>
-              <Card.Body>
-                <div className='ct-chart' id='chartActivity'>
-                  <ChartistGraph
-                    data={{
-                      labels: [
-                        'Jan',
-                        'Feb',
-                        'Mar',
-                        'Apr',
-                        'Mai',
-                        'Jun',
-                        'Jul',
-                        'Aug',
-                        'Sep',
-                        'Oct',
-                        'Nov',
-                        'Dec',
-                      ],
-                      series: [
-                        [
-                          542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756,
-                          895,
-                        ],
-                        [
-                          412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636,
-                          695,
-                        ],
-                      ],
-                    }}
-                    type='Bar'
-                    options={{
-                      seriesBarDistance: 10,
-                      axisX: {
-                        showGrid: false,
-                      },
-                      height: '245px',
-                    }}
-                    responsiveOptions={[
-                      [
-                        'screen and (max-width: 640px)',
-                        {
-                          seriesBarDistance: 5,
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
-                </div>
-              </Card.Body>
-              <Card.Footer>
-                <div className='legend'>
-                  <i className='fas fa-circle text-info' />
-                  Tesla Model S <i className='fas fa-circle text-danger' />
-                  BMW 5 Series
-                </div>
-                <hr />
-                <div className='stats'>
-                  <i className='fas fa-check' />
-                  Data information certified
-                </div>
-              </Card.Footer>
-            </Card>
-          </Col>
-          <Col md='6'>
+          <Col md='12'>
             <Card className='card-tasks'>
               <Card.Header>
                 <Card.Title as='h4'>Tasks</Card.Title>

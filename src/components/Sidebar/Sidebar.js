@@ -20,7 +20,7 @@ import { useLocation, NavLink } from 'react-router-dom';
 
 import { Nav } from 'react-bootstrap';
 
-function Sidebar({ color, image, routes }) {
+function Sidebar({ color, image, routes, role }) {
   const location = useLocation();
   const activeRoute = routeName => {
     return location.pathname.indexOf(routeName) > -1 ? 'active' : '';
@@ -52,7 +52,8 @@ function Sidebar({ color, image, routes }) {
         </div>
         <Nav>
           {routes.map((prop, key) => {
-            if (prop.layout === '/admin')
+            console.log('role', role.toLowerCase());
+            if (prop.layout === '/admin' && prop.role === role.toLowerCase()) {
               if (!prop.redirect) {
                 return (
                   <li
@@ -74,6 +75,7 @@ function Sidebar({ color, image, routes }) {
                   </li>
                 );
               }
+            }
             return null;
           })}
         </Nav>

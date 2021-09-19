@@ -29,6 +29,30 @@ export const getLocations = () => dispatch => {
     });
 };
 
+export const getCPOLocations = cpo => dispatch => {
+  dispatch(setLocationLoading());
+  // user cpo id param
+  axios
+    .get('/locations/cpo/')
+    .then(res => {
+      dispatch({
+        type: GET_LOCATIONS,
+        payload: res.data,
+      });
+    })
+    .catch(error => {
+      if (error.response && error.response.data) {
+        dispatch({
+          type: GET_ERRORS,
+          payload: {
+            message: error.response.data,
+            visible: true,
+          },
+        });
+      }
+    });
+};
+
 //     .get('/locations/saveLocations')
 
 // Set station loading

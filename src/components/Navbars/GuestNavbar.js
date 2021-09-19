@@ -48,19 +48,6 @@ function GuestHeader() {
     return 'EV Charging';
   };
 
-  const login = () => {
-    loginUser();
-    history.push('/guest/login');
-  };
-
-  const register = () => {
-    registerUser();
-    history.push('/guest/register');
-  };
-  const map = () => {
-    history.push('/guest/map');
-  };
-
   return (
     <Navbar bg='light' expand='lg'>
       <Container fluid>
@@ -100,18 +87,35 @@ function GuestHeader() {
           </Nav>
           <Nav className='ml-auto' navbar>
             <Nav.Item>
-              <Nav.Link className='m-0' onClick={map}>
+              <Nav.Link
+                className='m-0'
+                onClick={() => {
+                  history.push('/guest/maps');
+                }}
+              >
                 <span className='no-icon'>Carte</span>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link className='m-0' onClick={register}>
+              <Nav.Link
+                className='m-0'
+                onClick={() => {
+                  registerUser();
+                  history.push('/guest/register');
+                }}
+              >
                 <span className='no-icon'>S'inscrire</span>
               </Nav.Link>
             </Nav.Item>
 
             <Nav.Item>
-              <Nav.Link className='m-0' onClick={login}>
+              <Nav.Link
+                className='m-0'
+                onClick={() => {
+                  loginUser();
+                  history.push('/guest/login');
+                }}
+              >
                 <span className='no-icon'>S'identifier</span>
               </Nav.Link>
             </Nav.Item>

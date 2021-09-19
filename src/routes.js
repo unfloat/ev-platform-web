@@ -20,25 +20,29 @@ import UserProfile from 'views/UserProfile.js';
 import TableList from 'views/TableList.js';
 import Typography from 'views/Typography.js';
 import Maps from 'views/Maps.js';
+import MapsGuest from 'views/MapsGuest.js';
+import Bornes from 'views/cpo/Bornes.js';
 import Upgrade from 'views/Upgrade.js';
 
 import Vehicule from 'views/Vehicule.js';
 import Login from 'views/Login.js';
 import Register from 'views/Register.js';
+import Borne from 'views/Borne.js';
 
 const dashboardRoutes = [
   {
-    path: '/maps',
+    path: '/carte',
     name: 'Carte',
     icon: 'nc-icon nc-pin-3',
     component: Maps,
     layout: '/admin',
+    role: 'msp',
   },
   {
     path: '/maps',
     name: 'Carte',
     icon: 'nc-icon nc-pin-3',
-    component: Maps,
+    component: MapsGuest,
     layout: '/guest',
   },
   {
@@ -47,13 +51,39 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-paper-2',
     component: Vehicule,
     layout: '/admin',
+    role: 'msp',
+  },
+  {
+    path: '/bornes',
+    name: 'Mes bornes',
+    icon: 'nc-icon nc-paper-2',
+    component: Bornes,
+    layout: '/admin',
+    role: 'cpo',
   },
   {
     path: '/user',
-    name: 'Mon profil',
+    name: 'Mon profil CPO',
     icon: 'nc-icon nc-circle-09',
     component: UserProfile,
     layout: '/admin',
+    role: 'cpo',
+  },
+  {
+    path: '/user',
+    name: 'Mon profil MSP',
+    icon: 'nc-icon nc-circle-09',
+    component: UserProfile,
+    layout: '/admin',
+    role: 'msp',
+  },
+  {
+    path: '/dashboard',
+    name: 'Nouveautés',
+    icon: 'nc-icon nc-chart-pie-35',
+    component: Dashboard,
+    layout: '/admin',
+    role: 'msp',
   },
   {
     path: '/dashboard',
@@ -61,6 +91,7 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-chart-pie-35',
     component: Dashboard,
     layout: '/admin',
+    role: 'cpo',
   },
   {
     path: '/login',
