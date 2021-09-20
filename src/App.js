@@ -38,7 +38,7 @@ function App() {
         <Switch>
           {/* <Route path='/login' render={props => <Login {...props} />} /> */}
           <Route exact path='/'>
-            <Redirect to='/admin/dashboard' />
+            <Redirect to='/guest/carte' />
           </Route>
           <Route path='/guest' render={props => <GuestLayout {...props} />} />
 

@@ -36,7 +36,15 @@ function Admin({ isAuthenticated, user }) {
   const mainPanel = React.useRef(null);
   const getRoutes = routes => {
     return routes.map((prop, key) => {
-      if (prop.layout === '/admin') {
+      console.log('sidebar', user.role);
+      if (prop.layout === '/admin' && prop.role === user.role.toLowerCase()) {
+        // console.log(prop.layout);
+        // const layout = prop.layout.concat(
+        //   '/',
+        //   user.role.toString().toLowerCase()
+        // );
+        // console.log(layout + prop.path);
+
         return (
           <Route
             path={prop.layout + prop.path}
@@ -67,7 +75,12 @@ function Admin({ isAuthenticated, user }) {
   return (
     <>
       <div className='wrapper'>
-        <Sidebar color={color} image={hasImage ? image : ''} routes={routes} />
+        <Sidebar
+          color={color}
+          image={hasImage ? image : ''}
+          routes={routes}
+          role={user.role}
+        />
         <div className='main-panel' ref={mainPanel}>
           <AdminNavbar />
           <div className='content'>

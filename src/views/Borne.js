@@ -20,7 +20,7 @@ import {
   Col,
 } from 'react-bootstrap';
 
-function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
+function Borne({ vehicules, loading, addVehicule, user, getVehicules }) {
   const initalValues = {
     id: '',
     brand: '',
@@ -261,6 +261,4 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { getVehicules, addVehicule })(
-  Vehicule
-);
+export default connect(mapStateToProps, { getVehicules, addVehicule })(Borne);

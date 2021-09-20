@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { updateProfile } from '../actions/authActions';
 import { connect } from 'react-redux';
 
-// react-bootstrap components
 import {
   Badge,
   Button,
@@ -16,9 +15,7 @@ import {
 } from 'react-bootstrap';
 
 function User({ user }) {
-  const [role, setRole] = useState('1');
-  const [localUser, setlocalUser] = useState(user);
-  const [profileProperties, setprofileProperties] = useState({
+  const initialValues = {
     email: '',
     firstname: '',
     lastname: '',
@@ -26,15 +23,17 @@ function User({ user }) {
     city: '',
     country: '',
     about: '',
-  });
+  };
+  const [profileProperties, setprofileProperties] = useState(initialValues);
 
-  const roles = [
-    { name: 'CPO', value: 'CPO' },
-    { name: 'MSP', value: 'MSP' },
-  ];
+  // const roles = [
+  //   { name: 'CPO', value: 'CPO' },
+  //   { name: 'MSP', value: 'MSP' },
+  // ];
 
   const handleInputChange = (value, fieldName) => {
     setprofileProperties(prevState => ({ ...prevState, [fieldName]: value }));
+    console.log(profileProperties);
   };
 
   const _updateProfile = _user => {
@@ -61,6 +60,7 @@ function User({ user }) {
                         <label htmlFor='exampleInputEmail1'>E-mail</label>
                         <Form.Control
                           placeholder={user.email}
+                          disabled
                           type='email'
                           name='email'
                           onChange={e =>
@@ -163,8 +163,7 @@ function User({ user }) {
                   <Button
                     className='btn-fill pull-right'
                     type='submit'
-                    variant='info'
-                    onClick={() => _updateProfile(user)}
+                    onClick={_updateProfile(user)}
                   >
                     Enregistrer
                   </Button>
@@ -191,10 +190,12 @@ function User({ user }) {
                       className='avatar border-gray'
                       src={require('assets/img/default-avatar.png').default}
                     />
-                    <h5 className='title' />
+                    <h3 className='title'>
+                      {user.firstname} {user.lastname}
+                    </h3>
                   </a>
                 </div>
-                <p className='description text-center'>description</p>
+                <p className='description text-center'>Role: {user.role}</p>
               </Card.Body>
               <hr />
               <div className='button-container mr-auto ml-auto'>

@@ -7,6 +7,7 @@
     "axios": "^0.21.1",
     "bootstrap": "4.6.0",
     "chartist": "0.10.1",
+    "dotenv": "^10.0.0",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.8",
     "jsonwebtoken": "^8.5.1",
@@ -23,7 +24,8 @@
     "react-scripts": "4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "standard": "^16.0.3"
+    "standard": "^16.0.3",
+    "uuid": "^8.3.2"
   },
   "optionalDependencies": {
     "jquery": "3.5.1",

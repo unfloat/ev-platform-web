@@ -19,8 +19,9 @@ import {
   InputGroupText,
   Row,
 } from 'reactstrap';
+import UserProfile from './UserProfile';
 
-function Login({ isAuthenticated, loginUser }) {
+function Login({ isAuthenticated, loginUser, user }) {
   const history = useHistory();
   const [credentials, setCredentials] = useState({
     email: '',
@@ -41,7 +42,7 @@ function Login({ isAuthenticated, loginUser }) {
 
   if (isAuthenticated === true) {
     // console.log('state.from', state.from);
-    return <Redirect to={state?.from || '/admin/maps'} />;
+    return <Redirect to={state?.from || '/admin/dashboard'} />;
   }
 
   const register = () => {
@@ -134,6 +135,7 @@ function Login({ isAuthenticated, loginUser }) {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
   errors: state.errors,
 });
 

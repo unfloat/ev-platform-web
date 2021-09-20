@@ -18,7 +18,6 @@
 import React from 'react';
 import { useLocation, Route, Switch } from 'react-router-dom';
 
-import FixedPlugin from 'components/FixedPlugin/FixedPlugin.js';
 import routes from 'routes.js';
 
 import GuestFooter from 'components/Footer/GuestFooter';
