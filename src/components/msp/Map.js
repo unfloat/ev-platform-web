@@ -8,111 +8,121 @@ const Map = ({
   locations,
   getLocations,
   filters,
-  map,
-  forwaredRef,
 }) => {
   // const  = props;
 
-  // const [map, setMap] = useState();
-
+  const [map, setMap] = useState();
+  const ref = useRef(null);
   const { latitude, longitude } = usePosition();
-  const [markers, setMarkers] = useState();
+  const [markers, setMarkers] = useState([]);
   const [mybounds, setmybounds] = useState({
     lat: latitude,
     lng: longitude,
   });
 
-  //const addMarkers = (locations, mapInstance) => {
+  const removeMarkers = (markersArray) => {
+    markersArray?.forEach(marker => marker.setMap(null));
+    setMarkers([]);
+  };
+  const addMarkers = (locs, mapInstance, cb) => {
   // Deleting previous markers before adding the new list of markers
-  //   if (markers) {
-  //     for (let i = 0; i < markers.length; i++) {
-  //       markers[i].setMap(null);
-  //     }
-  //     setMarkers([]);
-  //   }
-  //   let tmp = [];
-  //   const bounds = mapInstance.LatLngBounds();
+    const tmpMarkers = [];
+    const bounds = new window.google.maps.LatLngBounds();
+    locs.forEach(location => {
+      // debugger; // eslint-disable-line no-debugger
+      // console.log('=========== ~ file: Map.js ~ line 37 ~ location', location);
+      const marker = new window.google.maps.Marker({
+        position: new window.google.maps.LatLng(
+          parseFloat(location.coordinates.latitude),
+          parseFloat(location.coordinates.longitude)
+        ),
+        // title: location.station_name,
+      });
+      marker.setMap(mapInstance);
 
-  //   locations.forEach(location => {
-  //     const marker = new mapInstance.Marker({
-  //       mapInstance,
-  //       position: new mapInstance.LatLng(
-  //         location.coordinates.latitude,
-  //         location.coordinates.longitude
-  //       ),
-  //       title: location.station_name,
-  //     });
-  //     marker.setMap(mapInstance);
-  //     // const infowindow = new window.google.maps.InfoWindow({
-  //     //   content: location.station_name,
-  //     //   boxStyle: {
-  //     //     width: '300px',
-  //     //     height: '300px',
-  //     //   },
-  //     // });
+  
+      const infowindow = new window.google.maps.InfoWindow({
+        content: `<p>${location.address}</p>
+        <ul>
+          <li><strong>Conditions d'accés</strong>: ${location.condition_acces}</li>
+          <li><strong>Type d'emplacement</strong>: ${location.location_type}</li>
+          <li><strong>Phone</strong>: <a href="tel:${location.telephone_operateur}">${location.telephone_operateur}</a></li>
+        </ul>`,
+        boxStyle: {
+          width: '300px',
+          height: '300px',
+        },
+      });
 
-  //     bounds.extend({
-  //       lat: location.coordinates.latitude,
-  //       lng: location.coordinates.longitude,
-  //     });
-  //     mapInstance.fitBounds(bounds);
+      bounds.extend(new window.google.maps.LatLng(
+        parseFloat(location.coordinates.latitude),
+        parseFloat(location.coordinates.longitude)
+      ));
+      
+      marker.addListener("click", () => {
+        infowindow.open({
+          anchor: marker,
+          map: mapInstance,
+          shouldFocus: false,
+        });
+      });
+      
+      tmpMarkers.push(marker);
+    });
 
-  //     // marker.addListener(`mouseover`, () => {
-  //     //   infowindow.open(mapInstance, marker);
-  //     // });
-  //     // marker.addListener(`mouseout`, () => {
-  //     //   infowindow.close(mapInstance, marker);
-  //     // });
+    mapInstance.fitBounds(bounds);
+    cb(tmpMarkers);
+  };
+  useEffect(() => {    
+    const onLoad = () => {
+      try {
+        const options = {
+          lat: 45.891181,
+          lng: 4.8223994,
+        };
+        const _map = new window.google.maps.Map(ref.current, {
+          center: options,
+          zoom: 15,
+        });
+        setMap(_map);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  //     tmp.push(marker);
-  //   });
-  //   setMarkers(tmp);
-  // };
+    if (!window.google) {
+      const script = document.createElement(`script`);
+      // + process.env.GOOGLE_MAPS_API_KEY;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
+      document.head.append(script);
+      script.addEventListener(`load`, onLoad);
+      
+      // return () => script.removeEventListener(`load`, onLoad);
+    } else onLoad();
+  }, []);
+
+  useEffect(() => {
+    getLocations();
+  }, []);
 
   // Drop Markers
-  // useEffect(() => {
-  //   if (locations.length && map) {
-  //     addMarkers(locations, map);
-  //   }
-  //   console.log('locations from the server', locations);
-  // }, [locations, map]);
+  useEffect(() => {
+    if (locations.length && map.renderingType!='UNINITIALIZED') {
+      addMarkers(locations, map, (addedMarkers) => console.log('new markers', addedMarkers));
+    }
+    // console.log('locations from the server', locations);
+  }, [locations, map]);
 
   // Map Filter
-  // useEffect(() => {
-  //   if (filters.length != 0) {
-  //     let filteredLocations = locations;
-  //     // if (filters.greenEnergy != '') {
-  //     //   filteredLocations = filteredLocations.filter(
-  //     //     loc => loc.is_green_energy?.toString() == filters.greenEnergy
-  //     //   );
-  //     // }
-  //     if (filters.bookable != null) {
-  //       filteredLocations = filteredLocations.filter(
-  //         loc => loc.bookable.toString() == filters.bookable
-  //       );
-  //     }
-  //     if (filters.payment_by_card != '') {
-  //       filteredLocations = filteredLocations.filter(
-  //         loc => loc.payment_by_card.toString() == filters.payment_by_card
-  //       );
-  //     }
-  //     addMarkers(filteredLocations, map);
-
-  //     // if (filters.freeCharging != '') {
-  //     //   filteredLocations = filteredLocations.filter(
-  //     //     loc => loc.freeCharging.toString() == filters.freeCharging
-  //     //   );
-  //     // }
-  //   }
-  //   //console.log('filteredLocations', filteredLocations);
-  // }, [map, filters]);
-
-  // if (map && typeof onMount === `function`) onMount(map, onMountProps);
+  useEffect(() => {
+    console.log("=========== ~ file: Map.js ~ line 120 ~ filters", filters);
+    
+  }, [filters]);
 
   return (
     <div
       style={{ height: `60vh`, margin: `1em 0`, borderRadius: `0.5em` }}
-      ref={forwaredRef}
+      ref={ref}
     />
   );
 };
@@ -125,7 +135,7 @@ const mapStateToProps = state => ({
 });
 
 // export default ;
-const ConnectedMap = connect(mapStateToProps, { getLocations })(Map);
-export default React.forwardRef((props, ref) => (
-  <Map {...props} forwaredRef={ref} />
-));
+export default connect(mapStateToProps, { getLocations })(Map);
+// export default React.forwardRef((props, ref) => (
+//   <ConnectedMap {...props} forwaredRef={ref} />
+// ));
