@@ -4,6 +4,7 @@ import {
   CLEAR_ERRORS,
   GET_ERRORS,
   LOCATION_LOADING,
+  CREATE_LOCATION,
 } from './types';
 
 export const getLocations = () => dispatch => {
@@ -13,6 +14,28 @@ export const getLocations = () => dispatch => {
     .then(res => {
       dispatch({
         type: GET_LOCATIONS,
+        payload: res.data,
+      });
+    })
+    .catch(error => {
+      if (error.response && error.response.data) {
+        dispatch({
+          type: GET_ERRORS,
+          payload: {
+            message: error.response.data,
+            visible: true,
+          },
+        });
+      }
+    });
+};
+export const addLocation = locationData => dispatch => {
+  dispatch(setLocationLoading());
+  axios
+    .post('/locations/createCpoOwnedLocation', locationData)
+    .then(res => {
+      dispatch({
+        type: CREATE_LOCATION,
         payload: res.data,
       });
     })
