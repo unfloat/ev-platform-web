@@ -3,12 +3,7 @@ import { getLocations } from '../../actions/locationAction';
 import { connect } from 'react-redux';
 import { usePosition } from '../../hooks/usePosition';
 
-const Map = ({
-  options,
-  locations,
-  getLocations,
-  filters,
-}) => {
+const Map = ({ options, locations, getLocations, filters }) => {
   // const  = props;
 
   const [map, setMap] = useState();
@@ -20,12 +15,15 @@ const Map = ({
     lng: longitude,
   });
 
-  const removeMarkers = (markersArray) => {
+  const [filterdLocations, setfilterdLocations] = useState([]);
+
+  const removeMarkers = markersArray => {
     markersArray?.forEach(marker => marker.setMap(null));
     setMarkers([]);
   };
-  const addMarkers = (locs, mapInstance, cb) => {
-  // Deleting previous markers before adding the new list of markers
+  const addMarkers = (locs, mapInstance) => {
+    markers.forEach(marker => marker.setMap(null));
+    // Deleting previous markers before adding the new list of markers
     const tmpMarkers = [];
     const bounds = new window.google.maps.LatLngBounds();
     locs.forEach(location => {
@@ -40,7 +38,6 @@ const Map = ({
       });
       marker.setMap(mapInstance);
 
-  
       const infowindow = new window.google.maps.InfoWindow({
         content: `<p>${location.address}</p>
         <ul>
@@ -54,26 +51,27 @@ const Map = ({
         },
       });
 
-      bounds.extend(new window.google.maps.LatLng(
-        parseFloat(location.coordinates.latitude),
-        parseFloat(location.coordinates.longitude)
-      ));
-      
-      marker.addListener("click", () => {
+      bounds.extend(
+        new window.google.maps.LatLng(
+          parseFloat(location.coordinates.latitude),
+          parseFloat(location.coordinates.longitude)
+        )
+      );
+
+      marker.addListener('click', () => {
         infowindow.open({
           anchor: marker,
           map: mapInstance,
           shouldFocus: false,
         });
       });
-      
+
       tmpMarkers.push(marker);
     });
 
     mapInstance.fitBounds(bounds);
-    cb(tmpMarkers);
   };
-  useEffect(() => {    
+  useEffect(() => {
     const onLoad = () => {
       try {
         const options = {
@@ -96,7 +94,7 @@ const Map = ({
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
       document.head.append(script);
       script.addEventListener(`load`, onLoad);
-      
+
       // return () => script.removeEventListener(`load`, onLoad);
     } else onLoad();
   }, []);
@@ -107,17 +105,34 @@ const Map = ({
 
   // Drop Markers
   useEffect(() => {
-    if (locations.length && map.renderingType!='UNINITIALIZED') {
-      addMarkers(locations, map, (addedMarkers) => console.log('new markers', addedMarkers));
+    if (locations.length && map.renderingType != 'UNINITIALIZED') {
+      addMarkers(locations, map, addedMarkers => setMarkers(addedMarkers));
     }
     // console.log('locations from the server', locations);
   }, [locations, map]);
 
   // Map Filter
   useEffect(() => {
-    console.log("=========== ~ file: Map.js ~ line 120 ~ filters", filters);
-    
-  }, [filters]);
+    let filterdLoc = locations;
+    if (map && locations) {
+    if (filters == 'isGreenEnergy') {
+      filterdLoc = locations.filter(loc => loc.is_green_energy == true);
+        addMarkers(filterdLoc, map);
+    }
+    if (filters == 'isBookable') {
+      filterdLoc = locations.filter(loc => loc.bookable);
+        addMarkers(filterdLoc, map);
+    }
+    if (filters == 'isCbPayment') {
+      filterdLoc = locations.filter(loc => loc.payment_by_card);
+        addMarkers(filterdLoc, map);
+    }
+    if (filters == '') {
+        addMarkers(filterdLoc, map);
+      }
+    }
+
+  }, [filters, locations]);
 
   return (
     <div

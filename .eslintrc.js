@@ -17,12 +17,11 @@ module.exports = {
   plugins: ['react'],
   rules: {
     'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single', { allowTemplateLiterals: true }],
+    // quotes: ['error', 'single', { allowTemplateLiterals: true }],
     semi: ['error', 'always'],
     'no-unused-vars': 'off',
     'no-console': 'off',
     'no-var': 'error',
-    'jsx-quotes': ['error', 'prefer-single'],
     'react/jsx-boolean-value': 'error',
     'react/jsx-curly-spacing': ['error', 'never'],
     'react/jsx-equals-spacing': ['error', 'never'],
