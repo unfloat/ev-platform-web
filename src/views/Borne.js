@@ -19,11 +19,6 @@ import {
 } from 'react-bootstrap';
 import { usePosition } from '../hooks/usePosition';
 
-import sideBarImage1 from 'assets/img/sidebar-1.jpg';
-import sideBarImage2 from 'assets/img/sidebar-2.jpg';
-import sideBarImage3 from 'assets/img/sidebar-3.jpg';
-import sideBarImage4 from 'assets/img/sidebar-4.jpg';
-
 function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
   const [hasImage, setHasImage] = useState(true);
   const [image, setImage] = useState();
@@ -32,209 +27,39 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
     name: '',
     address: '',
     city: '',
-    bookable: true,
+    bookable: false,
     connection: '',
     condition_acces: '',
-    payment_by_card: true,
+    payment_by_card: false,
     location_type: '',
     telephone_operateur: '',
     postal_code: '',
   };
+  const { latitude, longitude } = usePosition();
+
   const [locationProperties, setlocationProperties] = useState(initalValues);
 
   const handleInputChange = (value, fieldName) => {
     setlocationProperties(prevState => ({ ...prevState, [fieldName]: value }));
   };
-  const { latitude, longitude } = usePosition();
 
   const _addLocation = _user => {
-    // if (locationProperties.name !== '') {
-    addLocation({
-      ...locationProperties,
-
-      userId: _user._id,
-      position: {
-        latitude: latitude.toString(),
-        longitude: longitude.toString(),
-      },
-    });
-    console.log('locationProperties', locationProperties);
-    setlocationProperties(initalValues);
-    // } else return;
+    if (locationProperties.name !== '') {
+      addLocation({
+        ...locationProperties,
+        userId: _user._id,
+        position: {
+          latitude: latitude.toString(),
+          longitude: longitude.toString(),
+        },
+      });
+      console.log('locationProperties', locationProperties);
+      setlocationProperties(initalValues);
+    } else return;
   };
 
   return (
     <>
-      <div className='fixed-plugin'>
-        <Dropdown>
-          <Dropdown.Toggle
-            id='dropdown-fixed-plugin'
-            variant=''
-            className='text-white border-0 opacity-100'
-          >
-            <i className='fas fa-cogs fa-2x mt-1' />
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <li className='adjustments-line d-flex align-items-center justify-content-between'>
-              <p>Background Image</p>
-              <Form.Check
-                type='switch'
-                id='custom-switch-1-image'
-                checked={hasImage}
-                onChange={setHasImage}
-              />
-            </li>
-            <li className='adjustments-line mt-3'>
-              <p>Filters</p>
-              <div className='pull-right'>
-                <Badge
-                  variant='secondary'
-                  className={color === 'black' ? 'active' : ''}
-                  onClick={() => setColor('black')}
-                />
-                <Badge
-                  variant='azure'
-                  className={color === 'azure' ? 'active' : ''}
-                  onClick={() => setColor('azure')}
-                />
-                <Badge
-                  variant='green'
-                  className={color === 'green' ? 'active' : ''}
-                  onClick={() => setColor('green')}
-                />
-                <Badge
-                  variant='orange'
-                  className={color === 'orange' ? 'active' : ''}
-                  onClick={() => setColor('orange')}
-                />
-                <Badge
-                  variant='red'
-                  className={color === 'red' ? 'active' : ''}
-                  onClick={() => setColor('red')}
-                />
-                <Badge
-                  variant='purple'
-                  className={color === 'purple' ? 'active' : ''}
-                  onClick={() => setColor('purple')}
-                />
-              </div>
-            </li>
-            <li className='header-title'>Sidebar Images</li>
-            <li className={image === sideBarImage1 ? 'active' : ''}>
-              <a
-                className='img-holder switch-trigger d-block'
-                href='#pablo'
-                onClick={e => {
-                  e.preventDefault();
-                  setImage(sideBarImage1);
-                }}
-              >
-                <img alt='...' src={sideBarImage1} />
-              </a>
-            </li>
-            <li className={image === sideBarImage2 ? 'active' : ''}>
-              <a
-                className='img-holder switch-trigger d-block'
-                href='#pablo'
-                onClick={e => {
-                  e.preventDefault();
-                  setImage(sideBarImage2);
-                }}
-              >
-                <img alt='...' src={sideBarImage2} />
-              </a>
-            </li>
-            <li className={image === sideBarImage3 ? 'active' : ''}>
-              <a
-                className='img-holder switch-trigger d-block'
-                href='#pablo'
-                onClick={e => {
-                  e.preventDefault();
-                  setImage(sideBarImage3);
-                }}
-              >
-                <img alt='...' src={sideBarImage3} />
-              </a>
-            </li>
-            <li className={image === sideBarImage4 ? 'active' : ''}>
-              <a
-                className='img-holder switch-trigger d-block'
-                href='#pablo'
-                onClick={e => {
-                  e.preventDefault();
-                  setImage(sideBarImage4);
-                }}
-              >
-                <img alt='...' src={sideBarImage4} />
-              </a>
-            </li>
-            <li className='button-container'>
-              <div>
-                <Button
-                  block
-                  className='btn-fill'
-                  href='http://www.creative-tim.com/product/light-bootstrap-dashboard-react'
-                  rel='noopener noreferrer'
-                  target='_blank'
-                  variant='info'
-                >
-                  Download, it's free!
-                </Button>
-              </div>
-            </li>
-            <li className='button-container'>
-              <div>
-                <Button
-                  block
-                  className='btn-fill'
-                  href='http://www.creative-tim.com/product/light-bootstrap-dashboard-react'
-                  rel='noopener noreferrer'
-                  target='_blank'
-                  variant='default'
-                >
-                  Checkout docs.
-                </Button>
-              </div>
-            </li>
-            <li className='header-title pro-title text-center'>
-              Want more components?
-            </li>
-            <li className='button-container'>
-              <div>
-                <Button
-                  block
-                  className='btn-fill'
-                  href='http://www.creative-tim.com/product/light-bootstrap-dashboard-pro-react'
-                  rel='noopener noreferrer'
-                  target='_blank'
-                  variant='primary'
-                >
-                  Get The PRO Version!
-                </Button>
-              </div>
-            </li>
-            <li className='header-title' id='sharrreTitle'>
-              Thank you for sharing!
-            </li>
-            <li className='button-container mb-4'>
-              <Button
-                className='btn-social btn-outline btn-round sharrre'
-                id='twitter'
-                variant='twitter'
-              >
-                <i className='fab fa-twitter' />· 256
-              </Button>
-              <Button
-                className='btn-social btn-outline btn-round sharrre'
-                id='facebook'
-                variant='facebook'
-              >
-                <i className='fab fa-facebook-square' />· 426
-              </Button>
-            </li>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
       <Container fluid>
         <Row>
           <Col>
@@ -277,7 +102,7 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
                       <Form.Group>
                         <label>Adresse</label>
                         <Form.Control
-                          placeholder='Marque'
+                          placeholder='Adresse'
                           type='text'
                           name='address'
                           onChange={e =>
@@ -288,75 +113,7 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
                     </Col>
                   </Row>
                   <Row>
-                    <Col md='3'>
-                      <Form.Group>
-                        <label>Reservable</label>
-                        <Form.Check
-                          type='switch'
-                          checked={false}
-                          name='bookable'
-                          onChange={e =>
-                            handleInputChange(e.target.value, e.target.name)
-                          }
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md='3'>
-                      <Form.Group>
-                        <label>Paiement par carte bancaire</label>
-                        <Form.Check
-                          type='switch'
-                          checked={false}
-                          name='bookable'
-                          onChange={e =>
-                            handleInputChange(e.target.value, e.target.name)
-                          }
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md='6'>
-                      <Form.Group>
-                        <label>Ville</label>
-                        <Form.Control
-                          placeholder=''
-                          type='text'
-                          name='city'
-                          onChange={e =>
-                            handleInputChange(e.target.value, e.target.name)
-                          }
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
                     <Col md='4'>
-                      {/* <Form.Control
-                          aria-label='Connector select'
-                          as='select'
-                          custom
-                          
-                        >
-                          <option defaultValue='Type de connection à la station ' />
-                          {connectionTypeOptions.map((option, idx) => (
-                            <option key={idx} value={option.value}>
-                              {option.value}
-                            </option>
-                          ))}
-                        </Form.Control> */}
-                      {/* <Form>
-                        <Form.Check
-                          type='switch'
-                          id='custom-switch'
-                          label='Check this switch'
-                        />
-                        <Form.Check
-                          disabled
-                          type='switch'
-                          label='disabled switch'
-                          id='disabled-custom-switch'
-                        />
-                      </Form>
-                      <Form.Switch /> */}
                       <Form.Group>
                         <label>Type de connection aux stations</label>
                         <br />
@@ -383,6 +140,64 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
                     </Col>
                     <Col md='4'>
                       <Form.Group>
+                        <label>Reservation</label>
+                        <br />
+
+                        <ToggleButton
+                          className='mb-2'
+                          id='bookable-switch'
+                          type='checkbox'
+                          label='Reservable'
+                          checked={locationProperties.bookable}
+                          value={locationProperties.bookable}
+                          onChange={e =>
+                            setlocationProperties(prev => ({
+                              ...prev,
+                              bookable: !prev.bookable,
+                            }))
+                          }
+                        >
+                          Reservation{' '}
+                        </ToggleButton>
+                      </Form.Group>
+                    </Col>
+                    <Col md='4'>
+                      <label>Paiement</label>
+                      <br />
+                      <ToggleButton
+                        className='mb-2'
+                        id='payment_by_card-toggle'
+                        type='checkbox'
+                        variant='outline-primary'
+                        checked={locationProperties.payment_by_card}
+                        value={locationProperties.payment_by_card}
+                        onChange={e =>
+                          setlocationProperties(prev => ({
+                            ...prev,
+                            payment_by_card: !prev.payment_by_card,
+                          }))
+                        }
+                      >
+                        Carte Bancaire
+                      </ToggleButton>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md='4'>
+                      <Form.Group>
+                        <label>Ville</label>
+                        <Form.Control
+                          placeholder=''
+                          type='text'
+                          name='city'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md='4'>
+                      <Form.Group>
                         <label>Condition d'accès</label>
                         <Form.Control
                           placeholder=''
@@ -404,6 +219,28 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
                           onChange={e =>
                             handleInputChange(e.target.value, e.target.name)
                           }
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md='6'>
+                      <Form.Group>
+                        <label>Latitude</label>
+                        <Form.Control
+                          disabled
+                          type='text'
+                          value={latitude ? latitude : 'latitude'}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md='6'>
+                      <Form.Group>
+                        <label>Longitude</label>
+                        <Form.Control
+                          disabled
+                          type='text'
+                          value={longitude ? longitude : 'longitude'}
                         />
                       </Form.Group>
                     </Col>
