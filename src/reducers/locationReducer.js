@@ -1,4 +1,8 @@
-import { GET_LOCATIONS, LOCATION_LOADING } from '../actions/types';
+import {
+  GET_LOCATIONS,
+  LOCATION_LOADING,
+  CREATE_LOCATION,
+} from '../actions/types';
 
 const initialState = {
   locations: [],
@@ -13,6 +17,12 @@ export default function (state = initialState, action) {
         loading: true,
       };
     case GET_LOCATIONS:
+      return {
+        ...state,
+        locations: action.payload,
+        loading: false,
+      };
+    case CREATE_LOCATION:
       return {
         ...state,
         locations: action.payload,

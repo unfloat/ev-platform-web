@@ -13,9 +13,6 @@ import {
 } from 'react-bootstrap';
 
 // constants
-import greenEnergyTypeOptions from './../constants/greenEnergyTypes';
-import bookableOptions from './../constants/bookable';
-import paymentOptions from './../constants/payment';
 
 function MapsGuest() {
   const [filters, setFilters] = useState({});
@@ -24,7 +21,25 @@ function MapsGuest() {
 
   return (
     <>
-      <MapGuest />
+      <Container>
+        <Row className='justify-content-center'>
+          <Col md='12'>
+            <Card>
+              <Card.Header>
+                <Card.Title as='h3'>Carte des bornes de recharge</Card.Title>
+                <br />
+                <Card.Subtitle as='h4'>
+                  Le plus court chemin vers la borne de recharge qu’il vous
+                  faut.
+                </Card.Subtitle>
+              </Card.Header>
+              <Card.Body>
+                <MapGuest />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }

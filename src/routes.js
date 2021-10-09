@@ -17,12 +17,9 @@
 */
 import Dashboard from 'views/Dashboard.js';
 import UserProfile from 'views/UserProfile.js';
-import TableList from 'views/TableList.js';
-import Typography from 'views/Typography.js';
 import Maps from 'views/Maps.js';
 import MapsGuest from 'views/MapsGuest.js';
 import Bornes from 'views/cpo/Bornes.js';
-import Upgrade from 'views/Upgrade.js';
 
 import Vehicule from 'views/Vehicule.js';
 import Login from 'views/Login.js';
@@ -30,21 +27,21 @@ import Register from 'views/Register.js';
 import Borne from 'views/Borne.js';
 
 const dashboardRoutes = [
-  {
-    path: '/carte',
-    name: 'Carte',
-    icon: 'nc-icon nc-pin-3',
-    component: Maps,
-    layout: '/admin',
-    role: 'msp',
-  },
-  {
-    path: '/maps',
-    name: 'Carte',
-    icon: 'nc-icon nc-pin-3',
-    component: MapsGuest,
-    layout: '/guest',
-  },
+  // {
+  //   path: '/carte',
+  //   name: 'Carte',
+  //   icon: 'nc-icon nc-pin-3',
+  //   component: Maps,
+  //   layout: '/admin',
+  //   role: 'msp',
+  // },
+  // {
+  //   path: '/carte',
+  //   name: 'Carte',
+  //   icon: 'nc-icon nc-pin-3',
+  //   component: MapsGuest,
+  //   layout: '/guest',
+  // },
   {
     path: '/vehicule',
     name: 'Mon Vehicule',
@@ -71,7 +68,7 @@ const dashboardRoutes = [
   },
   {
     path: '/user',
-    name: 'Mon profil CPO',
+    name: 'Mon profil',
     icon: 'nc-icon nc-circle-09',
     component: UserProfile,
     layout: '/admin',
@@ -79,38 +76,38 @@ const dashboardRoutes = [
   },
   {
     path: '/user',
-    name: 'Mon profil MSP',
+    name: 'Mon profil',
     icon: 'nc-icon nc-circle-09',
     component: UserProfile,
     layout: '/admin',
     role: 'msp',
   },
-  {
-    path: '/dashboard',
-    name: 'Nouveautés',
-    icon: 'nc-icon nc-chart-pie-35',
-    component: Dashboard,
-    layout: '/admin',
-    role: 'msp',
-  },
-  {
-    path: '/dashboard',
-    name: 'Statistiques',
-    icon: 'nc-icon nc-chart-pie-35',
-    component: Dashboard,
-    layout: '/admin',
-    role: 'cpo',
-  },
+  // {
+  //   path: '/dashboard',
+  //   name: 'Nouveautés',
+  //   icon: 'nc-icon nc-chart-pie-35',
+  //   component: Dashboard,
+  //   layout: '/admin',
+  //   role: 'msp',
+  // },
+  // {
+  //   path: '/dashboard',
+  //   name: 'Statistiques',
+  //   icon: 'nc-icon nc-chart-pie-35',
+  //   component: Dashboard,
+  //   layout: '/admin',
+  //   role: 'cpo',
+  // },
   {
     path: '/login',
-    name: 'Log in',
+    name: 'Connexion',
     icon: 'nc-icon nc-bell-55',
     component: Login,
     layout: '/guest',
   },
   {
     path: '/register',
-    name: 'Register',
+    name: 'Inscription',
     icon: 'nc-icon nc-bell-55',
     component: Register,
     layout: '/guest',

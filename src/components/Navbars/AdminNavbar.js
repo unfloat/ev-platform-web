@@ -98,10 +98,10 @@ function Header({ logoutUser }) {
                 href='#pablo'
                 onClick={e => e.preventDefault()}
               >
-                <span className='no-icon'>Account</span>
+                <span className='no-icon'>Compte</span>
               </Nav.Link>
             </Nav.Item>
-            <Dropdown as={Nav.Item}>
+            {/* <Dropdown as={Nav.Item}>
               <Dropdown.Toggle
                 aria-expanded={false}
                 aria-haspopup
@@ -131,10 +131,10 @@ function Header({ logoutUser }) {
                   Separated link
                 </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
             <Nav.Item>
               <Nav.Link className='m-0' onClick={logout}>
-                <span className='no-icon'>Log out</span>
+                <span className='no-icon'>Déconnexion</span>
               </Nav.Link>
             </Nav.Item>
           </Nav>

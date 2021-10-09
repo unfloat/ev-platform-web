@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { addLocation } from '../actions/locationAction';
+import { addLocation, getCPOLocations } from '../actions/locationAction';
 
 import connectionTypeOptions from './../constants/connectionType';
 
@@ -10,16 +10,17 @@ import {
   Card,
   Form,
   ToggleButton,
+  ToggleButtonGroup,
   ButtonGroup,
   Container,
   Row,
   Col,
-  Dropdown,
+  Table,
   Badge,
 } from 'react-bootstrap';
 import { usePosition } from '../hooks/usePosition';
 
-function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
+function Borne({ locations, loading, addLocation, user, getCPOLocations }) {
   const [hasImage, setHasImage] = useState(true);
   const [image, setImage] = useState();
   const [color, setColor] = useState();
@@ -45,18 +46,23 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
 
   const _addLocation = _user => {
     if (locationProperties.name !== '') {
+      const id = _user.id;
       addLocation({
         ...locationProperties,
-        userId: _user._id,
         position: {
           latitude: latitude.toString(),
           longitude: longitude.toString(),
         },
+        userId: id,
       });
       console.log('locationProperties', locationProperties);
       setlocationProperties(initalValues);
     } else return;
   };
+
+  useEffect(() => {
+    getCPOLocations(user.id);
+  }, []);
 
   return (
     <>
@@ -113,73 +119,133 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
                     </Col>
                   </Row>
                   <Row>
-                    <Col md='4'>
-                      <Form.Group>
-                        <label>Type de connection aux stations</label>
-                        <br />
-                        <ButtonGroup>
-                          {connectionTypeOptions.map(option => (
-                            <ToggleButton
-                              key={option.id}
-                              id={`option-${option.id}`}
-                              type='radio'
-                              value={option.value}
-                              name='connection'
-                              onChange={e =>
-                                handleInputChange(prevState => ({
-                                  ...prevState,
-                                  energy: e.target.value,
-                                }))
-                              }
-                            >
-                              {option.value}
-                            </ToggleButton>
-                          ))}
-                        </ButtonGroup>
-                      </Form.Group>
-                    </Col>
-                    <Col md='4'>
-                      <Form.Group>
-                        <label>Reservation</label>
-                        <br />
-
-                        <ToggleButton
-                          className='mb-2'
-                          id='bookable-switch'
-                          type='checkbox'
-                          label='Reservable'
-                          checked={locationProperties.bookable}
-                          value={locationProperties.bookable}
-                          onChange={e =>
-                            setlocationProperties(prev => ({
-                              ...prev,
-                              bookable: !prev.bookable,
-                            }))
-                          }
-                        >
-                          Reservation{' '}
-                        </ToggleButton>
-                      </Form.Group>
-                    </Col>
-                    <Col md='4'>
-                      <label>Paiement</label>
+                    <Col md='3'>
+                      {/* <Form.Group className='mb-3' id='formGridCheckbox'> */}{' '}
+                      <label>Type de connection aux stations</label>
                       <br />
-                      <ToggleButton
-                        className='mb-2'
-                        id='payment_by_card-toggle'
-                        type='checkbox'
-                        variant='outline-primary'
-                        checked={locationProperties.payment_by_card}
-                        value={locationProperties.payment_by_card}
-                        onChange={e =>
-                          setlocationProperties(prev => ({
-                            ...prev,
-                            payment_by_card: !prev.payment_by_card,
-                          }))
-                        }
-                      >
-                        Carte Bancaire
-                      </ToggleButton>
+                      <ButtonGroup>
+                        {connectionTypeOptions.map(option => (
+                          <ToggleButton
+                            key={option.id}
+                            id={`option-${option.id}`}
+                            type='checkbox'
+                            value={option.value}
+                            name='connection'
+                            onChange={e =>
+                              handleInputChange(prevState => ({
+                                ...prevState,
+                                energy: e.target.value,
+                              }))
+                            }
+                          >
+                            {option.value}
+                          </ToggleButton>
+                        ))}
+                      </ButtonGroup>{' '}
+                    </Col>
+                    <Col md='3'>
+                      <label>Reservation</label>
+                      <fieldset>
+                        <ButtonGroup>
+                          <br />
+                          <ToggleButton
+                            className='mb-2'
+                            id='isbookable-switch'
+                            type='checkbox'
+                            label='Reservable'
+                            onChange={e =>
+                              setlocationProperties(prev => ({
+                                ...prev,
+                                bookable: !prev.bookable,
+                              }))
+                            }
+                          >
+                            Disponible
+                          </ToggleButton>
+                          <ToggleButton
+                            className='mb-2'
+                            id='bookable-switch'
+                            type='checkbox'
+                            label='Non Reservable'
+                            onChange={e =>
+                              setlocationProperties(prev => ({
+                                ...prev,
+                                bookable: !prev.bookable,
+                              }))
+                            }
+                          >
+                            Indisponible
+                          </ToggleButton>
+                        </ButtonGroup>
+                      </fieldset>
+                    </Col>
+                    <Col md='3'>
+                      <label>Paiement par carte bancaire</label>
+                      <fieldset>
+                        <ButtonGroup>
+                          <br />
+                          <ToggleButton
+                            className='mb-2'
+                            id='payment_by_card-switch'
+                            type='checkbox'
+                            onChange={e =>
+                              setlocationProperties(prev => ({
+                                ...prev,
+                                payment_by_card: !prev.payment_by_card,
+                              }))
+                            }
+                          >
+                            Disponible
+                          </ToggleButton>
+                          <ToggleButton
+                            className='mb-2'
+                            id='payment_by_card-switch'
+                            type='checkbox'
+                            onChange={e =>
+                              setlocationProperties(prev => ({
+                                ...prev,
+                                payment_by_card: !prev.payment_by_card,
+                              }))
+                            }
+                          >
+                            Indisponible
+                          </ToggleButton>
+                        </ButtonGroup>
+                      </fieldset>
+                    </Col>
+                    <Col md='3'>
+                      <label>Recharge</label>
+                      <fieldset>
+                        <ButtonGroup>
+                          <br />
+                          <ToggleButton
+                            className='mb-2'
+                            id='payment_by_card-switch'
+                            type='checkbox'
+                            onChange={e =>
+                              setlocationProperties(prev => ({
+                                ...prev,
+                                payment_by_card: !prev.payment_by_card,
+                              }))
+                            }
+                          >
+                            Gratuite
+                          </ToggleButton>
+                          <ToggleButton
+                            className='mb-2'
+                            id='payment_by_card-switch'
+                            type='checkbox'
+                            onChange={e =>
+                              setlocationProperties(prev => ({
+                                ...prev,
+                                payment_by_card: !prev.payment_by_card,
+                              }))
+                            }
+                          >
+                            Payante
+                          </ToggleButton>
+                        </ButtonGroup>
+                      </fieldset>
                     </Col>
                   </Row>
                   <Row>
@@ -187,7 +253,7 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
                       <Form.Group>
                         <label>Ville</label>
                         <Form.Control
-                          placeholder=''
+                          placeholder='Ville'
                           type='text'
                           name='city'
                           onChange={e =>
@@ -267,42 +333,42 @@ function Borne({ vehicules, loading, addLocation, user, getVehicules }) {
             <Col md='12'>
               <Card className='strpied-tabled-with-hover'>
                 <Card.Header>
-                  <Card.Title as='h4'>Mes EVs</Card.Title>
-                  <p className='card-category'>EVs enregistrés</p>
+                  <Card.Title as='h4'>Mes Bornes </Card.Title>
+                  <p className='card-category'>Bornes enregistrées</p>
                 </Card.Header>
                 <Card.Body className='table-full-width table-responsive px-0'>
-                  {/* <Table className='table-hover table-striped'>
+                  <Table className='table-hover table-striped'>
                     <thead>
                       <tr>
-                        <th className='border-0'>Marque</th>
-                        <th className='border-0'>Modèle</th>
-                        <th className='border-0'>Format Connecteur</th>
-                        <th className='border-0'>Standard</th>
+                        <th className='border-0'>Titre</th>
+                        <th className='border-0'>Type</th>
+                        <th className='border-0'>Adresse</th>
+                        {/* <th className='border-0'>Standard</th>
                         <th className='border-0'>Voltage Maximum</th>
                         <th className='border-0'>Type de Puissance</th>
-                        <th className='border-0'>Ampérage Maximum</th>
+                        <th className='border-0'>Ampérage Maximum</th> */}
                       </tr>
                     </thead>
                     <tbody>
-                 {vehicules?.length ? (
-                        vehicules?.map(vehicule => {
+                      {locations?.length ? (
+                        locations?.map(location => {
                           return (
                             <tr>
-                              <td>{vehicule.brand}</td>
-                              <td>{vehicule.model}</td>
-                              <td>{vehicule.format}</td>
-                              <td>{vehicule.standard}</td>
-                              <td>{vehicule.max_voltage}</td>
-                              <td>{vehicule.power_type}</td>
-                              <td>{vehicule.max_amperage}</td>{' '}
+                              <td>{location.location_name}</td>
+                              <td>{location.location_type}</td>
+                              <td>{location.address}</td>
+                              {/* <td>{location.standard}</td>
+                              <td>{location.max_voltage}</td>
+                              <td>{location.power_type}</td>
+                              <td>{location.max_amperage}</td>{' '} */}
                             </tr>
                           );
                         })
-                      ) : ( 
-                      {''}
-                      {/* )} 
+                      ) : (
+                        <td>{'Vide'}</td>
+                      )}{' '}
                     </tbody>
-                  </Table> */}
+                  </Table>
                 </Card.Body>
               </Card>
             </Col>
@@ -317,6 +383,9 @@ const mapStateToProps = state => ({
   errors: state.errors,
   loading: state.vehicule.loading,
   user: state.auth.user,
+  locations: state.location.locations,
 });
 
-export default connect(mapStateToProps, { addLocation })(Borne);
+export default connect(mapStateToProps, { getCPOLocations, addLocation })(
+  Borne
+);

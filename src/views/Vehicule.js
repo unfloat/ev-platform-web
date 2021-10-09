@@ -33,21 +33,24 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
   };
   const [vehiculeProperties, setvehiculeProperties] = useState(initalValues);
 
+  const [image, setImage] = useState();
+
   const handleInputChange = (value, fieldName) => {
     setvehiculeProperties(prevState => ({ ...prevState, [fieldName]: value }));
   };
 
   const add = _user => {
+    //const id = _user.id;
     if (vehiculeProperties.brand !== '' && vehiculeProperties.model !== '') {
-      addVehicule({ ...vehiculeProperties, id: _user._id });
-      console.log(_user);
+      addVehicule({ ...vehiculeProperties, userId: _user.id });
       setvehiculeProperties(initalValues);
-      getVehicules();
     } else return;
   };
   useEffect(() => {
-    getVehicules();
-    console.log('useeffect', vehicules);
+    console.log('user', user);
+    console.log('useeffect vehicules', vehicules);
+    const id = user.id;
+    getVehicules(id);
   }, [getVehicules]);
   return (
     <>
@@ -68,6 +71,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                           placeholder='Marque'
                           type='text'
                           name='brand'
+                          value={vehiculeProperties.brand}
                           onChange={e =>
                             handleInputChange(e.target.value, e.target.name)
                           }
@@ -81,6 +85,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                           placeholder='Modèle'
                           type='text'
                           name='model'
+                          value={vehiculeProperties.model}
                           onChange={e =>
                             handleInputChange(e.target.value, e.target.name)
                           }
@@ -95,6 +100,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                         as='select'
                         custom
                         name='standard'
+                        value={vehiculeProperties.standard}
                         onChange={e =>
                           handleInputChange(e.target.value, e.target.name)
                         }
@@ -102,17 +108,33 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                         <option defaultValue=''>Type de connecteur</option>
                         {connectorTypeOptions.map((option, idx) => (
                           <option key={idx} value={option.value}>
-                            {option.value}
+                            {option.label}
                           </option>
                         ))}
                       </Form.Control>
                     </Col>
                     <Col md='4'>
+                      {/* <ul>
+                        {connectorTypeOptions.map((option, idx) => (
+                          <li>
+                            <a
+                              className='img-holder switch-trigger d-block'
+                              onClick={e => {
+                                e.preventDefault();
+                                setImage(option.value);
+                              }}
+                            >
+                              <img alt='...' src={option.value} />
+                            </a>
+                          </li>
+                        ))}
+                      </ul> */}
                       <Form.Control
                         aria-label='Connector select'
                         as='select'
                         custom
                         name='format'
+                        value={vehiculeProperties.format}
                         onChange={e =>
                           handleInputChange(e.target.value, e.target.name)
                         }
@@ -120,7 +142,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                         <option defaultValue=''>Format connecteur</option>
                         {connectorFormatOptions.map((option, idx) => (
                           <option key={idx} value={option.value}>
-                            {option.value}
+                            {option.label}
                           </option>
                         ))}
                       </Form.Control>
@@ -132,6 +154,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                         as='select'
                         custom
                         name='format'
+                        value={vehiculeProperties.format}
                         onChange={e =>
                           handleInputChange(e.target.value, e.target.name)
                         }
@@ -153,6 +176,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                           placeholder='Puissance'
                           type='text'
                           name='power_type'
+                          value={vehiculeProperties.power_type}
                           onChange={e =>
                             handleInputChange(e.target.value, e.target.name)
                           }
@@ -166,6 +190,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                           placeholder='Voltage'
                           type='text'
                           name='max_voltage'
+                          value={vehiculeProperties.max_voltage}
                           onChange={e =>
                             handleInputChange(e.target.value, e.target.name)
                           }
@@ -179,6 +204,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                           placeholder='Ampérage'
                           type='text'
                           name='max_amperage'
+                          value={vehiculeProperties.max_amperage}
                           onChange={e =>
                             handleInputChange(e.target.value, e.target.name)
                           }
@@ -198,7 +224,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
         >
           Ajouter
         </Button>
-      </Container>{' '}
+      </Container>
       <br />
       {loading ? (
         <div> Chargement ...</div>
@@ -241,7 +267,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                         })
                       ) : (
                         <p>{''}</p>
-                      )}
+                      )}{' '}
                     </tbody>
                   </Table>
                 </Card.Body>
@@ -253,7 +279,6 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
     </>
   );
 }
-
 const mapStateToProps = state => ({
   errors: state.errors,
   vehicules: state.vehicule.vehicules,

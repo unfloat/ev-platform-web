@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { registerUser } from '../actions/authActions';
 import { Redirect } from 'react-router-dom';
+import roles from './../constants/roles';
 // react-bootstrap components
 import {
   ToggleButton,
@@ -12,6 +13,8 @@ import {
   Container,
   Row,
   Col,
+  FormGroup,
+  FormControl,
 } from 'react-bootstrap';
 
 function Register({ isAuthenticated, registerUser }) {
@@ -24,10 +27,10 @@ function Register({ isAuthenticated, registerUser }) {
   });
   const [role, setRole] = useState('');
 
-  const roles = [
-    { name: 'CPO', value: 'CPO' },
-    { name: 'MSP', value: 'MSP' },
-  ];
+  // const roles = [
+  //   { name: 'CPO', value: 'CPO', label: 'Gérant(e) point de recharge' },
+  //   { name: 'MSP', value: 'MSP', label: 'Conducteur véhicule électrique' },
+  // ];
 
   const handleInputChange = (value, fieldName) => {
     setCredentials(prevState => ({ ...prevState, [fieldName]: value }));
@@ -47,7 +50,7 @@ function Register({ isAuthenticated, registerUser }) {
   };
 
   if (isAuthenticated === true) {
-    return <Redirect to={'/admin/dashboard'} />;
+    return <Redirect to={'/admin/carte'} />;
   }
 
   return (
@@ -60,10 +63,11 @@ function Register({ isAuthenticated, registerUser }) {
                 <Card.Title as='h4'>Inscription</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Form onSubmit={() => history.push('/admin/dashboard')} />
+                <Form onSubmit={() => history.push('/admin/carte')} />
                 <Row>
                   <Col md='12'>
                     <Form.Group>
+                      <label htmlFor='email'>Adresse e-mail</label>
                       <Form.Control
                         placeholder='E-mail'
                         type='email'
@@ -73,12 +77,19 @@ function Register({ isAuthenticated, registerUser }) {
                         name='email'
                         value={credentials.email}
                       />
+                      {/* 
+      // TODO
+<FormControl.Feedback type='invalid'>
+                        Adresse mail invalide
+                      </FormControl.Feedback> */}
                     </Form.Group>
                   </Col>
                 </Row>
                 <Row>
                   <Col md='12'>
                     <Form.Group>
+                      <label htmlFor='password'>Mot de passe</label>
+
                       <Form.Control
                         placeholder='Mot de passe'
                         type='password'
@@ -92,8 +103,10 @@ function Register({ isAuthenticated, registerUser }) {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md='12'>
+                  <Col md='6'>
                     <Form.Group>
+                      <label htmlFor='firstname'>Prénom</label>
+
                       <Form.Control
                         type='text'
                         placeholder='Prénom'
@@ -106,10 +119,11 @@ function Register({ isAuthenticated, registerUser }) {
                       />
                     </Form.Group>
                   </Col>
-                </Row>
-                <Row>
-                  <Col md='12'>
+
+                  <Col md='6'>
                     <Form.Group>
+                      <label htmlFor='lastname'>Nom</label>
+
                       <Form.Control
                         type='text'
                         placeholder='Nom'
@@ -123,20 +137,56 @@ function Register({ isAuthenticated, registerUser }) {
                     </Form.Group>
                   </Col>
                 </Row>
-                <ButtonGroup>
-                  {roles.map((role, idx) => (
-                    <ToggleButton
-                      key={idx}
-                      id={`role-${idx}`}
-                      type='radio'
-                      name='role'
-                      value={role.value}
-                      onChange={e => setRole(e.currentTarget.value)}
-                    >
-                      {role.name}
-                    </ToggleButton>
-                  ))}
-                </ButtonGroup>
+                <Row>
+                  <Col md='6'>
+                    <FormGroup>
+                      <label>Ville</label>
+                      <Form.Control
+                        placeholder='Ville'
+                        type='text'
+                        name='city'
+                        value={credentials.city}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md='6'>
+                    <FormGroup>
+                      <label>Code Postal</label>
+                      <Form.Control
+                        placeholder='Code Postal'
+                        type='text'
+                        name='postal_code'
+                        value={credentials.postal_code}
+                        onChange={e =>
+                          handleInputChange(e.target.value, e.target.name)
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md='12'>
+                    <FormGroup>
+                      <label htmlFor='role'>Role</label>
+                      {roles.map(role => (
+                        <Col md='12'>
+                          <Form.Check
+                            key={role.id}
+                            type='radio'
+                            id={`role-${role.id}`}
+                            label={role.label}
+                            value={role.value}
+                            name='role'
+                            onChange={e => setRole(e.currentTarget.value)}
+                          />
+                        </Col>
+                      ))}
+                    </FormGroup>
+                  </Col>
+                </Row>
                 <Row>
                   <Col xs='6'>
                     <Button

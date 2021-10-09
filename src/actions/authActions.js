@@ -48,19 +48,27 @@ export const loginUser = userData => dispatch => {
     );
 };
 
-export const updateProfile = (userData, user) => dispatch => {
-  axios
-    .put('/users/', userData, {
+/*
+, {
       params: {
-        id: user._id,
+        userId: user._id,
+      },
+    }
+  */
+export const updateProfile = (data, id) => dispatch => {
+  axios
+    .put('/users/update', data, {
+      params: {
+        userId: id,
       },
     })
     .then(res => {
-      const { user } = res.data;
+      const savedUser = res.data;
+      console.log('user', savedUser);
 
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(savedUser));
       dispatch(clearErrors());
-      dispatch(setCurrentUser(user));
+      dispatch(setCurrentUser(savedUser));
     })
     .catch(err =>
       dispatch({

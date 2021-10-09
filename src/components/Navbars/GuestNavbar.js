@@ -90,7 +90,7 @@ function GuestHeader() {
               <Nav.Link
                 className='m-0'
                 onClick={() => {
-                  history.push('/guest/maps');
+                  history.push('/guest/carte');
                 }}
               >
                 <span className='no-icon'>Carte</span>

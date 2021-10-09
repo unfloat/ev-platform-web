@@ -4,12 +4,17 @@ import {
   CLEAR_ERRORS,
   GET_ERRORS,
   VEHICULE_LOADING,
+  CREATE_VEHICULES,
 } from './types';
 
-export const getVehicules = () => dispatch => {
+export const getVehicules = id => dispatch => {
   dispatch(setVehiculeLoading());
   axios
-    .get('/vehicules/')
+    .get('/vehicules/', {
+      params: {
+        userId: id,
+      },
+    })
     .then(res => {
       dispatch({
         type: GET_VEHICULES,
@@ -33,7 +38,13 @@ export const addVehicule = vehiculeData => dispatch => {
   axios
     .post('/vehicules/add', vehiculeData)
     .then(res => {
-      console.log(res);
+      dispatch(getVehicules(res.data.id));
+    })
+    .then(res => {
+      dispatch({
+        type: GET_VEHICULES,
+        payload: res.data,
+      });
     })
     .catch(error => {
       if (error.response && error.response.data) {

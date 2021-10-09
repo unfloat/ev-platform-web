@@ -34,10 +34,11 @@ export const addLocation = locationData => dispatch => {
   axios
     .post('/locations/createCpoOwnedLocation', locationData)
     .then(res => {
-      dispatch({
-        type: CREATE_LOCATION,
-        payload: res.data,
-      });
+      return res.data;
+      // dispatch({
+      //   type: CREATE_LOCATION,
+      //   payload: res.data,
+      // });
     })
     .catch(error => {
       if (error.response && error.response.data) {
@@ -52,11 +53,15 @@ export const addLocation = locationData => dispatch => {
     });
 };
 
-export const getCPOLocations = cpo => dispatch => {
+export const getCPOLocations = id => dispatch => {
   dispatch(setLocationLoading());
   // user cpo id param
   axios
-    .get('/locations/cpo/')
+    .get('/locations/cpo/', {
+      params: {
+        userId: id,
+      },
+    })
     .then(res => {
       dispatch({
         type: GET_LOCATIONS,

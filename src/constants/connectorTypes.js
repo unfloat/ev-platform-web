@@ -1,6 +1,6 @@
 const connectorTypes = [
   // { value: '', label:'Type de connecteur'},
-  { value: 'CHADEMO', label: 'The connector type is CHAdeMO, DC' },
+  { value: 'CHADEMO', label: 'CHAdeMO, DC' },
   {
     value: 'DOMESTIC_A',
     label: 'Standard/Domestic household, type "A", NEMA 1-15, 2 pins',
@@ -52,23 +52,19 @@ const connectorTypes = [
   },
   {
     value: 'IEC_60309_2_single_16',
-    label:
-      'IEC 60309-2 Industrial Connector single phase 16 amperes (usually blue)',
+    label: 'IEC 60309-2 Industrial Connector single phase 16 amperes )',
   },
   {
     value: 'IEC_60309_2_three_16',
-    label:
-      'IEC 60309-2 Industrial Connector three phase 16 amperes (usually red)',
+    label: 'IEC 60309-2 Industrial Connector three phase 16 amperes ',
   },
   {
     value: 'IEC_60309_2_three_32',
-    label:
-      'IEC 60309-2 Industrial Connector three phase 32 amperes (usually red)',
+    label: 'IEC 60309-2 Industrial Connector three phase 32 amperes ',
   },
   {
     value: 'IEC_60309_2_three_64',
-    label:
-      'IEC 60309-2 Industrial Connector three phase 64 amperes (usually red)',
+    label: 'IEC 60309-2 Industrial Connector three phase 64 amperes ',
   },
   { value: 'IEC_62196_T1', label: 'IEC 62196 Type 1 "SAE J1772"' },
   { value: 'IEC_62196_T1_COMBO', label: 'Combo Type 1 based, DC' },
@@ -84,7 +80,7 @@ const connectorTypes = [
     value: 'PANTOGRAPH_TOP_DOWN',
     label: 'Off-board Top-down-Pantograph typically for bus charging',
   },
-  { value: 'TESLA_R', label: 'Tesla Connector "Roadster"-type (round, 4 pin)' },
+  { value: 'TESLA_R', label: 'Tesla Connector "Roadster"-type (rond, 4 pin)' },
   { value: 'TESLA_S', label: 'Tesla Connector "Model-S"-type (oval, 5 pin)' },
 ];
 

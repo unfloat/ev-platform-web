@@ -47,7 +47,7 @@ function Sidebar({ color, image, routes, role }) {
             </div>
           </a>
           <a className='simple-text' href='http://www.creative-tim.com'>
-            EV Charging Platform
+            Plateforme VE
           </a>
         </div>
         <Nav>

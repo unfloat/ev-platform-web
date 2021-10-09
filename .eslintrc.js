@@ -22,7 +22,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-console': 'off',
     'no-var': 'error',
-    'react/jsx-boolean-value': 'error',
+    'react/jsx-boolean-value': 'off',
     'react/jsx-curly-spacing': ['error', 'never'],
     'react/jsx-equals-spacing': ['error', 'never'],
     'react/jsx-indent': ['error', 2],

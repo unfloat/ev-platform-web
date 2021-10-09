@@ -8,18 +8,12 @@ import { loginUser } from '../actions/authActions';
 import {
   Button,
   Card,
-  CardBody,
-  CardGroup,
-  Col,
-  Container,
   Form,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
+  CardGroup,
+  Container,
   Row,
-} from 'reactstrap';
-import UserProfile from './UserProfile';
+  Col,
+} from 'react-bootstrap';
 
 function Login({ isAuthenticated, loginUser, user }) {
   const history = useHistory();
@@ -42,7 +36,7 @@ function Login({ isAuthenticated, loginUser, user }) {
 
   if (isAuthenticated === true) {
     // console.log('state.from', state.from);
-    return <Redirect to={state?.from || '/admin/dashboard'} />;
+    return <Redirect to={state?.from || '/admin/carte'} />;
   }
 
   const register = () => {
@@ -54,78 +48,68 @@ function Login({ isAuthenticated, loginUser, user }) {
       <Container>
         <Row className='justify-content-center'>
           <Col md='8'>
-            <CardGroup>
-              <Card className='p-4'>
-                <CardBody>
-                  <Form>
-                    <h1>Se connecter</h1>
-                    <p className='text-muted'>
-                      Authentification à votre compte
-                    </p>
+            <Card>
+              <Card.Header>
+                <Card.Title as='h4'>Authentification</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <Form>
+                  <Form.Group className='mb-3'>
+                    <label htmlFor='email'>Adresse e-mail</label>
 
-                    <InputGroup className='mb-3'>
-                      <InputGroupAddon addonType='prepend'>
-                        <InputGroupText>
-                          <i className='icon-user' />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        onChange={e =>
-                          handleInputChange(e.target.value, e.target.name)
-                        }
-                        type='text'
-                        placeholder='Email'
-                        autoComplete='email'
-                        name='email'
-                        value={credentials.email}
-                      />
-                    </InputGroup>
-                    <InputGroup className='mb-4'>
-                      <InputGroupAddon addonType='prepend'>
-                        <InputGroupText>
-                          <i className='icon-lock' />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        onChange={e =>
-                          handleInputChange(e.target.value, e.target.name)
-                        }
-                        type='password'
-                        placeholder='Password'
-                        autoComplete='current-password'
-                        name='password'
-                        value={credentials.password}
-                      />
-                    </InputGroup>
-                    <Row>
-                      <Col xs='6'>
-                        <Button
-                          color='primary'
-                          className='px-4'
-                          name='connectButton'
-                          onClick={e => login(e)}
-                        >
-                          Se connecter
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form>
-                  <p className='text-muted'>Vous n'avez pas de compte?</p>
+                    <Form.Control
+                      onChange={e =>
+                        handleInputChange(e.target.value, e.target.name)
+                      }
+                      type='text'
+                      placeholder='E-mail'
+                      autoComplete='email'
+                      name='email'
+                      value={credentials.email}
+                    />
+                  </Form.Group>
+                  <Form.Group className='mb-4'>
+                    <label htmlFor='password'>Mot de passe</label>
+                    <Form.Control
+                      onChange={e =>
+                        handleInputChange(e.target.value, e.target.name)
+                      }
+                      type='password'
+                      placeholder='Mot de passe'
+                      autoComplete='current-password'
+                      name='password'
+                      value={credentials.password}
+                    />
+                  </Form.Group>
                   <Row>
                     <Col xs='6'>
                       <Button
                         color='primary'
                         className='px-4'
                         name='connectButton'
-                        onClick={register}
+                        onClick={e => login(e)}
                       >
-                        Inscription
+                        Se connecter
                       </Button>
                     </Col>
                   </Row>
-                </CardBody>
-              </Card>
-            </CardGroup>
+                </Form>
+                <br />
+                <p className='text-muted'>Ou créer un compte</p>
+                <Row>
+                  <Col xs='6'>
+                    <Button
+                      color='primary'
+                      className='px-4'
+                      name='connectButton'
+                      onClick={register}
+                    >
+                      Inscription
+                    </Button>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
       </Container>
