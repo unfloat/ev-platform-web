@@ -105,25 +105,24 @@ const Map = ({
     getLocations();
   }, []);
 
-  useEffect(() => {
-    console.log('selectedLatLng', selectedLatLng);
-    getLocationsByUserGeolocation(selectedLatLng);
-    console.log('useEffect locations', locations);
-  }, [selectedLatLng]);
+  // useEffect(() => {
+  //   console.log('selectedLatLng', selectedLatLng);
+  //   getLocationsByUserGeolocation(selectedLatLng);
+  //   console.log('useEffect locations', locations);
+  // }, [selectedLatLng]);
 
-  useEffect(() => {
-    getLocationsByConnectorType(connectiontypeid);
-    console.log(
-      'useEffect locations connectiontypeid ',
-      connectiontypeid,
-      locations
-    );
-  }, [connectiontypeid]);
+  // useEffect(() => {
+  //   getLocationsByConnectorType(connectiontypeid);
+  //   console.log(
+  //     'useEffect locations connectiontypeid ',
+  //     connectiontypeid,
+  //     locations
+  //   );
+  // }, [connectiontypeid]);
 
   // Drop Markers
   useEffect(() => {
     if (locations.length && map) {
-      console.log('fuck');
       addMarkers(locations, map);
 
       // .renderingType != 'UNINITIALIZED'
@@ -139,18 +138,11 @@ const Map = ({
           'mapsMouseEvent.latLng.toJSON()',
           mapsMouseEvent.latLng.toJSON()
         );
+        setshowModal(true);
+        setcurrentLocation({});
         //Close the current InfoWindow.
         infoWindow.close();
         // Create a new InfoWindow.
-        infoWindow = new window.google.maps.InfoWindow({
-          content: `
-          <p>${JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)}</p>
-          <div><button onClick=${setselectedLatLng(
-            mapsMouseEvent.latLng.toJSON()
-          )}>Ici</button>`,
-          position: mapsMouseEvent.latLng,
-        });
-        infoWindow.open(map);
       });
     }
   }, [locations, map]);

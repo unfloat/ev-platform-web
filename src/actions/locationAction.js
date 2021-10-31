@@ -21,8 +21,8 @@ export const getLocations = () => dispatch => {
   axios
     .get('/locations/', {
       params: {
-        latitude: '49.2603667',
-        longitude: '3.0872607',
+        latitude: 49.2603667,
+        longitude: 3.0872607,
       },
     })
     .then(res => {
