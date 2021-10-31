@@ -59,6 +59,68 @@ export const addVehicule = vehiculeData => dispatch => {
       }
     });
 };
+
+export const updateVehicule = (locationData, id) => dispatch => {
+  dispatch(setVehiculeLoading());
+  axios
+    .put('/vehicules/update', locationData, {
+      params: {
+        locationId: id,
+      },
+    })
+    .then(res => {
+      dispatch(getVehicules(res.data.id));
+    })
+    .then(res => {
+      dispatch({
+        type: GET_VEHICULES,
+        payload: res.data,
+      });
+    })
+    .catch(error => {
+      if (error.response && error.response.data) {
+        dispatch({
+          type: GET_ERRORS,
+          payload: {
+            message: error.response.data,
+            visible: true,
+          },
+        });
+      }
+    });
+};
+export const deleteVehicule = (id, user) => dispatch => {
+  //console.log('worked');
+  dispatch(setVehiculeLoading());
+  axios
+    .delete('/vehicules/delete', {
+      params: {
+        vehiculeId: id,
+        userId: user,
+      },
+    })
+    .then(res => {
+      dispatch(getVehicules(res.data));
+    })
+    .then(res => {
+      dispatch({
+        type: GET_VEHICULES,
+        payload: res.data,
+      });
+    })
+    .catch(error => {
+      if (error.response && error.response.data) {
+        dispatch({
+          type: GET_ERRORS,
+          payload: {
+            message: error.response.data,
+            visible: true,
+          },
+        });
+      }
+    });
+};
+
 export const setVehiculeLoading = () => {
   return {
     type: VEHICULE_LOADING,

@@ -2,29 +2,32 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getCPOLocations } from '../../actions/locationAction';
 import { connect } from 'react-redux';
 import { usePosition } from '../../hooks/usePosition';
-import { Alert, Button } from 'react-bootstrap';
+import { Alert, Modal } from 'react-bootstrap';
 
 const Map = ({ user, locations, filters }) => {
   // const  = props;
 
   const [map, setMap] = useState();
   const ref = useRef(null);
-  // const { latitude, longitude } = usePosition();
+  const { latitude, longitude } = usePosition();
   const [markers, setMarkers] = useState([]);
   const [mybounds, setmybounds] = useState({
     lat: 45.891181, //45.891181
     lng: 4.8223994, // 4.8223994
   });
 
+  const [showModal, setshowModal] = useState(false);
+
   const removeMarkers = markersArray => {
     markersArray?.forEach(marker => marker.setMap(null));
     setMarkers([]);
   };
   const addMarkers = (locs, mapInstance) => {
+    console.log('here?');
     markers.forEach(marker => marker.setMap(null));
     // Deleting previous markers before adding the new list of markers
     const tmpMarkers = [];
-    //const bounds = new window.google.maps.LatLngBounds();
+    const bounds = new window.google.maps.LatLngBounds();
     locs.forEach(location => {
       // debugger; // eslint-disable-line no-debugger
       // console.log('=========== ~ file: Map.js ~ line 37 ~ location', location);
@@ -36,6 +39,24 @@ const Map = ({ user, locations, filters }) => {
         // title: location.station_name,
       });
       marker.setMap(mapInstance);
+
+      console.log('marker', locs);
+
+      const modal = location => {
+        return (
+          <Modal
+            show={showModal}
+            onHide={() => setshowModal(false)}
+            className='search-modal text-center modal fade'
+          >
+            <Modal.Body>
+              <div className='modal-content'>
+                <div className='modal-body'>test</div>
+              </div>
+            </Modal.Body>
+          </Modal>
+        );
+      };
 
       const infowindow = new window.google.maps.InfoWindow({
         content: `<p>${location.address}</p>
@@ -50,12 +71,12 @@ const Map = ({ user, locations, filters }) => {
         },
       });
 
-      // bounds.extend(
-      //   new window.google.maps.LatLng(
-      //     parseFloat(latitude),
-      //     parseFloat(longitude)
-      //   )
-      // );
+      bounds.extend(
+        new window.google.maps.LatLng(
+          location.coordiantes.latitude,
+          location.coordiantes.longitude
+        )
+      );
 
       marker.addListener('click', () => {
         infowindow.open({
@@ -68,7 +89,7 @@ const Map = ({ user, locations, filters }) => {
       tmpMarkers.push(marker);
     });
 
-    //mapInstance.fitBounds(bounds);
+    mapInstance.fitBounds(bounds);
   };
   useEffect(() => {
     const onLoad = () => {
@@ -112,53 +133,53 @@ const Map = ({ user, locations, filters }) => {
   }, [locations, map]);
 
   // Map Filter
-  useEffect(() => {
-    let filterdLoc = locations;
-    if (map && locations) {
-      console.log(filters, 'filters useEffect');
-      if (filters.isGreenEnergy) {
-        filterdLoc = locations.filter(
-          loc => loc.is_green_energy == filters.isGreenEnergy
-        );
-        addMarkers(filterdLoc, map);
-      }
-      if (filters.isBookable) {
-        filterdLoc = locations.filter(
-          loc => loc.bookable == filters.isBookable
-        );
-        addMarkers(filterdLoc, map);
-      }
-      if (filters.isCbPayment) {
-        filterdLoc = locations.filter(
-          loc => loc.payment_by_card == filters.isCbPayment
-        );
-        addMarkers(filterdLoc, map);
-      }
-      if (filters.isFreeCharging) {
-        filterdLoc = locations.filter(
-          loc => loc.free_charging == filters.isFreeCharging
-        );
-        addMarkers(filterdLoc, map);
-      }
-      if (filters.isAvailable) {
-        filterdLoc = locations.filter(
-          loc => loc.payment_by_card == filters.isAvailable
-        );
-        addMarkers(filterdLoc, map);
-      }
-      if (filters.supportsTwoWheel) {
-        filterdLoc = locations.filter(
-          loc => loc.two_wheel == filters.supportsTwoWheel
-        );
-        addMarkers(filterdLoc, map);
-      }
+  // useEffect(() => {
+  //   let filterdLoc = locations;
+  //   if (map && locations) {
+  //     // console.log(filters, 'filters useEffect');
+  //     if (filters.isGreenEnergy) {
+  //       filterdLoc = locations.filter(
+  //         loc => loc.is_green_energy == filters.isGreenEnergy
+  //       );
+  //       addMarkers(filterdLoc, map);
+  //     }
+  //     if (filters.isBookable) {
+  //       filterdLoc = locations.filter(
+  //         loc => loc.bookable == filters.isBookable
+  //       );
+  //       addMarkers(filterdLoc, map);
+  //     }
+  //     if (filters.isCbPayment) {
+  //       filterdLoc = locations.filter(
+  //         loc => loc.payment_by_card == filters.isCbPayment
+  //       );
+  //       addMarkers(filterdLoc, map);
+  //     }
+  //     if (filters.isFreeCharging) {
+  //       filterdLoc = locations.filter(
+  //         loc => loc.free_charging == filters.isFreeCharging
+  //       );
+  //       addMarkers(filterdLoc, map);
+  //     }
+  //     if (filters.isAvailable) {
+  //       filterdLoc = locations.filter(
+  //         loc => loc.payment_by_card == filters.isAvailable
+  //       );
+  //       addMarkers(filterdLoc, map);
+  //     }
+  //     if (filters.supportsTwoWheel) {
+  //       filterdLoc = locations.filter(
+  //         loc => loc.two_wheel == filters.supportsTwoWheel
+  //       );
+  //       addMarkers(filterdLoc, map);
+  //     }
 
-      // if (!filters) {
-      //   addMarkers(filterdLoc, map);
-      // }
-    }
-    console.log('filterdLoc', filterdLoc);
-  }, [filters, locations]);
+  //     // if (!filters) {
+  //     //   addMarkers(filterdLoc, map);
+  //     // }
+  //   }
+  //   console.log('filterdLoc', filterdLoc);
+  // }, [filters, locations]);
 
   return (
     <>

@@ -25,23 +25,26 @@ import Vehicule from 'views/Vehicule.js';
 import Login from 'views/Login.js';
 import Register from 'views/Register.js';
 import Borne from 'views/Borne.js';
+import TableList from 'views/TableList';
+import Typography from 'views/Typography';
+import Upgrade from 'views/Upgrade';
 
 const dashboardRoutes = [
-  // {
-  //   path: '/carte',
-  //   name: 'Carte',
-  //   icon: 'nc-icon nc-pin-3',
-  //   component: Maps,
-  //   layout: '/admin',
-  //   role: 'msp',
-  // },
-  // {
-  //   path: '/carte',
-  //   name: 'Carte',
-  //   icon: 'nc-icon nc-pin-3',
-  //   component: MapsGuest,
-  //   layout: '/guest',
-  // },
+  {
+    path: '/carte',
+    name: 'Carte',
+    icon: 'nc-icon nc-pin-3',
+    component: Maps,
+    layout: '/admin',
+    role: 'msp',
+  },
+  {
+    path: '/carte',
+    name: 'Carte',
+    icon: 'nc-icon nc-pin-3',
+    component: MapsGuest,
+    layout: '/guest',
+  },
   {
     path: '/vehicule',
     name: 'Mon Vehicule',
@@ -82,19 +85,50 @@ const dashboardRoutes = [
     layout: '/admin',
     role: 'msp',
   },
+  {
+    path: '/reserver',
+    name: 'Reserver',
+    icon: 'nc-icon nc-chart-pie-35',
+    component: Dashboard,
+    layout: '/admin',
+  },
+  {
+    path: '/dashboard',
+    name: 'Statistiques',
+    icon: 'nc-icon nc-chart-pie-35',
+    component: Dashboard,
+    layout: '/admin',
+    role: 'cpo',
+  },
+  {
+    path: '/re',
+    name: 'Sessions',
+    icon: 'nc-icon nc-chart-pie-35',
+    component: TableList,
+    layout: '/admin',
+    role: 'msp',
+  },
   // {
-  //   path: '/dashboard',
-  //   name: 'Nouveautés',
+  //   path: '/table',
+  //   name: 'TableList',
   //   icon: 'nc-icon nc-chart-pie-35',
-  //   component: Dashboard,
+  //   component: TableList,
   //   layout: '/admin',
-  //   role: 'msp',
+  //   role: 'cpo',
   // },
   // {
-  //   path: '/dashboard',
-  //   name: 'Statistiques',
+  //   path: '/typo',
+  //   name: 'TableList',
   //   icon: 'nc-icon nc-chart-pie-35',
-  //   component: Dashboard,
+  //   component: Typography,
+  //   layout: '/admin',
+  //   role: 'cpo',
+  // },
+  // {
+  //   path: '/up',
+  //   name: 'TableList',
+  //   icon: 'nc-icon nc-chart-pie-35',
+  //   component: Upgrade,
   //   layout: '/admin',
   //   role: 'cpo',
   // },

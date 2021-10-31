@@ -1,81 +1,81 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getLocations } from '../../actions/locationAction';
+import {
+  getLocations,
+  getLocationsByUserGeolocation,
+  getLocationsByConnectorType,
+} from '../../actions/locationAction';
 import { connect } from 'react-redux';
-import { usePosition } from '../../hooks/usePosition';
-import { Alert, Button } from 'react-bootstrap';
+import { Modal, Card } from 'react-bootstrap';
 
-const Map = ({ options, locations, getLocations, filters }) => {
-  // const  = props;
-
+const Map = ({
+  options,
+  locations,
+  getLocations,
+  getLocationsByUserGeolocation,
+  getLocationsByConnectorType,
+  filters,
+  connectiontypeid,
+}) => {
   const [map, setMap] = useState();
   const ref = useRef(null);
-  const { latitude, longitude } = usePosition();
+  // const { latitude, longitude } = usePosition();
   const [markers, setMarkers] = useState([]);
-  const [mybounds, setmybounds] = useState({
-    lat: 45.891181, //45.891181
-    lng: 4.8223994, // 4.8223994
-  });
+  const [showModal, setshowModal] = useState(false);
+  const [currentLocation, setcurrentLocation] = useState({});
+  const [selectedLatLng, setselectedLatLng] = useState({});
 
+  //latitude: 49.2603667,
+  // longitude: 3.0872607,
+
+  //  removes markers from map
   const removeMarkers = markersArray => {
     markersArray?.forEach(marker => marker.setMap(null));
     setMarkers([]);
   };
+
   const addMarkers = (locs, mapInstance) => {
-    markers.forEach(marker => marker.setMap(null));
-    // Deleting previous markers before adding the new list of markers
+    removeMarkers(markers);
     const tmpMarkers = [];
     const bounds = new window.google.maps.LatLngBounds();
-    locs.forEach(location => {
-      // debugger; // eslint-disable-line no-debugger
-      // console.log('=========== ~ file: Map.js ~ line 37 ~ location', location);
+
+    locs.map(location => {
+      bounds.extend(
+        new window.google.maps.LatLng(
+          location.AddressInfo.Latitude,
+          location.AddressInfo.Longitude
+        )
+      );
+      // Initialize marker
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(
-          parseFloat(location.coordinates.latitude),
-          parseFloat(location.coordinates.longitude)
+          location.AddressInfo.Latitude,
+          location.AddressInfo.Longitude
         ),
-        // title: location.station_name,
+        title: location.AddressInfo.Title,
       });
       marker.setMap(mapInstance);
 
-      const infowindow = new window.google.maps.InfoWindow({
-        content: `<p>${location.AddressInfo.Title}</p>
-        <ul>
-          <li><strong>Conditions d'accés</strong>: ${location.AccessComments}</li>
-          <li><strong>Type d'emplacement</strong>: ${location.AddressInfo.Title}</li>
-          <li><strong>Phone</strong>: <a href="tel:${location.AddressInfo.ContactTelephone1}">${location.ContactTelephone1}</a></li>
-        </ul>`,
-        boxStyle: {
-          width: '300px',
-          height: '300px',
-        },
-      });
-      latitude && longitude
-        ? bounds.extend(
-            new window.google.maps.LatLng(
-              parseFloat(latitude),
-              parseFloat(longitude)
-            )
-          )
-        : bounds.extend(
-            new window.google.maps.LatLng(
-              parseFloat(location.coordinates.latitude),
-              parseFloat(location.coordinates.longitude)
-            )
-          );
-
       marker.addListener('click', () => {
-        infowindow.open({
-          anchor: marker,
-          map: mapInstance,
-          shouldFocus: true,
-        });
+        setshowModal(true);
+        setcurrentLocation(location);
       });
 
+      // selectedLatLng
+      //   ? bounds.extend(new window.google.maps.LatLng(selectedLatLng))
+      //   : bounds.extend(
+      //       new window.google.maps.LatLng(
+      //         location.AddressInfo.Latitude,
+      //         location.AddressInfo.Longitude
+      //       )
+      //     );
       tmpMarkers.push(marker);
     });
 
+    setMarkers(tmpMarkers);
     mapInstance.fitBounds(bounds);
   };
+
+  // Initialize map
   useEffect(() => {
     const onLoad = () => {
       try {
@@ -92,14 +92,11 @@ const Map = ({ options, locations, getLocations, filters }) => {
         console.log(err);
       }
     };
-
     if (!window.google) {
       const script = document.createElement(`script`);
-      // + process.env.GOOGLE_MAPS_API_KEY;
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
       document.head.append(script);
       script.addEventListener(`load`, onLoad);
-
       // return () => script.removeEventListener(`load`, onLoad);
     } else onLoad();
   }, []);
@@ -108,76 +105,153 @@ const Map = ({ options, locations, getLocations, filters }) => {
     getLocations();
   }, []);
 
+  useEffect(() => {
+    console.log('selectedLatLng', selectedLatLng);
+    getLocationsByUserGeolocation(selectedLatLng);
+    console.log('useEffect locations', locations);
+  }, [selectedLatLng]);
+
+  useEffect(() => {
+    getLocationsByConnectorType(connectiontypeid);
+    console.log(
+      'useEffect locations connectiontypeid ',
+      connectiontypeid,
+      locations
+    );
+  }, [connectiontypeid]);
+
   // Drop Markers
   useEffect(() => {
     if (locations.length && map) {
+      console.log('fuck');
+      addMarkers(locations, map);
+
       // .renderingType != 'UNINITIALIZED'
-      addMarkers(locations, map, addedMarkers => setMarkers(addedMarkers));
+      const myLatlng = { lat: 49.2603667, lng: 3.0872607 };
+      // Create the initial InfoWindow.
+      let infoWindow = new window.google.maps.InfoWindow({
+        content: 'Click the map to get Lat/Lng!',
+        position: myLatlng,
+      });
+      infoWindow.open(map);
+      map.addListener('click', mapsMouseEvent => {
+        console.log(
+          'mapsMouseEvent.latLng.toJSON()',
+          mapsMouseEvent.latLng.toJSON()
+        );
+        //Close the current InfoWindow.
+        infoWindow.close();
+        // Create a new InfoWindow.
+        infoWindow = new window.google.maps.InfoWindow({
+          content: `
+          <p>${JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)}</p>
+          <div><button onClick=${setselectedLatLng(
+            mapsMouseEvent.latLng.toJSON()
+          )}>Ici</button>`,
+          position: mapsMouseEvent.latLng,
+        });
+        infoWindow.open(map);
+      });
     }
-    // console.log('locations from the server', locations);
   }, [locations, map]);
 
   // Map Filter
   useEffect(() => {
     let filterdLoc = locations;
     if (map && locations) {
-      console.log(filters, 'filters useEffect');
-      if (filters.isGreenEnergy) {
+      if (filters.recently_verified) {
         filterdLoc = locations.filter(
-          loc => loc.is_green_energy === filters.isGreenEnergy
+          loc => loc.IsRecentlyVerified === filters.recently_verified
         );
         addMarkers(filterdLoc, map);
       }
-      if (filters.isBookable) {
+      if (filters.is_operational) {
         filterdLoc = locations.filter(
-          loc => loc.bookable === filters.isBookable
+          loc => loc.StatusType.IsOperational === filters.is_operational
         );
         addMarkers(filterdLoc, map);
       }
-      if (filters.isCbPayment) {
+      if (filters.is_pay_at_location) {
         filterdLoc = locations.filter(
-          loc => loc.payment_by_card === filters.isCbPayment
+          loc => loc.UsageType.IsPayAtLocation === filters.is_pay_at_location
         );
         addMarkers(filterdLoc, map);
       }
-      if (filters.isFreeCharging) {
-        filterdLoc = locations.filter(
-          loc => loc.free_charging === filters.isFreeCharging
-        );
-        addMarkers(filterdLoc, map);
-      }
-      if (filters.isAvailable) {
-        filterdLoc = locations.filter(
-          loc => loc.status === filters.isAvailable
-        );
-        addMarkers(filterdLoc, map);
-      }
-      if (filters.supportsTwoWheel) {
-        filterdLoc = locations.filter(
-          loc => loc.two_wheel === filters.supportsTwoWheel
-        );
-        addMarkers(filterdLoc, map);
-      }
-      if (filters.nominal_power) {
-        filterdLoc = locations.filter(
-          loc => loc.nominal_power === filters.nominal_power
-        );
-        addMarkers(filterdLoc, map);
-      }
-      // if (filters.status) {
-      //   filterdLoc = locations.filter(loc => loc.status === filters.status);
-      //   addMarkers(filterdLoc, map);
-      // }
 
-      // if (!filters) {
-      //   addMarkers(filterdLoc, map);
-      // }
+      addMarkers(filterdLoc, map);
     }
-    console.log('filterdLoc', filterdLoc);
   }, [filters]);
 
   return (
     <>
+      {currentLocation.AddressInfo ? (
+        <div>
+          <Modal
+            show={showModal}
+            onHide={() => setshowModal(false)}
+            className='search-modal text-center modal fade'
+          >
+            <Modal.Body>
+              <Card className='card-user'>
+                <Card.Body>
+                  <div className='author'>
+                    <a href='#pablo' onClick={e => e.preventDefault()}>
+                      <img
+                        alt='...'
+                        className='avatar border-gray'
+                        src={
+                          require('assets/img/connectors/DOMESTIC_B.png')
+                            .default
+                        }
+                      />
+                    </a>
+                  </div>
+                  <Card.Title> {currentLocation.AddressInfo.Title}</Card.Title>
+                  <Card.Subtitle className='mb-2 text-muted'>
+                    {' '}
+                    {currentLocation.ContactTelephone1}
+                    <br />
+                    {currentLocation.ContactTelephone2}
+                    {currentLocation.ContactEmail}
+                  </Card.Subtitle>
+                  <Card.Text>
+                    {currentLocation.AddressInfo.Town},
+                    {currentLocation.AddressInfo.Postcode}
+                    <h6>
+                      {currentLocation.AddressInfo.Latitude},{' '}
+                      {currentLocation.AddressInfo.Longitude}
+                    </h6>
+                    <br />
+                    <p>
+                      {currentLocation.IsOperational
+                        ? 'Opérationnelle'
+                        : 'Non Opérationnelle'}
+                    </p>
+                    <br />
+                    <p>
+                      {currentLocation.IsRecentlyVerified
+                        ? 'Vérifié récemment'
+                        : 'Non vérifié récemment'}
+                    </p>
+                    <br />
+                    <Card.Link href={currentLocation.RelatedURL}>
+                      Site web
+                    </Card.Link>
+                  </Card.Text>
+                </Card.Body>
+                <Card.Footer>
+                  <small className='text-muted'>
+                    Dernière mise à jour effectuée le:{' '}
+                    {currentLocation.DateLastStatusUpdate}
+                  </small>
+                </Card.Footer>
+              </Card>
+            </Modal.Body>
+          </Modal>
+        </div>
+      ) : (
+        <p>{''}</p>
+      )}
       <div
         style={{ height: `60vh`, margin: `1em 0`, borderRadius: `0.5em` }}
         ref={ref}
@@ -194,7 +268,11 @@ const mapStateToProps = state => ({
 });
 
 // export default ;
-export default connect(mapStateToProps, { getLocations })(Map);
+export default connect(mapStateToProps, {
+  getLocations,
+  getLocationsByUserGeolocation,
+  getLocationsByConnectorType,
+})(Map);
 // export default React.forwardRef((props, ref) => (
 //   <ConnectedMap {...props} forwaredRef={ref} />
 // ));

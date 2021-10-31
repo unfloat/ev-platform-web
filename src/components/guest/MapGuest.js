@@ -2,61 +2,71 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getLocations } from '../../actions/locationAction';
 import { connect } from 'react-redux';
 
-function MapGuest({ options, className, locations, getLocations, filters }) {
+function MapGuest({ options, className, locations, getLocations }) {
   const ref = useRef();
   const [map, setMap] = useState(null);
   // const { latitude, longitude } = usePosition();
   const [markers, setMarkers] = useState();
+  const [selectedLatLng, setselectedLatLng] = useState({
+    latitude: 49.2603667,
+    longitude: 3.0872607,
+  });
+  const [showModal, setshowModal] = useState(false);
+  const [currentLocation, setcurrentLocation] = useState({});
 
-  const addMarkers = (locations, mapInstance) => {
-    // Deleting previous markers before adding the new list of markers
-    if (markers) {
-      for (let i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-      }
-      setMarkers([]);
-    }
-    let tmp = [];
-    locations.forEach(location => {
+  //  removes markers from map
+  const removeMarkers = markersArray => {
+    markersArray?.forEach(marker => marker.setMap(null));
+    setMarkers([]);
+  };
+  const addMarkers = (locs, mapInstance) => {
+    removeMarkers(markers);
+    const tmpMarkers = [];
+    const bounds = new window.google.maps.LatLngBounds(selectedLatLng);
+
+    locs.map(location => {
+      bounds.extend(
+        new window.google.maps.LatLng(
+          location.AddressInfo.Latitude,
+          location.AddressInfo.Longitude
+        )
+      );
+      // Initialize marker
       const marker = new window.google.maps.Marker({
-        mapInstance,
         position: new window.google.maps.LatLng(
-          location.coordinates.latitude,
-          location.coordinates.longitude
+          location.AddressInfo.Latitude,
+          location.AddressInfo.Longitude
         ),
-        title: location.station_name,
+        title: location.AddressInfo.Title,
       });
       marker.setMap(mapInstance);
-      const infowindow = new window.google.maps.InfoWindow({
-        content: location.station_name,
-        boxStyle: {
-          width: '300px',
-          height: '300px',
-        },
-      });
-      marker.addListener(`mouseover`, () => {
-        infowindow.open(mapInstance, marker);
-      });
-      marker.addListener(`mouseout`, () => {
-        infowindow.close(mapInstance, marker);
+
+      marker.addListener('click', () => {
+        setshowModal(true);
+        setcurrentLocation(location);
       });
 
-      tmp.push(marker);
+      selectedLatLng
+        ? bounds.extend(new window.google.maps.LatLng(selectedLatLng))
+        : bounds.extend(
+            new window.google.maps.LatLng(
+              location.AddressInfo.Latitude,
+              location.AddressInfo.Longitude
+            )
+          );
+      tmpMarkers.push(marker);
     });
-    setMarkers(tmp);
+
+    setMarkers(tmpMarkers);
+    mapInstance.fitBounds(bounds);
   };
   useEffect(() => {
     const onLoad = () => {
       const options = {
         lat: 45.891181,
         lng: 4.8223994,
-        zoom: 12,
       };
-      // if (latitude && longitude) {
-      //   options.lat = latitude;
-      //   options.lng = longitude;
-      //   options.zoom = 7;
-      // }
+
       const map = new window.google.maps.Map(ref.current, {
         center: options,
         zoom: 15,
@@ -81,21 +91,14 @@ function MapGuest({ options, className, locations, getLocations, filters }) {
   }, [options, getLocations]);
 
   useEffect(() => {
+    getLocations();
+  }, []);
+
+  useEffect(() => {
     if (locations.length && map) {
       addMarkers(locations, map);
     }
-    console.log('locations from the server', locations);
   }, [locations, map]);
-
-  useEffect(() => {
-    if (map) {
-      //   map.MapMouseEvent(`onclick`, () => {
-      //     console.log('click on map');
-      //   });
-
-      console.log('aha');
-    }
-  }, [map]);
 
   // if (map && typeof onMount === `function`) onMount(map, onMountProps);
 

@@ -64,9 +64,6 @@ export const updateProfile = (data, id) => dispatch => {
     })
     .then(res => {
       const savedUser = res.data;
-      console.log('user', savedUser);
-
-      localStorage.setItem('user', JSON.stringify(savedUser));
       dispatch(clearErrors());
       dispatch(setCurrentUser(savedUser));
     })
