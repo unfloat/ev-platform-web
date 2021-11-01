@@ -60,16 +60,16 @@ export const addVehicule = vehiculeData => dispatch => {
     });
 };
 
-export const updateVehicule = (locationData, id) => dispatch => {
+export const updateVehicule = (vehiculeData, id) => dispatch => {
   dispatch(setVehiculeLoading());
   axios
-    .put('/vehicules/update', locationData, {
+    .put('/vehicules/update', vehiculeData, {
       params: {
-        locationId: id,
+        vehiculeId: id,
       },
     })
     .then(res => {
-      dispatch(getVehicules(res.data.id));
+      dispatch(getVehicules(res.data));
     })
     .then(res => {
       dispatch({

@@ -19,17 +19,26 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 
-function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
+function Vehicule({
+  vehicules,
+  loading,
+  addVehicule,
+  user,
+  getVehicules,
+  updateVehicule,
+  deleteVehicule,
+}) {
+  // Current Vehicule
+  const [currentVehicule, setcurrentVehicule] = useState({});
   // Form initial values
   const initalValues = {
-    id: '',
-    brand: '',
-    model: '',
-    standard: '',
-    format: '',
-    power_type: '',
-    max_voltage: '',
-    max_amperage: '',
+    brand: currentVehicule.brand ?? '',
+    model: currentVehicule.model ?? '',
+    standard: currentVehicule.standard ?? '',
+    format: currentVehicule.format ?? '',
+    power_type: currentVehicule.power_type ?? '',
+    max_voltage: currentVehicule.max_voltage ?? '',
+    max_amperage: currentVehicule.max_amperage ?? '',
   };
 
   // Local State Management
@@ -38,8 +47,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
   const [showModal, setshowModal] = useState(false);
   // Modal Delete
   const [showDeleteModal, setshowDeleteModal] = useState(false);
-  // Current Vehicule
-  const [currentVehicule, setcurrentVehicule] = useState({});
+
   // Form functions
   const handleInputChange = (value, fieldName) => {
     setvehiculeProperties(prevState => ({ ...prevState, [fieldName]: value }));
@@ -53,9 +61,10 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
     } else return;
   };
 
-  const _updateVehicule = current => {
-    console.log('current', current);
-    updateVehicule(vehiculeProperties, current._id);
+  const _updateVehicule = () => {
+    console.log('currentVehicule', currentVehicule);
+    console.log('vehiculeProperties', vehiculeProperties);
+    updateVehicule(vehiculeProperties, currentVehicule._id);
     setvehiculeProperties(initalValues);
     setshowModal(false);
     setcurrentVehicule({});
@@ -69,7 +78,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
 
   useEffect(() => {
     getVehicules(user.id);
-  }, [getVehicules]);
+  }, []);
 
   return (
     <>
@@ -191,7 +200,7 @@ function Vehicule({ vehicules, loading, addVehicule, user, getVehicules }) {
                     <Button
                       className='btn-fill pull-right'
                       type='submit'
-                      onClick={() => _updateVehicule(currentVehicule, user)}
+                      onClick={() => _updateVehicule()}
                     >
                       Modifier
                     </Button>
@@ -351,6 +360,9 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { getVehicules, addVehicule })(
-  Vehicule
-);
+export default connect(mapStateToProps, {
+  getVehicules,
+  addVehicule,
+  updateVehicule,
+  deleteVehicule,
+})(Vehicule);

@@ -56,7 +56,7 @@ const Map = ({
       marker.setMap(mapInstance);
 
       marker.addListener('click', () => {
-        setshowModal(true);
+        setshowModal(prev => !prev);
         setcurrentLocation(location);
       });
 
@@ -105,20 +105,20 @@ const Map = ({
     getLocations();
   }, []);
 
-  // useEffect(() => {
-  //   console.log('selectedLatLng', selectedLatLng);
-  //   getLocationsByUserGeolocation(selectedLatLng);
-  //   console.log('useEffect locations', locations);
-  // }, [selectedLatLng]);
+  useEffect(() => {
+    console.log('selectedLatLng', selectedLatLng);
+    getLocationsByUserGeolocation(selectedLatLng);
+    console.log('useEffect locations', locations);
+  }, [selectedLatLng]);
 
-  // useEffect(() => {
-  //   getLocationsByConnectorType(connectiontypeid);
-  //   console.log(
-  //     'useEffect locations connectiontypeid ',
-  //     connectiontypeid,
-  //     locations
-  //   );
-  // }, [connectiontypeid]);
+  useEffect(() => {
+    getLocationsByConnectorType(connectiontypeid);
+    console.log(
+      'useEffect locations connectiontypeid ',
+      connectiontypeid,
+      locations
+    );
+  }, [connectiontypeid]);
 
   // Drop Markers
   useEffect(() => {
@@ -134,14 +134,11 @@ const Map = ({
       });
       infoWindow.open(map);
       map.addListener('click', mapsMouseEvent => {
-        console.log(
-          'mapsMouseEvent.latLng.toJSON()',
-          mapsMouseEvent.latLng.toJSON()
-        );
-        setshowModal(true);
+        console.log(mapsMouseEvent);
+        setshowModal(prev => !prev);
         setcurrentLocation({});
         //Close the current InfoWindow.
-        infoWindow.close();
+
         // Create a new InfoWindow.
       });
     }
@@ -176,14 +173,14 @@ const Map = ({
 
   return (
     <>
-      {currentLocation.AddressInfo ? (
-        <div>
-          <Modal
-            show={showModal}
-            onHide={() => setshowModal(false)}
-            className='search-modal text-center modal fade'
-          >
-            <Modal.Body>
+      <div>
+        <Modal
+          show={showModal}
+          onHide={() => setshowModal(prev => !prev)}
+          className='search-modal text-center modal fade'
+        >
+          <Modal.Body>
+            {currentLocation.AddressInfo ? (
               <Card className='card-user'>
                 <Card.Body>
                   <div className='author'>
@@ -209,22 +206,20 @@ const Map = ({
                   <Card.Text>
                     {currentLocation.AddressInfo.Town},
                     {currentLocation.AddressInfo.Postcode}
-                    <h6>
-                      {currentLocation.AddressInfo.Latitude},{' '}
-                      {currentLocation.AddressInfo.Longitude}
-                    </h6>
+                    {currentLocation.AddressInfo.Latitude},{' '}
+                    {currentLocation.AddressInfo.Longitude}
                     <br />
-                    <p>
+                    <>
                       {currentLocation.IsOperational
                         ? 'Opérationnelle'
                         : 'Non Opérationnelle'}
-                    </p>
+                    </>
                     <br />
-                    <p>
+                    <>
                       {currentLocation.IsRecentlyVerified
                         ? 'Vérifié récemment'
                         : 'Non vérifié récemment'}
-                    </p>
+                    </>{' '}
                     <br />
                     <Card.Link href={currentLocation.RelatedURL}>
                       Site web
@@ -238,12 +233,14 @@ const Map = ({
                   </small>
                 </Card.Footer>
               </Card>
-            </Modal.Body>
-          </Modal>
-        </div>
-      ) : (
-        <p>{''}</p>
-      )}
+            ) : (
+              <div>
+                <p>{'No current location'}</p>
+              </div>
+            )}
+          </Modal.Body>
+        </Modal>
+      </div>
       <div
         style={{ height: `60vh`, margin: `1em 0`, borderRadius: `0.5em` }}
         ref={ref}
