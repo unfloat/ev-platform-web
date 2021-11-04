@@ -33,13 +33,13 @@ function Vehicule({
   const [currentVehicule, setcurrentVehicule] = useState({});
   // Form initial values
   const initalValues = {
-    brand: '',
-    model: '',
-    standard: '',
-    format: '',
-    power_type: '',
-    max_voltage: '',
-    max_amperage: '',
+    brand: currentVehicule.brand ?? '',
+    model: currentVehicule.model ?? '',
+    standard: currentVehicule.standard ?? '',
+    format: currentVehicule.format ?? '',
+    power_type: currentVehicule.power_type ?? '',
+    max_voltage: currentVehicule.max_voltage ?? '',
+    max_amperage: currentVehicule.max_amperage ?? '',
   };
 
   // Local State Management
@@ -64,9 +64,9 @@ function Vehicule({
   const _updateVehicule = current => {
     console.log('vehiculeProperties', vehiculeProperties, 'current', current);
     updateVehicule(vehiculeProperties, current._id);
+    setcurrentVehicule({});
     setvehiculeProperties(initalValues);
     setshowModal(false);
-    setcurrentVehicule({});
     console.log('vehiculeProperties', vehiculeProperties, 'current', current);
   };
 
@@ -80,6 +80,10 @@ function Vehicule({
     getVehicules(user.id);
   }, []);
 
+  useEffect(() => {
+    if (currentVehicule) setvehiculeProperties({ ...currentVehicule });
+  }, [currentVehicule]);
+
   return (
     <>
       {loading ? (
@@ -91,6 +95,8 @@ function Vehicule({
             type='submit'
             onClick={() => {
               setcurrentVehicule({});
+              setvehiculeProperties(initalValues);
+
               setshowModal(true);
             }}
           >
@@ -120,9 +126,10 @@ function Vehicule({
                             <Form.Group>
                               <label>Marque</label>
                               <Form.Control
-                                placeholder={currentVehicule.brand ?? 'Marque'}
+                                placeholder='Marque'
                                 type='text'
                                 name='brand'
+                                value={vehiculeProperties.brand ?? ''}
                                 onChange={e =>
                                   handleInputChange(
                                     e.target.value,
@@ -136,9 +143,10 @@ function Vehicule({
                             <Form.Group>
                               <label>Modèle</label>
                               <Form.Control
-                                placeholder={currentVehicule.model ?? 'Modèle'}
+                                placeholder='Modèle'
                                 type='text'
                                 name='model'
+                                value={vehiculeProperties.model ?? ''}
                                 onChange={e =>
                                   handleInputChange(
                                     e.target.value,
@@ -176,11 +184,10 @@ function Vehicule({
                             <Form.Group>
                               <label>Voltage Maximum</label>
                               <Form.Control
-                                placeholder={
-                                  currentVehicule.max_voltage ?? 'Voltage'
-                                }
+                                placeholder='Voltage'
                                 type='text'
                                 name='max_voltage'
+                                value={vehiculeProperties.max_voltage ?? ''}
                                 onChange={e =>
                                   handleInputChange(
                                     e.target.value,
@@ -194,11 +201,10 @@ function Vehicule({
                             <Form.Group>
                               <label>Ampérage Maximum</label>
                               <Form.Control
-                                placeholder={
-                                  currentVehicule.max_amperage ?? 'Ampérage'
-                                }
+                                placeholder='Ampérage'
                                 type='text'
                                 name='max_amperage'
+                                value={vehiculeProperties.max_amperage ?? ''}
                                 onChange={e =>
                                   handleInputChange(
                                     e.target.value,
@@ -284,21 +290,24 @@ function Vehicule({
                             <h3 className='title'>
                               {vehicule.brand},{vehicule.model}
                             </h3>
-                            {vehicule.standard ? (
-                              <img
-                                alt='...'
-                                className='avatar border-gray'
-                                src={
-                                  require(`assets/img/connectors/${vehicule.standard}.png`)
-                                    .default
-                                }
-                              />
-                            ) : (
-                              <br />
-                            )}
+
                             <br />
 
-                            <ListGroupItem>{vehicule.standard}</ListGroupItem>
+                            <ListGroupItem>
+                              {vehicule.standard}{' '}
+                              {vehicule.standard ? (
+                                <img
+                                  alt='...'
+                                  className='avatar border-gray'
+                                  src={
+                                    require(`assets/img/connectors/${vehicule.standard}.png`)
+                                      .default
+                                  }
+                                />
+                              ) : (
+                                <br />
+                              )}{' '}
+                            </ListGroupItem>
 
                             <ListGroupItem>
                               Voltage: {vehicule.max_voltage}

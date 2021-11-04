@@ -6,7 +6,14 @@ import {
 } from '../../actions/locationAction';
 import { connect } from 'react-redux';
 
-import { Card, Modal, Button, Alert } from 'react-bootstrap';
+import {
+  Card,
+  Modal,
+  Button,
+  Alert,
+  ListGroupItem,
+  ListGroup,
+} from 'react-bootstrap';
 
 const Map = ({
   locations,
@@ -62,7 +69,7 @@ const Map = ({
         });
         marker.setMap(mapInstance);
 
-        marker.addListener('click', location => {
+        marker.addListener('click', () => {
           setcurrentLocation(location);
           console.log('current location', location);
 
@@ -114,7 +121,6 @@ const Map = ({
     getLocationsByUserGeolocation({
       latitude: selectedLatLng.latitude,
       longitude: selectedLatLng.longitude,
-      connectiontypeid,
     });
   }, [selectedLatLng, connectiontypeid]);
 
@@ -131,23 +137,24 @@ const Map = ({
       addMarkers(locations, carte);
       const myLatlng = { lat: 49.2603667, lng: 3.0872607 };
       // Create the initial InfoWindow.
-      let infoWindow = new window.google.maps.InfoWindow({
-        content: 'Cliquez où vous voulez chercher votre borne',
-        position: myLatlng,
-      });
-      infoWindow.open(carte);
-      carte.addListener('click', mapsMouseEvent => {
-        console.log('mapsMouseEvent', mapsMouseEvent.latLng.toJSON().lat);
-        setselectedLatLng({
-          latitude: mapsMouseEvent.latLng.toJSON().lat,
-          longitude: mapsMouseEvent.latLng.toJSON().lng,
-        });
+      // let infoWindow = new window.google.maps.InfoWindow({
+      //   content: 'Cliquez où vous voulez chercher votre borne',
+      //   position: myLatlng,
+      // });
+      // infoWindow.open(carte);
+      // carte.addListener('click', mapsMouseEvent => {
+      //   console.log('mapsMouseEvent', mapsMouseEvent.latLng.toJSON().lat);
+      //   infoWindow.close();
+      // setselectedLatLng({
+      //   latitude: mapsMouseEvent.latLng.toJSON().lat,
+      //   longitude: mapsMouseEvent.latLng.toJSON().lng,
+      // });
 
-        // setshowModal(true);
+      // // setshowModal(true);
 
-        console.log('selectedLatLng', selectedLatLng);
-        setcurrentLocation({});
-      });
+      // console.log('selectedLatLng', selectedLatLng);
+      // setcurrentLocation({});
+      // });
 
       // .renderingType != 'UNINITIALIZED'
     }
@@ -182,7 +189,7 @@ const Map = ({
 
   return (
     <>
-      {currentLocation ? (
+      {currentLocation.AddressInfo ? (
         <Modal
           show={showModal}
           onHide={() => setshowModal(false)}
@@ -191,6 +198,26 @@ const Map = ({
           <Modal.Body>
             <Card>
               <Card.Body>
+                <Card.Title>{currentLocation.AddressInfo.Title}</Card.Title>
+                <br />
+                <Card.Subtitle>
+                  {currentLocation.AddressInfo.AddressLine1}
+                </Card.Subtitle>
+                <br />
+                <ListGroup className='list-group-flush'>
+                  <ListGroupItem>
+                    Adresse: {currentLocation.AddressInfo.StateOrProvince}
+                  </ListGroupItem>
+                  <ListGroupItem>
+                    Code postal: {currentLocation.AddressInfo.Postcode}
+                  </ListGroupItem>
+
+                  <ListGroupItem>
+                    {currentLocation.AddressInfo.Town}
+                  </ListGroupItem>
+                </ListGroup>
+                <p> Prix de recharge: {currentLocation.UsageCost}</p>
+
                 <Button
                   onClick={e => console.log('reservation', currentLocation)}
                 >

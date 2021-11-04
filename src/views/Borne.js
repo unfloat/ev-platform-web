@@ -31,7 +31,7 @@ function Borne({
   updateCPOLocation,
   deleteLocation,
 }) {
-  const [currentStation, setcurrentStation] = useState();
+  const [currentStation, setcurrentStation] = useState({});
 
   // Form initial values
   // const initialValues = {
@@ -48,16 +48,16 @@ function Borne({
   // };
 
   const initialValues = {
-    location_name: '',
-    address: user.address,
-    bookable: false,
-    free_charging: false,
-    connection: '',
-    condition_acces: '',
-    payment_by_card: false,
-    location_type: '',
-    postal_code: '',
-    tarif: '',
+    location_name: currentStation.location_name ?? '',
+    address: currentStation.address ?? user.address,
+    bookable: currentStation.bookable ?? false,
+    free_charging: currentStation.free_charging ?? false,
+    connection: currentStation.connection ?? '',
+    condition_acces: currentStation.condition_acces ?? '',
+    payment_by_card: currentStation.payment_by_card ?? false,
+    location_type: currentStation.location_type ?? '',
+    postal_code: currentStation.postal_code ?? '',
+    tarif: currentStation.tarif ?? '',
   };
   // Local State Management
   const { latitude, longitude } = usePosition();
@@ -102,6 +102,10 @@ function Borne({
   useEffect(() => {
     getCPOLocations(user.id);
   }, [getCPOLocations]);
+
+  useEffect(() => {
+    if (currentStation) setlocationProperties({ ...currentStation });
+  }, [currentStation]);
 
   return (
     <>
@@ -380,9 +384,6 @@ function Borne({
                             {location.condition_acces}
                           </ListGroupItem>
                         </ListGroup>
-
-                        <br />
-                        <br />
                       </Card.Body>
                       <Card.Footer>
                         <small className='text-muted'>
