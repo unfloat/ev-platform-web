@@ -4,7 +4,6 @@ import {
   CLEAR_ERRORS,
   GET_ERRORS,
   LOCATION_LOADING,
-  CREATE_LOCATION,
 } from './types';
 
 /*
@@ -21,8 +20,8 @@ export const getLocations = () => dispatch => {
   axios
     .get('/locations/', {
       params: {
-        latitude: 49.2603667,
-        longitude: 3.0872607,
+        latitude: 45.891181,
+        longitude: 4.8223994,
       },
     })
     .then(res => {
@@ -57,8 +56,9 @@ export const getLocationsByUserGeolocation = parameters => dispatch => {
   axios
     .get('/locations/geolocation', {
       params: {
-        latitude: parameters.latitude,
-        longitude: parameters.longitude,
+        parameters,
+        // latitude: parameters.latitude,
+        // longitude: parameters.longitude,
       },
     })
     .then(res => {
@@ -140,7 +140,7 @@ export const updateCPOLocation = (locationData, id) => dispatch => {
       },
     })
     .then(res => {
-      dispatch(getCPOLocations(res.data.owner));
+      dispatch(getCPOLocations(res.data));
     })
     .then(res => {
       dispatch({

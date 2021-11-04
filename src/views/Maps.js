@@ -8,10 +8,10 @@ import {
   Container,
   Row,
   Col,
+  Form,
   Button,
   Alert,
 } from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
 
 // constants
 import greenEnergyTypeOptions from './../constants/greenEnergyTypes';
@@ -26,13 +26,8 @@ import paymentOptions from './../constants/payment';
     */
 function Maps() {
   const initialFilters = {
-    maxresults: 0,
     recently_verified: false,
     is_operational: false,
-    postal_code: '',
-    connector_type: '',
-    latitude: 49.2603667,
-    longitude: 3.0872607,
   };
   // const initialFilters = {
   //   isBookable: false,
@@ -43,22 +38,20 @@ function Maps() {
   //   supportsTwoWheel: false,
   // };
   const [filters, setFilters] = useState(initialFilters);
-  const [connectorType, setconnectorType] = useState(null);
+  const [connectorType, setconnectorType] = useState();
 
   const handleInputChange = (value, fieldName) => {
-    setFilters(prevState => ({ ...prevState, [fieldName]: Number(value) }));
+    setFilters(prevState => ({ ...prevState, [fieldName]: value }));
   };
 
   console.log('filters', filters);
 
   const powerRange = [
-    // { value: '', label:'Type de connecteur'},
     { value: 22, label: '22kW' },
     { value: 24, label: '24kW' },
     { value: 7, label: '7kW' },
   ];
   const distanceRange = [
-    // { value: '', label:'Type de connecteur'},
     { value: 10, label: '10Km' },
     { value: 50, label: '50Km' },
     { value: 100, label: '100Km' },
@@ -282,7 +275,6 @@ function Maps() {
                         </ButtonGroup>
                       </Col>
                     </Row>
-
                     <Button
                       color='primary'
                       className='mt-4'

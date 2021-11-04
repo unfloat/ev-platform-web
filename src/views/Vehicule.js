@@ -16,6 +16,7 @@ import {
   Row,
   Col,
   OverlayTrigger,
+  ListGroupItem,
   Tooltip,
 } from 'react-bootstrap';
 
@@ -32,13 +33,13 @@ function Vehicule({
   const [currentVehicule, setcurrentVehicule] = useState({});
   // Form initial values
   const initalValues = {
-    brand: currentVehicule.brand ?? '',
-    model: currentVehicule.model ?? '',
-    standard: currentVehicule.standard ?? '',
-    format: currentVehicule.format ?? '',
-    power_type: currentVehicule.power_type ?? '',
-    max_voltage: currentVehicule.max_voltage ?? '',
-    max_amperage: currentVehicule.max_amperage ?? '',
+    brand: '',
+    model: '',
+    standard: '',
+    format: '',
+    power_type: '',
+    max_voltage: '',
+    max_amperage: '',
   };
 
   // Local State Management
@@ -47,7 +48,6 @@ function Vehicule({
   const [showModal, setshowModal] = useState(false);
   // Modal Delete
   const [showDeleteModal, setshowDeleteModal] = useState(false);
-
   // Form functions
   const handleInputChange = (value, fieldName) => {
     setvehiculeProperties(prevState => ({ ...prevState, [fieldName]: value }));
@@ -61,13 +61,13 @@ function Vehicule({
     } else return;
   };
 
-  const _updateVehicule = () => {
-    console.log('currentVehicule', currentVehicule);
-    console.log('vehiculeProperties', vehiculeProperties);
-    updateVehicule(vehiculeProperties, currentVehicule._id);
+  const _updateVehicule = current => {
+    console.log('vehiculeProperties', vehiculeProperties, 'current', current);
+    updateVehicule(vehiculeProperties, current._id);
     setvehiculeProperties(initalValues);
     setshowModal(false);
     setcurrentVehicule({});
+    console.log('vehiculeProperties', vehiculeProperties, 'current', current);
   };
 
   const _deleteVehicule = current => {
@@ -89,174 +89,189 @@ function Vehicule({
           <Button
             className='btn-fill pull-right'
             type='submit'
-            onClick={() => setshowModal(true)}
+            onClick={() => {
+              setcurrentVehicule({});
+              setshowModal(true);
+            }}
           >
             Nouveau véhicule
           </Button>
           <hr />
-          <Modal
-            show={showModal}
-            onHide={() => setshowModal(false)}
-            className='search-modal text-center modal fade'
-          >
-            <Modal.Body>
-              {/* <div className='modal-content'> */}
-              {/* <div className='modal-body'> */}
-              {/* <h4> */}
-              <Card>
-                <Card.Header>
-                  <Card.Title as='h4'>
-                    {currentVehicule.brand
-                      ? `EV: ${currentVehicule.brand}`
-                      : `Nouvelle vehicule`}
-                    {/* </h4> */}
-                  </Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Form>
-                    <Row>
-                      <Col md='6'>
-                        <Form.Group>
-                          <label>Marque</label>
-                          <Form.Control
-                            placeholder={currentVehicule.brand}
-                            value={vehiculeProperties.brand}
-                            type='text'
-                            name='brand'
-                            onChange={e =>
-                              handleInputChange(e.target.value, e.target.name)
-                            }
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col md='6'>
-                        <Form.Group>
-                          <label>Modèle</label>
-                          <Form.Control
-                            placeholder={currentVehicule.model}
-                            value={vehiculeProperties.model}
-                            type='text'
-                            name='model'
-                            onChange={e =>
-                              handleInputChange(e.target.value, e.target.name)
-                            }
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Control
-                          aria-label='Connector select'
-                          as='select'
-                          custom
-                          name='standard'
-                          value={vehiculeProperties.standard}
-                          onChange={e =>
-                            handleInputChange(e.target.value, e.target.name)
-                          }
-                        >
-                          <option defaultValue=''>Type de connecteur</option>
-                          {connectorTypeOptions.map((option, idx) => (
-                            <option key={idx} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </Form.Control>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col md='6'>
-                        <Form.Group>
-                          <label>Voltage Maximum</label>
-                          <Form.Control
-                            placeholder='Voltage'
-                            type='text'
-                            name='max_voltage'
-                            value={vehiculeProperties.max_voltage}
-                            onChange={e =>
-                              handleInputChange(e.target.value, e.target.name)
-                            }
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col md='6'>
-                        <Form.Group>
-                          <label>Ampérage Maximum</label>
-                          <Form.Control
-                            placeholder='Ampérage'
-                            type='text'
-                            name='max_amperage'
-                            value={vehiculeProperties.max_amperage}
-                            onChange={e =>
-                              handleInputChange(e.target.value, e.target.name)
-                            }
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                  </Form>
-                  {currentVehicule.brand ? (
-                    <Button
-                      className='btn-fill pull-right'
-                      type='submit'
-                      onClick={() => _updateVehicule()}
-                    >
-                      Modifier
-                    </Button>
-                  ) : (
-                    <Button
-                      className='btn-fill pull-right'
-                      type='submit'
-                      onClick={() => _addVehicule(user)}
-                    >
-                      Ajouter
-                    </Button>
-                  )}
-
-                  {/* </div> */}
-                  {/* </div> */}
-                </Card.Body>
-              </Card>
-            </Modal.Body>
-          </Modal>
-          <Modal
-            show={showDeleteModal}
-            onHide={() => setshowDeleteModal(false)}
-            className='search-modal text-center modal fade'
-          >
-            <Modal.Body>
-              <div className='modal-content'>
-                <div className='modal-body'>
+          {currentVehicule ? (
+            <>
+              <Modal
+                show={showModal}
+                onHide={() => setshowModal(false)}
+                className='search-modal text-center modal fade'
+              >
+                <Modal.Body>
                   <Card>
                     <Card.Header>
                       <Card.Title as='h4'>
-                        {`Supprimer EV ${currentVehicule.brand}`}
+                        {currentVehicule._id
+                          ? `EV: ${currentVehicule.brand}`
+                          : `Nouveau vehicule`}
                       </Card.Title>
                     </Card.Header>
                     <Card.Body>
-                      <Button
-                        className='btn-fill pull-right'
-                        type='submit'
-                        onClick={() => {
-                          _deleteVehicule(currentVehicule);
-                        }}
-                      >
-                        Supprimer
-                      </Button>
-                      <Button
-                        className='btn-fill pull-right'
-                        type='submit'
-                        onClick={() => setshowDeleteModal(false)}
-                      >
-                        Annuler
-                      </Button>
+                      <Form>
+                        <Row>
+                          <Col md='6'>
+                            <Form.Group>
+                              <label>Marque</label>
+                              <Form.Control
+                                placeholder={currentVehicule.brand ?? 'Marque'}
+                                type='text'
+                                name='brand'
+                                onChange={e =>
+                                  handleInputChange(
+                                    e.target.value,
+                                    e.target.name
+                                  )
+                                }
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col md='6'>
+                            <Form.Group>
+                              <label>Modèle</label>
+                              <Form.Control
+                                placeholder={currentVehicule.model ?? 'Modèle'}
+                                type='text'
+                                name='model'
+                                onChange={e =>
+                                  handleInputChange(
+                                    e.target.value,
+                                    e.target.name
+                                  )
+                                }
+                              />
+                            </Form.Group>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <Form.Control
+                              aria-label='Connector select'
+                              as='select'
+                              custom
+                              name='standard'
+                              onChange={e =>
+                                handleInputChange(e.target.value, e.target.name)
+                              }
+                            >
+                              <option defaultValue=''>
+                                Type de connecteur
+                              </option>
+                              {connectorTypeOptions.map((option, idx) => (
+                                <option key={idx} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md='6'>
+                            <Form.Group>
+                              <label>Voltage Maximum</label>
+                              <Form.Control
+                                placeholder={
+                                  currentVehicule.max_voltage ?? 'Voltage'
+                                }
+                                type='text'
+                                name='max_voltage'
+                                onChange={e =>
+                                  handleInputChange(
+                                    e.target.value,
+                                    e.target.name
+                                  )
+                                }
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col md='6'>
+                            <Form.Group>
+                              <label>Ampérage Maximum</label>
+                              <Form.Control
+                                placeholder={
+                                  currentVehicule.max_amperage ?? 'Ampérage'
+                                }
+                                type='text'
+                                name='max_amperage'
+                                onChange={e =>
+                                  handleInputChange(
+                                    e.target.value,
+                                    e.target.name
+                                  )
+                                }
+                              />
+                            </Form.Group>
+                          </Col>
+                        </Row>
+                      </Form>
+                      {currentVehicule._id ? (
+                        <Button
+                          className='btn-fill pull-right'
+                          type='submit'
+                          onClick={() => _updateVehicule(currentVehicule)}
+                        >
+                          Modifier
+                        </Button>
+                      ) : (
+                        <Button
+                          className='btn-fill pull-right'
+                          type='submit'
+                          onClick={() => _addVehicule(user)}
+                        >
+                          Ajouter
+                        </Button>
+                      )}
                     </Card.Body>
                   </Card>
-                </div>
-              </div>
-            </Modal.Body>
-          </Modal>
+                </Modal.Body>
+              </Modal>
+              <Modal
+                show={showDeleteModal}
+                onHide={() => setshowDeleteModal(false)}
+                className='search-modal text-center modal fade'
+              >
+                <Modal.Body>
+                  <div className='modal-content'>
+                    <div className='modal-body'>
+                      <Card>
+                        <Card.Header>
+                          <Card.Title as='h4'>
+                            {`Supprimer EV ${currentVehicule.brand}`}
+                          </Card.Title>
+                        </Card.Header>
+                        <Card.Body>
+                          <Button
+                            className='btn-fill pull-right'
+                            type='submit'
+                            onClick={() => {
+                              _deleteVehicule(currentVehicule);
+                            }}
+                          >
+                            Supprimer
+                          </Button>
+                          <Button
+                            className='btn-fill pull-right'
+                            type='submit'
+                            onClick={() => setshowDeleteModal(false)}
+                          >
+                            Annuler
+                          </Button>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  </div>
+                </Modal.Body>
+              </Modal>
+            </>
+          ) : (
+            <hr />
+          )}
           <Row>
             <Col md='12'>
               <Row>
@@ -264,40 +279,33 @@ function Vehicule({
                   vehicules?.map(vehicule => {
                     return (
                       <Col md='6'>
-                        <Card className='card-user'>
-                          <div className='card-image'>
-                            <img
-                              alt='...'
-                              src={
-                                require('assets/img/photo-1431578500526-4d9613015464.jpeg')
-                                  .default
-                              }
-                            />
-                          </div>
+                        <Card style={{ width: '18rem' }}>
                           <Card.Body>
-                            <div className='author'>
-                              <a
-                                href='#pablo'
-                                onClick={e => e.preventDefault()}
-                              >
-                                <img
-                                  alt='...'
-                                  className='avatar border-gray'
-                                  src={
-                                    require('assets/img/default-avatar.png')
-                                      .default
-                                  }
-                                />
-                                <h3 className='title'>
-                                  {vehicule.brand},{vehicule.model}
-                                </h3>
-                              </a>
-                            </div>
-                            {vehicule.format} <br />
-                            {vehicule.standard} <br />
-                            {vehicule.max_voltage} <br />
-                            {vehicule.power_type} <br />
-                            {vehicule.max_amperage} <br />
+                            <h3 className='title'>
+                              {vehicule.brand},{vehicule.model}
+                            </h3>
+                            {vehicule.standard ? (
+                              <img
+                                alt='...'
+                                className='avatar border-gray'
+                                src={
+                                  require(`assets/img/connectors/${vehicule.standard}.png`)
+                                    .default
+                                }
+                              />
+                            ) : (
+                              <br />
+                            )}
+                            <br />
+
+                            <ListGroupItem>{vehicule.standard}</ListGroupItem>
+
+                            <ListGroupItem>
+                              Voltage: {vehicule.max_voltage}
+                            </ListGroupItem>
+                            <ListGroupItem>
+                              Ampérage: {vehicule.max_amperage}
+                            </ListGroupItem>
                             <OverlayTrigger
                               overlay={
                                 <Tooltip id='tooltip-488980961'>
@@ -312,7 +320,10 @@ function Vehicule({
                                 onClick={() => {
                                   setcurrentVehicule(vehicule);
                                   setshowModal(true);
-                                  console.log('vehicule', vehicule);
+                                  console.log(
+                                    'currentVehicule',
+                                    currentVehicule
+                                  );
                                 }}
                               >
                                 <i className='fas fa-edit' />

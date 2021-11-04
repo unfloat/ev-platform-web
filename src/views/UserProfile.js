@@ -4,33 +4,24 @@ import { connect } from 'react-redux';
 
 import { Button, Card, Form, Container, Row, Col } from 'react-bootstrap';
 
-function User({
-  user,
-  updateProfile,
-  hasImage,
-  setHasImage,
-  color,
-  setColor,
-  image,
-  setImage,
-}) {
+function User({ user, updateProfile }) {
   const initialValues = {
-    firstname: user.firstname,
-    lastname: user.lastname,
-    address: '',
-    city: '',
-    country: '',
-    about: '',
-    website_url: '',
-    phone: '',
+    firstname: user.firstname ?? '',
+    lastname: user.lastname ?? '',
+    address: user.address ?? '',
+    city: user.city ?? '',
+    country: user.country ?? '',
+    about: user.about ?? '',
+    website_url: user.website_url ?? '',
+    phone: user.phone ?? '',
   };
   const [profileProperties, setprofileProperties] = useState(initialValues);
   const handleInputChange = (value, fieldName) => {
     setprofileProperties(prevState => ({ ...prevState, [fieldName]: value }));
   };
 
-  const _updateProfile = _user => {
-    updateProfile(profileProperties, _user.id);
+  const _updateProfile = () => {
+    updateProfile(profileProperties, user.id);
   };
 
   return (
@@ -165,7 +156,7 @@ function User({
                   <div className='clearfix' />
                   <Button
                     className='btn-fill pull-right'
-                    onClick={() => _updateProfile(user)}
+                    onClick={() => _updateProfile()}
                   >
                     Enregistrer
                   </Button>
@@ -193,19 +184,17 @@ function User({
                       src={require('assets/img/default-avatar.png').default}
                     />
                     <h3 className='title'>
-                      {user.firstname} {user.lastname}
+                      {user.firstname} {user.lastname} ( {user.role} )
                     </h3>
                   </a>
                 </div>
-                <Card.Title>{user.role}</Card.Title>
-                <Card.Subtitle className='mb-2 text-muted'>
-                  {user.website_url}
-                </Card.Subtitle>
-                <Card.Text>{user.address}</Card.Text>
-                <Card.Text>{user.city}</Card.Text>
-                <Card.Text>{user.country}</Card.Text>
+                <br />
+
+                <Card.Text>{user.website_url}</Card.Text>
+                <Card.Text>Adresse: {user.address}</Card.Text>
+                <Card.Text>Ville: {user.city}</Card.Text>
                 <Card.Text>{user.about}</Card.Text>
-                <Card.Text>{user.phone} </Card.Text>
+                <Card.Text>Téléphone: {user.phone} </Card.Text>
               </Card.Body>
 
               <hr />

@@ -5,24 +5,28 @@ import {
   getLocationsByConnectorType,
 } from '../../actions/locationAction';
 import { connect } from 'react-redux';
-import { Modal, Card } from 'react-bootstrap';
+
+import { Card, Modal, Button, Alert } from 'react-bootstrap';
 
 const Map = ({
-  options,
   locations,
   getLocations,
   getLocationsByUserGeolocation,
   getLocationsByConnectorType,
   filters,
   connectiontypeid,
+  loading,
 }) => {
-  const [map, setMap] = useState();
+  const [carte, setCarte] = useState();
   const ref = useRef(null);
   // const { latitude, longitude } = usePosition();
   const [markers, setMarkers] = useState([]);
   const [showModal, setshowModal] = useState(false);
   const [currentLocation, setcurrentLocation] = useState({});
-  const [selectedLatLng, setselectedLatLng] = useState({});
+  const [selectedLatLng, setselectedLatLng] = useState({
+    latitude: 45.891181,
+    longitude: 4.8223994,
+  });
 
   //latitude: 49.2603667,
   // longitude: 3.0872607,
@@ -33,43 +37,42 @@ const Map = ({
     setMarkers([]);
   };
 
+  // add markers to the map after getting/filtering locations
   const addMarkers = (locs, mapInstance) => {
     removeMarkers(markers);
     const tmpMarkers = [];
     const bounds = new window.google.maps.LatLngBounds();
+    //45.891181, 4.8223994
 
-    locs.map(location => {
-      bounds.extend(
-        new window.google.maps.LatLng(
-          location.AddressInfo.Latitude,
-          location.AddressInfo.Longitude
-        )
-      );
-      // Initialize marker
-      const marker = new window.google.maps.Marker({
-        position: new window.google.maps.LatLng(
-          location.AddressInfo.Latitude,
-          location.AddressInfo.Longitude
-        ),
-        title: location.AddressInfo.Title,
+    if (locs.length > 0) {
+      locs.map(location => {
+        bounds.extend(
+          new window.google.maps.LatLng(
+            location.AddressInfo.Latitude,
+            location.AddressInfo.Longitude
+          )
+        );
+        // Initialize marker
+        const marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(
+            location.AddressInfo.Latitude,
+            location.AddressInfo.Longitude
+          ),
+          title: location.AddressInfo.Title,
+        });
+        marker.setMap(mapInstance);
+
+        marker.addListener('click', location => {
+          setcurrentLocation(location);
+          console.log('current location', location);
+
+          setshowModal(true);
+        });
+        tmpMarkers.push(marker);
       });
-      marker.setMap(mapInstance);
-
-      marker.addListener('click', () => {
-        setshowModal(prev => !prev);
-        setcurrentLocation(location);
-      });
-
-      // selectedLatLng
-      //   ? bounds.extend(new window.google.maps.LatLng(selectedLatLng))
-      //   : bounds.extend(
-      //       new window.google.maps.LatLng(
-      //         location.AddressInfo.Latitude,
-      //         location.AddressInfo.Longitude
-      //       )
-      //     );
-      tmpMarkers.push(marker);
-    });
+    } else {
+      console.log('selectedLatLng', selectedLatLng);
+    }
 
     setMarkers(tmpMarkers);
     mapInstance.fitBounds(bounds);
@@ -85,161 +88,134 @@ const Map = ({
         };
         const _map = new window.google.maps.Map(ref.current, {
           center: options,
-          zoom: 6,
+          zoom: 10,
         });
-        setMap(_map);
+        setCarte(_map);
       } catch (err) {
         console.log(err);
       }
     };
+
     if (!window.google) {
       const script = document.createElement(`script`);
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
       document.head.append(script);
       script.addEventListener(`load`, onLoad);
-      // return () => script.removeEventListener(`load`, onLoad);
     } else onLoad();
   }, []);
 
   useEffect(() => {
+    console.log('getLocations');
     getLocations();
   }, []);
 
   useEffect(() => {
-    console.log('selectedLatLng', selectedLatLng);
-    getLocationsByUserGeolocation(selectedLatLng);
-    console.log('useEffect locations', locations);
-  }, [selectedLatLng]);
+    console.log('getLocationsByUserGeolocation');
+    getLocationsByUserGeolocation({
+      latitude: selectedLatLng.latitude,
+      longitude: selectedLatLng.longitude,
+      connectiontypeid,
+    });
+  }, [selectedLatLng, connectiontypeid]);
 
   useEffect(() => {
+    console.log('getLocationsByConnectorType');
+
     getLocationsByConnectorType(connectiontypeid);
-    console.log(
-      'useEffect locations connectiontypeid ',
-      connectiontypeid,
-      locations
-    );
   }, [connectiontypeid]);
 
   // Drop Markers
   useEffect(() => {
-    if (locations.length && map) {
-      addMarkers(locations, map);
-
-      // .renderingType != 'UNINITIALIZED'
+    if (locations.length > 0 && carte) {
+      console.log(currentLocation);
+      addMarkers(locations, carte);
       const myLatlng = { lat: 49.2603667, lng: 3.0872607 };
       // Create the initial InfoWindow.
       let infoWindow = new window.google.maps.InfoWindow({
-        content: 'Click the map to get Lat/Lng!',
+        content: 'Cliquez où vous voulez chercher votre borne',
         position: myLatlng,
       });
-      infoWindow.open(map);
-      map.addListener('click', mapsMouseEvent => {
-        console.log(mapsMouseEvent);
-        setshowModal(prev => !prev);
-        setcurrentLocation({});
-        //Close the current InfoWindow.
+      infoWindow.open(carte);
+      carte.addListener('click', mapsMouseEvent => {
+        console.log('mapsMouseEvent', mapsMouseEvent.latLng.toJSON().lat);
+        setselectedLatLng({
+          latitude: mapsMouseEvent.latLng.toJSON().lat,
+          longitude: mapsMouseEvent.latLng.toJSON().lng,
+        });
 
-        // Create a new InfoWindow.
+        // setshowModal(true);
+
+        console.log('selectedLatLng', selectedLatLng);
+        setcurrentLocation({});
       });
+
+      // .renderingType != 'UNINITIALIZED'
     }
-  }, [locations, map]);
+  }, [locations, carte]);
 
   // Map Filter
   useEffect(() => {
     let filterdLoc = locations;
-    if (map && locations) {
+    if (carte && locations.length > 0) {
       if (filters.recently_verified) {
         filterdLoc = locations.filter(
           loc => loc.IsRecentlyVerified === filters.recently_verified
         );
-        addMarkers(filterdLoc, map);
+        addMarkers(filterdLoc, carte);
       }
       if (filters.is_operational) {
         filterdLoc = locations.filter(
           loc => loc.StatusType.IsOperational === filters.is_operational
         );
-        addMarkers(filterdLoc, map);
+        addMarkers(filterdLoc, carte);
       }
       if (filters.is_pay_at_location) {
         filterdLoc = locations.filter(
           loc => loc.UsageType.IsPayAtLocation === filters.is_pay_at_location
         );
-        addMarkers(filterdLoc, map);
+        addMarkers(filterdLoc, carte);
       }
 
-      addMarkers(filterdLoc, map);
+      addMarkers(filterdLoc, carte);
     }
   }, [filters]);
 
   return (
     <>
-      <div>
+      {currentLocation ? (
         <Modal
           show={showModal}
-          onHide={() => setshowModal(prev => !prev)}
+          onHide={() => setshowModal(false)}
           className='search-modal text-center modal fade'
         >
           <Modal.Body>
-            {currentLocation.AddressInfo ? (
-              <Card className='card-user'>
-                <Card.Body>
-                  <div className='author'>
-                    <a href='#pablo' onClick={e => e.preventDefault()}>
-                      <img
-                        alt='...'
-                        className='avatar border-gray'
-                        src={
-                          require('assets/img/connectors/DOMESTIC_B.png')
-                            .default
-                        }
-                      />
-                    </a>
-                  </div>
-                  <Card.Title> {currentLocation.AddressInfo.Title}</Card.Title>
-                  <Card.Subtitle className='mb-2 text-muted'>
-                    {' '}
-                    {currentLocation.ContactTelephone1}
-                    <br />
-                    {currentLocation.ContactTelephone2}
-                    {currentLocation.ContactEmail}
-                  </Card.Subtitle>
-                  <Card.Text>
-                    {currentLocation.AddressInfo.Town},
-                    {currentLocation.AddressInfo.Postcode}
-                    {currentLocation.AddressInfo.Latitude},{' '}
-                    {currentLocation.AddressInfo.Longitude}
-                    <br />
-                    <>
-                      {currentLocation.IsOperational
-                        ? 'Opérationnelle'
-                        : 'Non Opérationnelle'}
-                    </>
-                    <br />
-                    <>
-                      {currentLocation.IsRecentlyVerified
-                        ? 'Vérifié récemment'
-                        : 'Non vérifié récemment'}
-                    </>{' '}
-                    <br />
-                    <Card.Link href={currentLocation.RelatedURL}>
-                      Site web
-                    </Card.Link>
-                  </Card.Text>
-                </Card.Body>
-                <Card.Footer>
-                  <small className='text-muted'>
-                    Dernière mise à jour effectuée le:{' '}
-                    {currentLocation.DateLastStatusUpdate}
-                  </small>
-                </Card.Footer>
-              </Card>
-            ) : (
-              <div>
-                <p>{'No current location'}</p>
-              </div>
-            )}
+            <Card>
+              <Card.Body>
+                <Button
+                  onClick={e => console.log('reservation', currentLocation)}
+                >
+                  Réserver
+                </Button>
+              </Card.Body>
+            </Card>
           </Modal.Body>
         </Modal>
+      ) : (
+        <hr />
+      )}
+
+      <div>
+        {loading ? (
+          <div>
+            <Alert variant='info'>
+              <span>Recherche des stations ...</span>
+            </Alert>
+          </div>
+        ) : (
+          <Alert variant='info'>
+            <span>Cliquez sur la carte pour chercher des stations</span>
+          </Alert>
+        )}
       </div>
       <div
         style={{ height: `60vh`, margin: `1em 0`, borderRadius: `0.5em` }}

@@ -18,6 +18,7 @@ import {
   Tooltip,
   Nav,
   ListGroupItem,
+  ListGroup,
 } from 'react-bootstrap';
 import { usePosition } from '../hooks/usePosition';
 
@@ -30,14 +31,24 @@ function Borne({
   updateCPOLocation,
   deleteLocation,
 }) {
-  const [hasImage, setHasImage] = useState(true);
-  const [image, setImage] = useState();
-  const [color, setColor] = useState();
-  const [freeCharging, setfreeCharging] = useState(false);
+  const [currentStation, setcurrentStation] = useState();
 
   // Form initial values
-  const initalValues = {
-    name: '',
+  // const initialValues = {
+  //   location_name: currentStation.location_name ?? '',
+  //   address: currentStation.address ?? user.address,
+  //   bookable: currentStation.bookable ?? false,
+  //   free_charging: currentStation.free_charging ?? false,
+  //   connection: currentStation.connection ?? '',
+  //   condition_acces: currentStation.condition_acces ?? '',
+  //   payment_by_card: currentStation.payment_by_card ?? false,
+  //   location_type: currentStation.location_type ?? '',
+  //   postal_code: currentStation.postal_code ?? '',
+  //   tarif: currentStation.tarif ?? '',
+  // };
+
+  const initialValues = {
+    location_name: '',
     address: user.address,
     bookable: false,
     free_charging: false,
@@ -50,34 +61,34 @@ function Borne({
   };
   // Local State Management
   const { latitude, longitude } = usePosition();
+  // Modal Add/Update
   const [showModal, setshowModal] = useState(false);
+  // Modal Delete
   const [showDeleteModal, setshowDeleteModal] = useState(false);
-  const [currentStation, setcurrentStation] = useState({});
-  const [locationProperties, setlocationProperties] = useState(initalValues);
+  const [locationProperties, setlocationProperties] = useState(initialValues);
   // Form functions
   const handleInputChange = (value, fieldName) => {
     setlocationProperties(prevState => ({ ...prevState, [fieldName]: value }));
   };
   // CRUD actions call
   const _addLocation = _user => {
-    console.log(_user, '_user', locationProperties, latitude, longitude);
-    if (locationProperties.name !== '') {
+    if (locationProperties) {
       addLocation({
         ...locationProperties,
         position: {
-          latitude: latitude.toString(),
-          longitude: longitude.toString(),
+          latitude: latitude ? latitude.toString() : '49.2603667',
+          longitude: longitude ? longitude.toString() : '3.0872607',
         },
         userId: _user.id,
       });
-      setlocationProperties(initalValues);
+      setlocationProperties(initialValues);
       setshowModal(false);
     } else return;
   };
   const _updateLocation = current => {
-    console.log('current', current);
     updateCPOLocation(locationProperties, current._id);
     setshowModal(false);
+    setlocationProperties(initialValues);
     setcurrentStation({});
   };
 
@@ -101,293 +112,280 @@ function Borne({
           <Button
             className='btn-fill pull-right'
             type='submit'
-            onClick={() => setshowModal(true)}
+            onClick={() => {
+              setcurrentStation({});
+              setshowModal(true);
+            }}
           >
             Nouvelle borne
           </Button>
           <hr />
-          <Modal
-            show={showModal}
-            onHide={() => setshowModal(false)}
-            className='search-modal text-center modal fade'
-          >
-            <Modal.Body>
-              <div className='modal-content'>
-                <div className='modal-body'>
-                  <Card>
-                    <Card.Header>
-                      <Card.Title as='h4'>
-                        {currentStation.location_name
-                          ? `Modifier la borne ${currentStation.location_name}`
-                          : `Nouvelle borne`}
-                      </Card.Title>
-                    </Card.Header>
-                    <Card.Body>
-                      <Form>
-                        <Row>
-                          <Col md='6'>
-                            <Form.Group>
-                              <label>Titre</label>
-                              <Form.Control
-                                placeholder='Titre'
-                                type='text'
-                                name='name'
-                                value={locationProperties.name}
-                                onChange={e =>
-                                  handleInputChange(
-                                    e.target.value,
-                                    e.target.name
-                                  )
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                          <Col md='6'>
-                            <Form.Group>
-                              <label>Type d'emplacement</label>
-                              <Form.Control
-                                placeholder='Station service, parking,...'
-                                type='text'
-                                name='location_type'
-                                value={locationProperties.location_type}
-                                onChange={e =>
-                                  handleInputChange(
-                                    e.target.value,
-                                    e.target.name
-                                  )
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col md='4'>
-                            <Form.Check
-                              type='switch'
-                              id='isbookable-switch'
-                              label='Reservation'
-                              value={locationProperties.bookable}
-                              onChange={e =>
-                                setlocationProperties(prev => ({
-                                  ...prev,
-                                  bookable: !prev.bookable,
-                                }))
-                              }
-                            />
-                          </Col>
-                          <Col md='4'>
-                            <Form.Check
-                              type='switch'
-                              id='isLive-switch'
-                              label='Live'
-                              value={locationProperties.status}
-                              onChange={e =>
-                                setlocationProperties(prev => ({
-                                  ...prev,
-                                  status: !prev.status,
-                                }))
-                              }
-                            />
-                          </Col>
-                          <Col md='4'>
-                            <Form.Check
-                              type='switch'
-                              id='free_charging-switch'
-                              label='Recharge gratuite'
-                              value={locationProperties.free_charging}
-                              onChange={e =>
-                                setlocationProperties(prev => ({
-                                  ...prev,
-                                  free_charging: !prev.free_charging,
-                                }))
-                              }
-                            />
-                          </Col>
-                        </Row>
-                        {locationProperties.free_charging ? (
-                          <br />
-                        ) : (
-                          <Row>
-                            {/* <Col md='6'>
-                        <Form.Check
-                          type='switch'
-                          id='payment_by_card-switch'
-                          label='Payement Carte Bancaire'
-                          value={locationProperties.payment_by_card}
-                          onChange={e =>
-                            setlocationProperties(prev => ({
-                              ...prev,
-                              payment_by_card: !prev.payment_by_card,
-                            }))
-                          }
-                        />
-                      </Col> */}
-                            <Col md='12'>
-                              <Form.Group>
-                                <label>Tarif</label>
-                                <Form.Control
-                                  placeholder='Prix de recharge'
-                                  type='text'
-                                  name='tarif'
-                                  value={locationProperties.tarif}
+          {currentStation ? (
+            <>
+              <Modal
+                show={showModal}
+                onHide={() => setshowModal(false)}
+                className='search-modal text-center modal fade'
+              >
+                <Modal.Body>
+                  <div className='modal-content'>
+                    <div className='modal-body'>
+                      <Card>
+                        <Card.Header>
+                          <Card.Title as='h4'>
+                            {currentStation._id
+                              ? `Modifier la borne ${currentStation.location_name}`
+                              : `Nouvelle borne`}
+                          </Card.Title>
+                        </Card.Header>
+                        <Card.Body>
+                          <Form>
+                            <Row>
+                              <Col md='6'>
+                                <Form.Group>
+                                  <label>Titre</label>
+                                  <Form.Control
+                                    placeholder={
+                                      currentStation.location_name ?? 'Titre'
+                                    }
+                                    type='text'
+                                    name='location_name'
+                                    onChange={e =>
+                                      handleInputChange(
+                                        e.target.value,
+                                        e.target.name
+                                      )
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col md='6'>
+                                <Form.Group>
+                                  <label>Type d'emplacement</label>
+                                  <Form.Control
+                                    placeholder={
+                                      currentStation.location_type ??
+                                      'Station service, parking,...'
+                                    }
+                                    type='text'
+                                    name='location_type'
+                                    onChange={e =>
+                                      handleInputChange(
+                                        e.target.value,
+                                        e.target.name
+                                      )
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col md='4'>
+                                <Form.Check
+                                  type='switch'
+                                  id='isbookable-switch'
+                                  label='Reservation'
+                                  value={locationProperties.bookable}
                                   onChange={e =>
-                                    handleInputChange(
-                                      e.target.value,
-                                      e.target.name
-                                    )
+                                    setlocationProperties(prev => ({
+                                      ...prev,
+                                      bookable: !prev.bookable,
+                                    }))
                                   }
                                 />
-                              </Form.Group>
-                            </Col>
-                          </Row>
-                        )}
-                        <Row>
-                          <Col md='12'>
-                            <Form.Group>
-                              <label>Condition d'accès</label>
-                              <Form.Control
-                                placeholder={`Conditions d'accès`}
-                                type='text'
-                                name='condition_acces'
-                                value={locationProperties.condition_acces}
-                                onChange={e =>
-                                  handleInputChange(
-                                    e.target.value,
-                                    e.target.name
-                                  )
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col md='6'>
-                            <Form.Group>
-                              <label>Latitude</label>
-                              <Form.Control
-                                disabled
-                                type='text'
-                                value={latitude ? latitude : 'latitude'}
-                              />
-                            </Form.Group>
-                          </Col>
-                          <Col md='6'>
-                            <Form.Group>
-                              <label>Longitude</label>
-                              <Form.Control
-                                disabled
-                                type='text'
-                                value={longitude ? longitude : 'longitude'}
-                              />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                      </Form>
-                      {currentStation.location_name ? (
-                        <Button
-                          className='btn-fill pull-right'
-                          type='submit'
-                          onClick={() => _updateLocation(currentStation, user)}
-                        >
-                          Modifier
-                        </Button>
-                      ) : (
-                        <Button
-                          className='btn-fill pull-right'
-                          type='submit'
-                          onClick={() => _addLocation(user)}
-                        >
-                          Ajouter
-                        </Button>
-                      )}
-                    </Card.Body>
-                  </Card>
-                </div>
-              </div>
-            </Modal.Body>
-          </Modal>
-          <Modal
-            show={showDeleteModal}
-            onHide={() => setshowDeleteModal(false)}
-            className='search-modal text-center modal fade'
-          >
-            <Modal.Body>
-              <div className='modal-content'>
-                <div className='modal-body'>
-                  <Card>
-                    <Card.Header>
-                      <Card.Title as='h4'>
-                        {`Supprimer la borne ${currentStation.location_name}`}
-                      </Card.Title>
-                    </Card.Header>
-                    <Card.Body>
-                      <Button
-                        className='btn-fill pull-right'
-                        type='submit'
-                        onClick={() => {
-                          _deleteLocation(currentStation);
-                        }}
-                      >
-                        Supprimer
-                      </Button>
-                      <Button
-                        className='btn-fill pull-right'
-                        type='submit'
-                        onClick={() => setshowDeleteModal(false)}
-                      >
-                        Annuler
-                      </Button>
-                    </Card.Body>
-                  </Card>
-                </div>
-              </div>
-            </Modal.Body>
-          </Modal>
+                              </Col>
+                              <Col md='4'>
+                                <Form.Check
+                                  type='switch'
+                                  id='isLive-switch'
+                                  label='Live'
+                                  value={locationProperties.status}
+                                  onChange={e =>
+                                    setlocationProperties(prev => ({
+                                      ...prev,
+                                      status: !prev.status,
+                                    }))
+                                  }
+                                />
+                              </Col>
+                              <Col md='4'>
+                                <Form.Check
+                                  type='switch'
+                                  id='free_charging-switch'
+                                  label='Recharge gratuite'
+                                  onChange={e =>
+                                    setlocationProperties(prev => ({
+                                      ...prev,
+                                      free_charging: !prev.free_charging,
+                                    }))
+                                  }
+                                />
+                              </Col>
+                            </Row>
+                            {locationProperties.free_charging ? (
+                              <br />
+                            ) : (
+                              <Row>
+                                <Col md='12'>
+                                  <Form.Group>
+                                    <label>Tarif</label>
+                                    <Form.Control
+                                      placeholder='Prix de recharge'
+                                      type='text'
+                                      name='tarif'
+                                      onChange={e =>
+                                        handleInputChange(
+                                          e.target.value,
+                                          e.target.name
+                                        )
+                                      }
+                                    />
+                                  </Form.Group>
+                                </Col>
+                              </Row>
+                            )}
+                            <Row>
+                              <Col md='12'>
+                                <Form.Group>
+                                  <label>Condition d'accès</label>
+                                  <Form.Control
+                                    placeholder={`Conditions d'accès`}
+                                    type='text'
+                                    name='condition_acces'
+                                    onChange={e =>
+                                      handleInputChange(
+                                        e.target.value,
+                                        e.target.name
+                                      )
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col md='6'>
+                                <Form.Group>
+                                  <label>Latitude</label>
+                                  <Form.Control
+                                    disabled
+                                    type='text'
+                                    value={latitude ? latitude : null}
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col md='6'>
+                                <Form.Group>
+                                  <label>Longitude</label>
+                                  <Form.Control
+                                    disabled
+                                    type='text'
+                                    value={longitude ? longitude : null}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                          </Form>
+                          {currentStation._id ? (
+                            <Button
+                              className='btn-fill pull-right'
+                              type='submit'
+                              onClick={() => _updateLocation(currentStation)}
+                            >
+                              Modifier
+                            </Button>
+                          ) : (
+                            <Button
+                              className='btn-fill pull-right'
+                              type='submit'
+                              onClick={() => _addLocation(user)}
+                            >
+                              Ajouter
+                            </Button>
+                          )}
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  </div>
+                </Modal.Body>
+              </Modal>
+              <Modal
+                show={showDeleteModal}
+                onHide={() => setshowDeleteModal(false)}
+                className='search-modal text-center modal fade'
+              >
+                <Modal.Body>
+                  <div className='modal-content'>
+                    <div className='modal-body'>
+                      <Row>
+                        <Col>
+                          {`Supprimer la borne ${currentStation.location_name}`}
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col>
+                          <Button
+                            className='btn-fill pull-right'
+                            type='submit'
+                            onClick={() => {
+                              _deleteLocation(currentStation);
+                            }}
+                          >
+                            Supprimer
+                          </Button>
+                        </Col>
+                        <Col>
+                          <Button
+                            className='btn-fill pull-right'
+                            type='submit'
+                            onClick={() => setshowDeleteModal(false)}
+                          >
+                            Annuler
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
+                </Modal.Body>
+              </Modal>
+            </>
+          ) : (
+            <hr />
+          )}
+
           <Row>
             {locations?.length ? (
               locations?.map(location => {
                 return (
                   <Col md='4'>
-                    <Card className='card-user'>
-                      <div className='card-image'>
-                        <img
-                          alt='...'
-                          src={
-                            require('assets/img/photo-1431578500526-4d9613015464.jpeg')
-                              .default
-                          }
-                        />
-                      </div>
+                    <Card style={{ width: '18rem' }}>
+                      <Card.Header>{location.location_name}</Card.Header>
                       <Card.Body>
-                        {/* <Nav variant='tabs' defaultActiveKey='#first'>
-                          <Nav.Item>
-                            <Nav.Link href='#first'>Active</Nav.Link>
-                            <p className='description text-center'>
-                              {location.location_type}
-                              {location.address}
-                            </p>
-                          </Nav.Item>
-                          <Nav.Item>
-                            <Nav.Link href='#link'>Link</Nav.Link>
-                            {location.address}
-
-                            {location.standard}
-                            {location.max_voltage}
-                            {location.power_type}
-                            {location.max_amperage}
-                          </Nav.Item>
-                        </Nav> */}
-                        {location.location_name}
+                        <Card.Title>{location.address}</Card.Title>
                         <br />
-
-                        {location.location_type}
+                        <Card.Subtitle>{location.location_type}</Card.Subtitle>
                         <br />
-                        {location.address}
+                        <ListGroup className='list-group-flush'>
+                          <ListGroupItem>
+                            {location.free_charging
+                              ? 'Recharge gratuite'
+                              : 'Recharge payante'}
+                          </ListGroupItem>
+                          <ListGroupItem>
+                            {location.bookable
+                              ? 'Reservable'
+                              : 'Non reservable'}
+                          </ListGroupItem>
+                          <ListGroupItem>
+                            {location.condition_acces}
+                          </ListGroupItem>
+                        </ListGroup>
+
+                        <br />
                         <br />
                       </Card.Body>
                       <Card.Footer>
                         <small className='text-muted'>
-                          Last updated 3 mins ago
                           <OverlayTrigger
                             overlay={
                               <Tooltip id='tooltip-488980961'>Modifier</Tooltip>
@@ -398,8 +396,9 @@ function Borne({
                               type='button'
                               variant='info'
                               onClick={() => {
-                                setshowModal(true);
                                 setcurrentStation(location);
+                                setshowModal(true);
+                                console.log(currentStation);
                               }}
                             >
                               <i className='fas fa-edit' />

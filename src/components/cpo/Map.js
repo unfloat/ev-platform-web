@@ -11,12 +11,6 @@ const Map = ({ user, locations, filters }) => {
   const ref = useRef(null);
   const { latitude, longitude } = usePosition();
   const [markers, setMarkers] = useState([]);
-  const [mybounds, setmybounds] = useState({
-    lat: 45.891181, //45.891181
-    lng: 4.8223994, // 4.8223994
-  });
-
-  const [showModal, setshowModal] = useState(false);
 
   const removeMarkers = markersArray => {
     markersArray?.forEach(marker => marker.setMap(null));
@@ -42,24 +36,8 @@ const Map = ({ user, locations, filters }) => {
 
       console.log('marker', locs);
 
-      const modal = location => {
-        return (
-          <Modal
-            show={showModal}
-            onHide={() => setshowModal(false)}
-            className='search-modal text-center modal fade'
-          >
-            <Modal.Body>
-              <div className='modal-content'>
-                <div className='modal-body'>test</div>
-              </div>
-            </Modal.Body>
-          </Modal>
-        );
-      };
-
       const infowindow = new window.google.maps.InfoWindow({
-        content: `<p>${location.address}</p>
+        content: `<p>Adresse: ${location.address}</p>
         <ul>
           <li><strong>Conditions d'accés</strong>: ${location.condition_acces}</li>
           <li><strong>Type d'emplacement</strong>: ${location.location_type}</li>
@@ -73,8 +51,8 @@ const Map = ({ user, locations, filters }) => {
 
       bounds.extend(
         new window.google.maps.LatLng(
-          location.coordiantes.latitude,
-          location.coordiantes.longitude
+          location.coordinates.latitude,
+          location.coordinates.longitude
         )
       );
 
@@ -121,7 +99,8 @@ const Map = ({ user, locations, filters }) => {
 
   useEffect(() => {
     getCPOLocations(user.id);
-  }, []);
+    console.log('user', user);
+  });
 
   // Drop Markers
   useEffect(() => {
