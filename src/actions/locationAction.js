@@ -192,17 +192,6 @@ export const deleteLocation = (id, owner) => dispatch => {
     });
 };
 
-// .then(res => {
-//   dispatch(getCPOLocations(res.data.owner));
-// })
-
-/*
-, {
-      params: {
-        userId: id,
-      },
-    }
-    */
 export const getCPOLocations = id => dispatch => {
   dispatch(setLocationLoading());
   // user cpo id param
@@ -230,10 +219,6 @@ export const getCPOLocations = id => dispatch => {
       }
     });
 };
-
-//     .get('/locations/saveLocations')
-
-// Set station loading
 
 export const setLocationLoading = () => {
   return {

@@ -5,6 +5,9 @@ import {
   getLocationsByConnectorType,
 } from '../../actions/locationAction';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+import { usePosition } from './../../hooks/usePosition';
 
 import {
   Card,
@@ -13,6 +16,8 @@ import {
   Alert,
   ListGroupItem,
   ListGroup,
+  Row,
+  Col,
 } from 'react-bootstrap';
 
 const Map = ({
@@ -26,6 +31,8 @@ const Map = ({
 }) => {
   const [carte, setCarte] = useState();
   const ref = useRef(null);
+  const history = useHistory();
+
   // const { latitude, longitude } = usePosition();
   const [markers, setMarkers] = useState([]);
   const [showModal, setshowModal] = useState(false);
@@ -34,9 +41,7 @@ const Map = ({
     latitude: 45.891181,
     longitude: 4.8223994,
   });
-
-  //latitude: 49.2603667,
-  // longitude: 3.0872607,
+  const [reservation, setreservation] = useState(false);
 
   //  removes markers from map
   const removeMarkers = markersArray => {
@@ -76,6 +81,27 @@ const Map = ({
           setshowModal(true);
         });
         tmpMarkers.push(marker);
+        // Create the initial InfoWindow.
+        // if (selectedLatLng) {
+        //   let infoWindow = new window.google.maps.InfoWindow({
+        //     content: 'Cliquez où vous voulez chercher votre borne',
+        //     position: selectedLatLng,
+        //   });
+        //   infoWindow.open(mapInstance);
+        //   mapInstance.addListener('click', mapsMouseEvent => {
+        //     console.log('mapsMouseEvent', mapsMouseEvent.latLng.toJSON().lat);
+        //     infoWindow.close();
+        //     setselectedLatLng({
+        //       latitude: mapsMouseEvent.latLng.toJSON().lat,
+        //       longitude: mapsMouseEvent.latLng.toJSON().lng,
+        //     });
+
+        //     // setshowModal(true);
+
+        //     console.log('selectedLatLng', selectedLatLng);
+        //     setcurrentLocation({});
+        //   });
+        //}
       });
     } else {
       console.log('selectedLatLng', selectedLatLng);
@@ -84,14 +110,17 @@ const Map = ({
     setMarkers(tmpMarkers);
     mapInstance.fitBounds(bounds);
   };
+  const reserver = () => {
+    history.push('/admin/reserver');
+  };
 
   // Initialize map
   useEffect(() => {
     const onLoad = () => {
       try {
         const options = {
-          lat: 45.891181, //45.891181
-          lng: 7, // 4.8223994
+          lat: 45.891181, //latitude
+          lng: 4.8223994, // longitude
         };
         const _map = new window.google.maps.Map(ref.current, {
           center: options,
@@ -111,18 +140,50 @@ const Map = ({
     } else onLoad();
   }, []);
 
+  // Geocoding
+  // useEffect(() => {
+  //   const onGeocode = () => {
+  //     try {
+  //       const geocoder = new window.google.maps.Geocoder();
+  //       geocoder.geocode({ address: 'paris' }, (results, status) => {
+  //         if (status == 'OK') {
+  //           carte.setCenter(results[0].geometry.location);
+  //           const marker = new window.google.maps.Marker({
+  //             map: carte,
+  //             position: results[0].geometry.location,
+  //           });
+  //         } else {
+  //           alert(
+  //             'Geocode was not successful for the following reason: ' + status
+  //           );
+  //         }
+  //       });
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   if (!window.google) {
+  //     const script = document.createElement(`script`);
+  //     script.src = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAhobSlTjGBQSW4nfojOb8T7PFvVN8hG94`;
+  //     document.head.append(script);
+  //     script.addEventListener(`load`, onGeocode);
+  //   } else onGeocode();
+  // return () => {
+  //   cleanup;
+  // };
+  // }, []);
+
   useEffect(() => {
     console.log('getLocations');
     getLocations();
   }, []);
 
-  useEffect(() => {
-    console.log('getLocationsByUserGeolocation');
-    getLocationsByUserGeolocation({
-      latitude: selectedLatLng.latitude,
-      longitude: selectedLatLng.longitude,
-    });
-  }, [selectedLatLng, connectiontypeid]);
+  // useEffect(() => {
+  //   console.log('getLocationsByUserGeolocation');
+  //   getLocationsByUserGeolocation({
+  //     selectedLatLng,
+  //   });
+  // }, [selectedLatLng]);
 
   useEffect(() => {
     console.log('getLocationsByConnectorType');
@@ -136,26 +197,6 @@ const Map = ({
       console.log(currentLocation);
       addMarkers(locations, carte);
       const myLatlng = { lat: 49.2603667, lng: 3.0872607 };
-      // Create the initial InfoWindow.
-      // let infoWindow = new window.google.maps.InfoWindow({
-      //   content: 'Cliquez où vous voulez chercher votre borne',
-      //   position: myLatlng,
-      // });
-      // infoWindow.open(carte);
-      // carte.addListener('click', mapsMouseEvent => {
-      //   console.log('mapsMouseEvent', mapsMouseEvent.latLng.toJSON().lat);
-      //   infoWindow.close();
-      // setselectedLatLng({
-      //   latitude: mapsMouseEvent.latLng.toJSON().lat,
-      //   longitude: mapsMouseEvent.latLng.toJSON().lng,
-      // });
-
-      // // setshowModal(true);
-
-      // console.log('selectedLatLng', selectedLatLng);
-      // setcurrentLocation({});
-      // });
-
       // .renderingType != 'UNINITIALIZED'
     }
   }, [locations, carte]);
@@ -178,7 +219,15 @@ const Map = ({
       }
       if (filters.is_pay_at_location) {
         filterdLoc = locations.filter(
-          loc => loc.UsageType.IsPayAtLocation === filters.is_pay_at_location
+          loc => loc.UsageType?.IsPayAtLocation === filters.is_pay_at_location
+        );
+        addMarkers(filterdLoc, carte);
+      }
+      if (filters.is_membership_required) {
+        filterdLoc = locations.filter(
+          loc =>
+            loc.UsageType?.IsMembershipRequired ===
+            filters.is_membership_required
         );
         addMarkers(filterdLoc, carte);
       }
@@ -203,32 +252,78 @@ const Map = ({
                 <Card.Subtitle>
                   {currentLocation.AddressInfo.AddressLine1}
                 </Card.Subtitle>
-                <br />
-                <ListGroup className='list-group-flush'>
-                  <ListGroupItem>
-                    Adresse: {currentLocation.AddressInfo.StateOrProvince}
-                  </ListGroupItem>
-                  <ListGroupItem>
-                    Code postal: {currentLocation.AddressInfo.Postcode}
-                  </ListGroupItem>
 
-                  <ListGroupItem>
-                    {currentLocation.AddressInfo.Town}
-                  </ListGroupItem>
-                </ListGroup>
-                <p> Prix de recharge: {currentLocation.UsageCost}</p>
+                <Row>
+                  <Col>
+                    {currentLocation.AddressInfo.StateOrProvince},
+                    {currentLocation.AddressInfo.Postcode}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col> {currentLocation.AddressInfo.Town}</Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <p> Prix de recharge: {currentLocation.UsageCost}</p>
+                  </Col>
+                </Row>
 
+                {currentLocation.Connections.map(connection => (
+                  <>
+                    <Row>
+                      <Col>{connection.ConnectionType.FormalName}</Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <p> {connection.CurrentType.Title}</p>
+                      </Col>
+                      <Col>
+                        <p>
+                          {connection.ConnectionType.IsDiscontinued
+                            ? 'Connexion Indirecte'
+                            : 'Connexion Directe'}
+                        </p>
+                      </Col>
+                      <Col>
+                        <p> Ampérage {connection.Amps ?? 'inconnu'}</p>
+                      </Col>
+                      <Col>
+                        <p> Voltage {connection.Voltage ?? ' inconnu'}</p>
+                      </Col>
+                      <Col>
+                        <p>
+                          {' '}
+                          Puissance par kWh {connection.PowerKW ?? ' inconnue'}
+                        </p>{' '}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <small className='text-muted'>
+                          Commentaires de recharge:
+                          {connection.Level?.Comments ?? 'Aucun'}
+                        </small>
+                      </Col>
+                    </Row>
+                  </>
+                ))}
+                {currentLocation.OperatorInfo?.WebsiteURL}
+              </Card.Body>
+              <Card.Footer>
                 <Button
-                  onClick={e => console.log('reservation', currentLocation)}
+                  onClick={e => {
+                    setreservation(currentLocation);
+                    setshowModal(false);
+                  }}
                 >
                   Réserver
                 </Button>
-              </Card.Body>
+              </Card.Footer>
             </Card>
           </Modal.Body>
         </Modal>
       ) : (
-        <hr />
+        <></>
       )}
 
       <div>
@@ -239,9 +334,18 @@ const Map = ({
             </Alert>
           </div>
         ) : (
-          <Alert variant='info'>
-            <span>Cliquez sur la carte pour chercher des stations</span>
-          </Alert>
+          <></>
+        )}
+      </div>
+      <div>
+        {reservation ? (
+          <div>
+            <Alert variant='info'>
+              <span>{reservation.AddressInfo.Title} réservée</span>
+            </Alert>
+          </div>
+        ) : (
+          <hr />
         )}
       </div>
       <div
@@ -265,6 +369,3 @@ export default connect(mapStateToProps, {
   getLocationsByUserGeolocation,
   getLocationsByConnectorType,
 })(Map);
-// export default React.forwardRef((props, ref) => (
-//   <ConnectedMap {...props} forwaredRef={ref} />
-// ));

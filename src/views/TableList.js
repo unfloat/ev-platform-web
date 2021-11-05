@@ -15,18 +15,7 @@ import {
   Col,
 } from 'react-bootstrap';
 
-function TableList({ loading, locations, getLocations }) {
-  const mountRef = React.useRef(false);
-  useEffect(() => {
-    getLocations();
-  });
-  useEffect(() => {
-    if (mountRef.current) {
-      console.log(locations);
-    } else {
-      mountRef.current = true;
-    }
-  }, [locations]);
+function TableList({ loading, locations }) {
   return (
     <>
       <Container fluid>
@@ -34,7 +23,7 @@ function TableList({ loading, locations, getLocations }) {
           <Col md='12'>
             <Card className='strpied-tabled-with-hover'>
               <Card.Header>
-                <Card.Title as='h4'>Locations</Card.Title>
+                <Card.Title as='h4'>Reservations</Card.Title>
                 <p className='card-category'>Locations</p>
               </Card.Header>
               <Card.Body className='table-full-width table-responsive px-0'>
@@ -89,4 +78,4 @@ const mapStateToProps = state => ({
   loading: state.location.loading,
 });
 
-export default connect(mapStateToProps, { getLocations })(TableList);
+export default connect(mapStateToProps)(TableList);

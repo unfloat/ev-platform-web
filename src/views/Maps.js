@@ -28,6 +28,8 @@ function Maps() {
   const initialFilters = {
     recently_verified: false,
     is_operational: false,
+    is_pay_at_location: false,
+    is_membership_required: false,
   };
   // const initialFilters = {
   //   isBookable: false,
@@ -236,26 +238,26 @@ function Maps() {
                       </Col>
                     </Row>
                     <Row>
-                      <Col md='6'>
+                      <Col md='4'>
                         <ButtonGroup className='mb-2'>
                           <ToggleButton
                             id='toggle-check'
                             type='checkbox'
                             variant='secondary'
-                            checked={filters.is_operational}
-                            name='isAvailable'
+                            checked={filters.is_pay_at_location}
+                            name='is_pay_at_location'
                             onChange={e =>
                               setFilters(prevState => ({
                                 ...prevState,
-                                is_operational: !filters.is_operational,
+                                is_pay_at_location: !filters.is_pay_at_location,
                               }))
                             }
                           >
-                            Live
+                            Paiement sur place
                           </ToggleButton>
                         </ButtonGroup>
                       </Col>
-                      <Col md='6'>
+                      <Col md='4'>
                         {/* <label>Vérifié récemment</label> */}
                         <ButtonGroup className='mb-2'>
                           <ToggleButton
@@ -270,7 +272,27 @@ function Maps() {
                               }))
                             }
                           >
-                            Vérifié récemment
+                            Mis à jour
+                          </ToggleButton>
+                        </ButtonGroup>
+                      </Col>
+                      <Col md='4'>
+                        {/* <label>Vérifié récemment</label> */}
+                        <ButtonGroup className='mb-2'>
+                          <ToggleButton
+                            id='toggle-check'
+                            type='checkbox'
+                            variant='secondary'
+                            checked={filters.is_membership_required}
+                            onChange={e =>
+                              setFilters(prevState => ({
+                                ...prevState,
+                                is_membership_required:
+                                  !filters.is_membership_required,
+                              }))
+                            }
+                          >
+                            Avec abonnement
                           </ToggleButton>
                         </ButtonGroup>
                       </Col>

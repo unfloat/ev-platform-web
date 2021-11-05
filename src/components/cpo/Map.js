@@ -22,50 +22,52 @@ const Map = ({ user, locations, filters }) => {
     // Deleting previous markers before adding the new list of markers
     const tmpMarkers = [];
     const bounds = new window.google.maps.LatLngBounds();
-    locs.forEach(location => {
-      // debugger; // eslint-disable-line no-debugger
-      // console.log('=========== ~ file: Map.js ~ line 37 ~ location', location);
-      const marker = new window.google.maps.Marker({
-        position: new window.google.maps.LatLng(
-          parseFloat(location.coordinates.latitude),
-          parseFloat(location.coordinates.longitude)
-        ),
-        // title: location.station_name,
-      });
-      marker.setMap(mapInstance);
-
-      console.log('marker', locs);
-
-      const infowindow = new window.google.maps.InfoWindow({
-        content: `<p>Adresse: ${location.address}</p>
-        <ul>
-          <li><strong>Conditions d'accés</strong>: ${location.condition_acces}</li>
-          <li><strong>Type d'emplacement</strong>: ${location.location_type}</li>
-          <li><strong>Phone</strong>: <a href="tel:${location.telephone_operateur}">${location.telephone_operateur}</a></li>
-        </ul>`,
-        boxStyle: {
-          width: '300px',
-          height: '300px',
-        },
-      });
-
-      bounds.extend(
-        new window.google.maps.LatLng(
-          location.coordinates.latitude,
-          location.coordinates.longitude
-        )
-      );
-
-      marker.addListener('click', () => {
-        infowindow.open({
-          anchor: marker,
-          map: mapInstance,
-          shouldFocus: true,
+    if (locs.length > 0) {
+      locs.forEach(location => {
+        // debugger; // eslint-disable-line no-debugger
+        // console.log('=========== ~ file: Map.js ~ line 37 ~ location', location);
+        const marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(
+            parseFloat(location.coordinates.latitude),
+            parseFloat(location.coordinates.longitude)
+          ),
+          // title: location.station_name,
         });
-      });
+        marker.setMap(mapInstance);
 
-      tmpMarkers.push(marker);
-    });
+        console.log('marker', locs);
+
+        const infowindow = new window.google.maps.InfoWindow({
+          content: `<p>Adresse: ${location.address}</p>
+          <ul>
+            <li><strong>Conditions d'accés</strong>: ${location.condition_acces}</li>
+            <li><strong>Type d'emplacement</strong>: ${location.location_type}</li>
+            <li><strong>Phone</strong>: <a href="tel:${location.telephone_operateur}">${location.telephone_operateur}</a></li>
+          </ul>`,
+          boxStyle: {
+            width: '300px',
+            height: '300px',
+          },
+        });
+
+        bounds.extend(
+          new window.google.maps.LatLng(
+            location.coordinates.latitude,
+            location.coordinates.longitude
+          )
+        );
+
+        marker.addListener('click', () => {
+          infowindow.open({
+            anchor: marker,
+            map: mapInstance,
+            shouldFocus: true,
+          });
+        });
+
+        tmpMarkers.push(marker);
+      });
+    }
 
     mapInstance.fitBounds(bounds);
   };

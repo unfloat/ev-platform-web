@@ -21,6 +21,7 @@ import {
   ListGroup,
 } from 'react-bootstrap';
 import { usePosition } from '../hooks/usePosition';
+import connectorTypeOptions from './../constants/connectorTypes';
 
 function Borne({
   locations,
@@ -264,6 +265,31 @@ function Borne({
                                     }
                                   />
                                 </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <Form.Control
+                                  aria-label='Connector select'
+                                  as='select'
+                                  custom
+                                  name='standard'
+                                  onChange={e =>
+                                    handleInputChange(
+                                      e.target.value,
+                                      e.target.name
+                                    )
+                                  }
+                                >
+                                  <option defaultValue=''>
+                                    Type de connecteur
+                                  </option>
+                                  {connectorTypeOptions.map((option, idx) => (
+                                    <option key={idx} value={option.value}>
+                                      {option.label}
+                                    </option>
+                                  ))}
+                                </Form.Control>
                               </Col>
                             </Row>
                             <Row>

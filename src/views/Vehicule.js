@@ -86,22 +86,22 @@ function Vehicule({
 
   return (
     <>
+      <Button
+        className='btn-fill pull-right'
+        type='submit'
+        onClick={() => {
+          setcurrentVehicule({});
+          setvehiculeProperties(initalValues);
+
+          setshowModal(true);
+        }}
+      >
+        Nouveau véhicule
+      </Button>
       {loading ? (
         <div> Chargement ...</div>
       ) : (
         <Container fluid>
-          <Button
-            className='btn-fill pull-right'
-            type='submit'
-            onClick={() => {
-              setcurrentVehicule({});
-              setvehiculeProperties(initalValues);
-
-              setshowModal(true);
-            }}
-          >
-            Nouveau véhicule
-          </Button>
           <hr />
           {currentVehicule ? (
             <>

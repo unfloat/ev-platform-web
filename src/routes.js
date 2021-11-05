@@ -87,21 +87,6 @@ const dashboardRoutes = [
   },
   {
     path: '/reserver',
-    name: 'Reserver',
-    icon: 'nc-icon nc-chart-pie-35',
-    component: Dashboard,
-    layout: '/admin',
-  },
-  {
-    path: '/dashboard',
-    name: 'Statistiques',
-    icon: 'nc-icon nc-chart-pie-35',
-    component: Dashboard,
-    layout: '/admin',
-    role: 'cpo',
-  },
-  {
-    path: '/re',
     name: 'Sessions',
     icon: 'nc-icon nc-chart-pie-35',
     component: TableList,
