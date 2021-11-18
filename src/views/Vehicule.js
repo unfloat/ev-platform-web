@@ -245,13 +245,12 @@ function Vehicule({
                 <Modal.Body>
                   <div className='modal-content'>
                     <div className='modal-body'>
-                      <Card>
-                        <Card.Header>
-                          <Card.Title as='h4'>
-                            {`Supprimer EV ${currentVehicule.brand}`}
-                          </Card.Title>
-                        </Card.Header>
-                        <Card.Body>
+                      <Row>
+                        <Col>{`Supprimer EV ${currentVehicule.brand}`}</Col>
+                      </Row>
+
+                      <Row>
+                        <Col>
                           <Button
                             className='btn-fill pull-right'
                             type='submit'
@@ -261,6 +260,8 @@ function Vehicule({
                           >
                             Supprimer
                           </Button>
+                        </Col>
+                        <Col>
                           <Button
                             className='btn-fill pull-right'
                             type='submit'
@@ -268,8 +269,8 @@ function Vehicule({
                           >
                             Annuler
                           </Button>
-                        </Card.Body>
-                      </Card>
+                        </Col>
+                      </Row>
                     </div>
                   </div>
                 </Modal.Body>
@@ -294,8 +295,8 @@ function Vehicule({
                             <br />
 
                             <ListGroupItem>
-                              {vehicule.standard}{' '}
-                              {vehicule.standard ? (
+                              {vehicule.standard}
+                              {/* {vehicule.standard ? (
                                 <img
                                   alt='...'
                                   className='avatar border-gray'
@@ -306,7 +307,7 @@ function Vehicule({
                                 />
                               ) : (
                                 <br />
-                              )}{' '}
+                              )}{' '} */}
                             </ListGroupItem>
 
                             <ListGroupItem>

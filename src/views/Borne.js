@@ -35,19 +35,6 @@ function Borne({
   const [currentStation, setcurrentStation] = useState({});
 
   // Form initial values
-  // const initialValues = {
-  //   location_name: currentStation.location_name ?? '',
-  //   address: currentStation.address ?? user.address,
-  //   bookable: currentStation.bookable ?? false,
-  //   free_charging: currentStation.free_charging ?? false,
-  //   connection: currentStation.connection ?? '',
-  //   condition_acces: currentStation.condition_acces ?? '',
-  //   payment_by_card: currentStation.payment_by_card ?? false,
-  //   location_type: currentStation.location_type ?? '',
-  //   postal_code: currentStation.postal_code ?? '',
-  //   tarif: currentStation.tarif ?? '',
-  // };
-
   const initialValues = {
     location_name: currentStation.location_name ?? '',
     address: currentStation.address ?? user.address,
@@ -297,9 +284,14 @@ function Borne({
                                 <Form.Group>
                                   <label>Latitude</label>
                                   <Form.Control
-                                    disabled
                                     type='text'
-                                    value={latitude ? latitude : null}
+                                    name='latitude'
+                                    onChange={e =>
+                                      handleInputChange(
+                                        e.target.value,
+                                        e.target.name
+                                      )
+                                    }
                                   />
                                 </Form.Group>
                               </Col>
@@ -307,9 +299,14 @@ function Borne({
                                 <Form.Group>
                                   <label>Longitude</label>
                                   <Form.Control
-                                    disabled
                                     type='text'
-                                    value={longitude ? longitude : null}
+                                    name='longitude'
+                                    onChange={e =>
+                                      handleInputChange(
+                                        e.target.value,
+                                        e.target.name
+                                      )
+                                    }
                                   />
                                 </Form.Group>
                               </Col>

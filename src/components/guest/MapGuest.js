@@ -1,29 +1,143 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getLocations } from '../../actions/locationAction';
+import {
+  getLocations,
+  getLocationsByUserGeolocation,
+} from '../../actions/locationAction';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { usePosition } from 'hooks/usePosition';
 
-function MapGuest({ options, className, locations, getLocations }) {
+import {
+  Card,
+  Modal,
+  Button,
+  Alert,
+  ListGroupItem,
+  ListGroup,
+  Row,
+  Col,
+} from 'react-bootstrap';
+
+function MapGuest({
+  locations,
+  getLocations,
+  getLocationsByUserGeolocation,
+  loading,
+}) {
   const ref = useRef();
-  const [map, setMap] = useState(null);
-  // const { latitude, longitude } = usePosition();
-  const [markers, setMarkers] = useState();
-  const [selectedLatLng, setselectedLatLng] = useState({
-    latitude: 49.2603667,
-    longitude: 3.0872607,
-  });
+  const [carte, setCarte] = useState();
+  const [markers, setMarkers] = useState([]);
+  const [geocoder, setgeocoder] = useState();
+
   const [showModal, setshowModal] = useState(false);
   const [currentLocation, setcurrentLocation] = useState({});
+
+  // Initialize Map & Geocoding
+  useEffect(() => {
+    const onLoad = () => {
+      try {
+        const options = {
+          lat: 48.856614, //latitude
+          lng: 2.3522219, // longitude
+        };
+        const _map = new window.google.maps.Map(ref.current, {
+          center: options,
+          zoom: 6,
+        });
+        setCarte(_map);
+        const _geocoder = new window.google.maps.Geocoder();
+        console.log(_geocoder, 'onGeocode');
+        setgeocoder(_geocoder);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (window.google === undefined) {
+      const script = document.createElement(`script`);
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
+      document.head.append(script);
+      script.addEventListener(`load`, onLoad());
+    } else onLoad();
+  }, []);
+  // Geocoding
+  useEffect(() => {
+    try {
+      // `${placeName}`
+      geocoder.geocode({ address: 'paris' }, (results, status) => {
+        if (status == 'OK') {
+          console.log(
+            status,
+            results[0].geometry.location.lat(),
+            results[0].geometry.location.lng()
+          );
+        } else {
+          alert(
+            'Geocode was not successful for the following reason: ' + status
+          );
+        }
+      });
+      // setgeocoder(_geocoder);
+    } catch (err) {
+      console.log(
+        '========================================================================================================================================',
+        err
+      );
+    }
+  }, [geocoder]);
+
+  // useEffect(() => {
+  //   const onGeocode = () => {
+  //     try {
+  //       const _geocoder = new window.google.maps.Geocoder();
+  //       console.log(_geocoder, 'onGeocode');
+  //       // setgeocoder(_geocoder);
+  //     } catch (err) {
+  //       console.log(
+  //         '========================================================================================================================================',
+  //         err
+  //       );
+  //     }
+  //   };
+  //   if (!window.google) {
+  //     const script = document.createElement(`script`);
+  //     script.src = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`; //  AIzaSyAhobSlTjGBQSW4nfojOb8T7PFvVN8hG94
+
+  //     document.head.append(script);
+  //     script.addEventListener(`load`, onGeocode);
+  //   } else onGeocode();
+  //   // return () => {
+  //   //   cleanup;
+  //   // };
+  // }, []);
+
+  // get all locations at component mount
+  useEffect(() => {
+    console.log('getLocations');
+    getLocations();
+  }, []);
+
+  // call add markers every time locations data change or map rerenders
+  useEffect(() => {
+    if (locations && carte) {
+      addMarkers(locations, carte);
+    }
+  }, [locations, carte]);
 
   //  removes markers from map
   const removeMarkers = markersArray => {
     markersArray?.forEach(marker => marker.setMap(null));
     setMarkers([]);
   };
+
+  // add markers to the map after getting/filtering locations
   const addMarkers = (locs, mapInstance) => {
     removeMarkers(markers);
     const tmpMarkers = [];
-    const bounds = new window.google.maps.LatLngBounds(selectedLatLng);
+    const bounds = new window.google.maps.LatLngBounds();
+    //45.891181, 4.8223994
 
+    // if (locs.length > 0) {
     locs.map(location => {
       bounds.extend(
         new window.google.maps.LatLng(
@@ -42,70 +156,25 @@ function MapGuest({ options, className, locations, getLocations }) {
       marker.setMap(mapInstance);
 
       marker.addListener('click', () => {
-        setshowModal(true);
         setcurrentLocation(location);
-      });
+        console.log('current location', location);
 
-      selectedLatLng
-        ? bounds.extend(new window.google.maps.LatLng(selectedLatLng))
-        : bounds.extend(
-            new window.google.maps.LatLng(
-              location.AddressInfo.Latitude,
-              location.AddressInfo.Longitude
-            )
-          );
+        setshowModal(true);
+      });
       tmpMarkers.push(marker);
     });
+    // } else {
+    //   console.log('selectedLatLng');
+    // }
 
     setMarkers(tmpMarkers);
     mapInstance.fitBounds(bounds);
   };
-  useEffect(() => {
-    const onLoad = () => {
-      const options = {
-        lat: 45.891181,
-        lng: 4.8223994,
-      };
-
-      const map = new window.google.maps.Map(ref.current, {
-        center: options,
-        zoom: 15,
-      });
-
-      if (map) {
-        console.log('map', map);
-        setMap(map);
-        getLocations();
-      }
-    };
-
-    if (!window.google) {
-      const script = document.createElement(`script`);
-      // + process.env.GOOGLE_MAPS_API_KEY;
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
-      document.head.append(script);
-      script.addEventListener(`load`, onLoad);
-
-      return () => script.removeEventListener(`load`, onLoad);
-    } else onLoad();
-  }, [options, getLocations]);
-
-  useEffect(() => {
-    getLocations();
-  }, []);
-
-  useEffect(() => {
-    if (locations.length && map) {
-      addMarkers(locations, map);
-    }
-  }, [locations, map]);
-
-  // if (map && typeof onMount === `function`) onMount(map, onMountProps);
 
   return (
     <div
       style={{ height: `60vh`, margin: `1em 0`, borderRadius: `0.5em` }}
-      {...{ ref, className }}
+      ref={ref}
     />
   );
 }
@@ -117,4 +186,7 @@ const mapStateToProps = state => ({
   loading: state.location.loading,
 });
 
-export default connect(mapStateToProps, { getLocations })(MapGuest);
+export default connect(mapStateToProps, {
+  getLocations,
+  getLocationsByUserGeolocation,
+})(MapGuest);

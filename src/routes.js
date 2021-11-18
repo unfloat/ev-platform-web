@@ -28,6 +28,7 @@ import Borne from 'views/Borne.js';
 import TableList from 'views/TableList';
 import Typography from 'views/Typography';
 import Upgrade from 'views/Upgrade';
+import Page404 from 'views/Page404';
 
 const dashboardRoutes = [
   {
@@ -93,30 +94,7 @@ const dashboardRoutes = [
     layout: '/admin',
     role: 'msp',
   },
-  // {
-  //   path: '/table',
-  //   name: 'TableList',
-  //   icon: 'nc-icon nc-chart-pie-35',
-  //   component: TableList,
-  //   layout: '/admin',
-  //   role: 'cpo',
-  // },
-  // {
-  //   path: '/typo',
-  //   name: 'TableList',
-  //   icon: 'nc-icon nc-chart-pie-35',
-  //   component: Typography,
-  //   layout: '/admin',
-  //   role: 'cpo',
-  // },
-  // {
-  //   path: '/up',
-  //   name: 'TableList',
-  //   icon: 'nc-icon nc-chart-pie-35',
-  //   component: Upgrade,
-  //   layout: '/admin',
-  //   role: 'cpo',
-  // },
+
   {
     path: '/login',
     name: 'Connexion',

@@ -19,6 +19,7 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
+import isEmpty from 'validation/is-empty';
 
 const Map = ({
   locations,
@@ -28,8 +29,11 @@ const Map = ({
   filters,
   connectiontypeid,
   loading,
+  address,
+  user,
 }) => {
   const [carte, setCarte] = useState();
+  const [geocoder, setgeocoder] = useState();
   const ref = useRef(null);
   const history = useHistory();
 
@@ -37,11 +41,20 @@ const Map = ({
   const [markers, setMarkers] = useState([]);
   const [showModal, setshowModal] = useState(false);
   const [currentLocation, setcurrentLocation] = useState({});
-  const [selectedLatLng, setselectedLatLng] = useState({
+  const initialSelectedCoord = {
     latitude: 45.891181,
     longitude: 4.8223994,
-  });
+  };
+  const [selectedLatLng, setselectedLatLng] = useState(initialSelectedCoord);
   const [reservation, setreservation] = useState(false);
+
+  const [searchParameters, setsearchParameters] = useState({
+    latitude: selectedLatLng.latitude ?? 45.891181,
+    longitude: selectedLatLng.longitude ?? 4.8223994,
+    connectiontypeid: null,
+  });
+
+  // const [connector, setconnector] = useState();
 
   //  removes markers from map
   const removeMarkers = markersArray => {
@@ -114,87 +127,172 @@ const Map = ({
     history.push('/admin/reserver');
   };
 
-  // Initialize map
+  // Initialize Map & Geocoding
   useEffect(() => {
     const onLoad = () => {
       try {
         const options = {
-          lat: 45.891181, //latitude
-          lng: 4.8223994, // longitude
+          lat: 48.856614, //latitude
+          lng: 2.3522219, // longitude
         };
         const _map = new window.google.maps.Map(ref.current, {
           center: options,
-          zoom: 10,
+          zoom: 6,
         });
         setCarte(_map);
+        const _geocoder = new window.google.maps.Geocoder();
+        console.log(_geocoder, 'onGeocode');
+        console.log(searchParameters, 'searchParameters');
+
+        setgeocoder(_geocoder);
       } catch (err) {
         console.log(err);
       }
     };
 
-    if (!window.google) {
+    if (window.google === undefined || !window.google) {
       const script = document.createElement(`script`);
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
       document.head.append(script);
-      script.addEventListener(`load`, onLoad);
+      script.addEventListener(`load`, onLoad());
     } else onLoad();
   }, []);
-
   // Geocoding
+  useEffect(() => {
+    try {
+      // `${placeName}`
+      geocoder.geocode({ address: `${address}` }, (results, status) => {
+        if (status == 'OK') {
+          const resultLatLng = new window.google.maps.LatLng(
+            results[0].geometry.location.lat(),
+            results[0].geometry.location.lng()
+          );
+          carte.setCenter(resultLatLng);
+          const marker = new window.google.maps.Marker({
+            map: carte,
+            position: results[0].geometry.location,
+          });
+          setselectedLatLng({
+            latitude: results[0].geometry.location.lat(),
+            longitude: results[0].geometry.location.lng(),
+          });
+          // setsearchParameters({
+          //   latitude: results[0].geometry.location.lat(),
+          //   longitude: results[0].geometry.location.lng(),
+          // });
+
+          let infoWindow = new window.google.maps.InfoWindow({
+            content: 'Filtrez les stations à proximité de cette position',
+            position: results[0].geometry.location,
+          });
+          infoWindow.open(carte);
+          marker.setMap(carte);
+          console.log(
+            status,
+            results[0].geometry.location.lat(),
+            'lat',
+            results[0].geometry.location.lng(),
+            'lng'
+          );
+        } else {
+          alert(
+            'Geocode was not successful for the following reason: ' + status
+          );
+        }
+      });
+      // setgeocoder(_geocoder);
+    } catch (err) {
+      console.log(
+        '========================================================================================================================================',
+        err
+      );
+    }
+  }, [geocoder, address]);
+
   // useEffect(() => {
-  //   const onGeocode = () => {
-  //     try {
-  //       const geocoder = new window.google.maps.Geocoder();
-  //       geocoder.geocode({ address: 'paris' }, (results, status) => {
+  //   if (geocoder) {
+  //     if (address !== undefined && !isEmpty(address))
+  //       geocoder.geocode({ address: address }, (results, status) => {
   //         if (status == 'OK') {
-  //           carte.setCenter(results[0].geometry.location);
+  //           carte.setCenter(
+  //             results[0].geometry.location[0],
+  //             results[0].geometry.location[1]
+  //           );
   //           const marker = new window.google.maps.Marker({
   //             map: carte,
   //             position: results[0].geometry.location,
   //           });
+  //           setselectedLatLng(
+  //             results[0].geometry.location[0],
+  //             results[0].geometry.location[1]
+  //           );
+  //           let infoWindow = new window.google.maps.InfoWindow({
+  //             content: 'Filtrez les stations à proximité de cette position',
+  //             position:
+  //               (results[0].geometry.location[0],
+  //               results[0].geometry.location[1]),
+  //           });
+  //           infoWindow.open(carte);
+  //           marker.setMap(carte);
+
+  //           console.log(
+  //             'geometry',
+  //             results[0].geometry.location[0],
+  //             results[0].geometry.location[1]
+  //           );
   //         } else {
   //           alert(
   //             'Geocode was not successful for the following reason: ' + status
   //           );
   //         }
   //       });
-  //     } catch (err) {
-  //       console.log(err);
+  //     else {
+  //       geocoder.geocode({ address: user.address }, (results, status) => {
+  //         if (status == 'OK') {
+  //           carte.setCenter(
+  //             results[0].geometry.location[0],
+  //             results[0].geometry.location[1]
+  //           );
+  //           const marker = new window.google.maps.Marker({
+  //             map: carte,
+  //             position: results[0].geometry.location,
+  //           });
+  //           marker.setMap(carte);
+  //           // setselectedLatLng(results[0].geometry.location);
+  //           console.log(
+  //             'user.address',
+  //             results[0].geometry.location[0],
+  //             results[0].geometry.location[1]
+  //           );
+  //         } else {
+  //           alert(
+  //             'Geocode was not successful for the following reason: ' + status
+  //           );
+  //         }
+  //       });
   //     }
-  //   };
-  //   if (!window.google) {
-  //     const script = document.createElement(`script`);
-  //     script.src = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAhobSlTjGBQSW4nfojOb8T7PFvVN8hG94`;
-  //     document.head.append(script);
-  //     script.addEventListener(`load`, onGeocode);
-  //   } else onGeocode();
-  // return () => {
-  //   cleanup;
-  // };
-  // }, []);
+  //   } else console.log('geocoder didnt work');
+  // }, [address]);
 
   useEffect(() => {
     console.log('getLocations');
     getLocations();
   }, []);
 
-  // useEffect(() => {
-  //   console.log('getLocationsByUserGeolocation');
-  //   getLocationsByUserGeolocation({
-  //     selectedLatLng,
-  //   });
-  // }, [selectedLatLng]);
-
   useEffect(() => {
-    console.log('getLocationsByConnectorType');
+    console.log('getLocationsByUserGeolocation', searchParameters);
+    getLocationsByUserGeolocation(selectedLatLng);
+  }, [selectedLatLng]);
 
-    getLocationsByConnectorType(connectiontypeid);
-  }, [connectiontypeid]);
+  // useEffect(() => {
+  //   console.log('getLocationsByConnectorType');
+
+  //   getLocationsByConnectorType(connectiontypeid);
+  // }, [connectiontypeid]);
 
   // Drop Markers
   useEffect(() => {
-    if (locations.length > 0 && carte) {
-      console.log(currentLocation);
+    if (locations && carte) {
       addMarkers(locations, carte);
       const myLatlng = { lat: 49.2603667, lng: 3.0872607 };
       // .renderingType != 'UNINITIALIZED'
@@ -361,6 +459,7 @@ const mapStateToProps = state => ({
   errors: state.errors,
   locations: state.location.locations,
   loading: state.location.loading,
+  user: state.auth.user,
 });
 
 // export default ;

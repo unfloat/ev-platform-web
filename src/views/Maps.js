@@ -2,16 +2,25 @@ import React, { useRef, useState, useEffect } from 'react';
 // UI components
 import Map from '../components/msp/Map';
 import {
-  ToggleButton,
+  CardHeader,
   Card,
   ButtonGroup,
+  CardBody,
   Container,
   Row,
   Col,
   Form,
+  CardTitle,
   Button,
   Alert,
-} from 'react-bootstrap';
+  FormGroup,
+  Input,
+  Label,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 
 // constants
 import greenEnergyTypeOptions from './../constants/greenEnergyTypes';
@@ -27,7 +36,7 @@ import paymentOptions from './../constants/payment';
 function Maps() {
   const initialFilters = {
     recently_verified: false,
-    is_operational: false,
+    is_operational: true,
     is_pay_at_location: false,
     is_membership_required: false,
   };
@@ -40,13 +49,21 @@ function Maps() {
   //   supportsTwoWheel: false,
   // };
   const [filters, setFilters] = useState(initialFilters);
+
   const [connectorType, setconnectorType] = useState();
+  const [connector, setconnector] = useState();
 
-  const handleInputChange = (value, fieldName) => {
-    setFilters(prevState => ({ ...prevState, [fieldName]: value }));
-  };
+  const [address, setaddress] = useState();
+  const [adressProperty, setadressProperty] = useState();
 
-  console.log('filters', filters);
+  const [openDropdown, setopenDropdown] = useState(false);
+
+  // const handleInputChange = (value, fieldName) => {
+  //   setadressProperty(prevState => ({ ...prevState, [fieldName]: value }));
+  // };
+
+  console.log('address', address);
+  console.log('adressProperty', adressProperty);
 
   const powerRange = [
     { value: 22, label: '22kW' },
@@ -60,20 +77,6 @@ function Maps() {
   ];
 
   const ConnectionTypes = [
-    {
-      FormalName: 'Avcon SAE J1772-2001',
-      IsDiscontinued: true,
-      IsObsolete: false,
-      ID: 7,
-      Title: 'Avcon Connector',
-    },
-    {
-      FormalName: null,
-      IsDiscontinued: null,
-      IsObsolete: null,
-      ID: 4,
-      Title: 'Blue Commando (2P+E)',
-    },
     {
       FormalName: 'IEC 62196-3 Configuration FF',
       IsDiscontinued: false,
@@ -102,13 +105,7 @@ function Maps() {
       ID: 28,
       Title: 'CEE 7/4 - Schuko - Type F',
     },
-    {
-      FormalName: null,
-      IsDiscontinued: false,
-      IsObsolete: false,
-      ID: 23,
-      Title: 'CEE 7/5',
-    },
+
     {
       FormalName: 'IEC 62196-3 Configuration AA',
       IsDiscontinued: null,
@@ -130,13 +127,7 @@ function Maps() {
       ID: 34,
       Title: 'IEC 60309 3-pin',
     },
-    {
-      FormalName: null,
-      IsDiscontinued: false,
-      IsObsolete: false,
-      ID: 36,
-      Title: 'SCAME Type 3A (Low Power)',
-    },
+
     {
       FormalName: 'IEC 62196-2 Type 3',
       IsDiscontinued: false,
@@ -144,13 +135,7 @@ function Maps() {
       ID: 26,
       Title: 'SCAME Type 3C (Schneider-Legrand)',
     },
-    {
-      FormalName: null,
-      IsDiscontinued: false,
-      IsObsolete: false,
-      ID: 30,
-      Title: 'Tesla (Model S/X)',
-    },
+
     {
       FormalName: 'Tesla Connector',
       IsDiscontinued: true,
@@ -165,13 +150,7 @@ function Maps() {
       ID: 27,
       Title: 'Tesla Supercharger',
     },
-    {
-      FormalName: 'SAE J1772-2009',
-      IsDiscontinued: null,
-      IsObsolete: null,
-      ID: 1,
-      Title: 'Type 1 (J1772)',
-    },
+
     {
       FormalName: 'IEC 62196-2 Type 2',
       IsDiscontinued: false,
@@ -195,51 +174,81 @@ function Maps() {
     },
   ];
 
-  // const setFilter = (value, fieldName) => {
-  //   console.log(value, fieldName);
-  //   setFilters(prevState => ({
-  //     ...prevState,
-  //     [fieldName]: value,
-  //   }));
-  // };
-
   return (
     <>
       <Row>
         <Container fluid>
           <Row>
-            <hr />
-          </Row>
-          <Row>
             <Col>
               <Card>
-                <Card.Header>
-                  <Card.Title as='h4'>Filtrer les stations par:</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Form>
+                <CardHeader>
+                  <CardTitle as='h4'>Filtrer les stations par:</CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <Form onSubmit={e => e.preventDefault()}>
                     <Row>
                       <Col md='12'>
+                        {/* <FormGroup> */}
+                        <label>Adresse</label>
+                        <div>
+                          <Input
+                            bsSize='lg'
+                            placeholder='Adresse'
+                            type='text'
+                            name='address'
+                            onChange={e => {
+                              setadressProperty(e.target.value);
+                              console.log('e.target.value', e.target.value);
+                            }}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    {/* <Row>
+                      <Col md='12'>
                         <label>Type de prise</label>
-                        <Form.Control
+                        {/* <FormControl
                           aria-label='Type de prise'
                           as='select'
                           custom
                           name='standard'
                           onChange={e => setconnectorType(e.target.value)}
                         >
-                          {/* <option defaultValue=''>Type de connecteur</option> */}
+                          {/* <option defaultValue=''>Type de connecteur</option> 
                           {ConnectionTypes.map((option, idx) => (
                             <option key={idx} value={option.ID}>
                               {option.Title}
                             </option>
                           ))}
-                        </Form.Control>
+                        </FormControl> 
+
+                        <Dropdown
+                          toggle={e => {
+                            setopenDropdown(!openDropdown);
+                          }}
+                          isOpen={openDropdown}
+                        >
+                          <DropdownToggle caret>Type de prise</DropdownToggle>
+                          <DropdownMenu>
+                            {ConnectionTypes.map((option, idx) => (
+                              <DropdownItem
+                                key={idx}
+                                onClick={e => {
+                                  setconnectorType(option.ID);
+                                  e.preventDefault();
+                                }}
+                              >
+                                {option.Title}
+                              </DropdownItem>
+                            ))}
+                          </DropdownMenu>
+                        </Dropdown>
                       </Col>
-                    </Row>
+                    </Row> */}
+
                     <Row>
                       <Col md='4'>
-                        <ButtonGroup className='mb-2'>
+                        {/* <ButtonGroup className='mb-2'>
                           <ToggleButton
                             id='toggle-check'
                             type='checkbox'
@@ -255,11 +264,15 @@ function Maps() {
                           >
                             Paiement sur place
                           </ToggleButton>
-                        </ButtonGroup>
+                        </ButtonGroup> */}
+                        <FormGroup check inline>
+                          <Input className='checkbox' type='checkbox' />
+                          <Label check>Some input</Label>
+                        </FormGroup>
                       </Col>
                       <Col md='4'>
                         {/* <label>Vérifié récemment</label> */}
-                        <ButtonGroup className='mb-2'>
+                        {/* <ButtonGroup className='mb-2'>
                           <ToggleButton
                             id='toggle-check'
                             type='checkbox'
@@ -274,11 +287,15 @@ function Maps() {
                           >
                             Mis à jour
                           </ToggleButton>
-                        </ButtonGroup>
+                        </ButtonGroup> */}
+                        <FormGroup check inline>
+                          <Input type='checkbox' />
+                          <Label check>Some input</Label>
+                        </FormGroup>
                       </Col>
                       <Col md='4'>
                         {/* <label>Vérifié récemment</label> */}
-                        <ButtonGroup className='mb-2'>
+                        {/* <ButtonGroup className='mb-2'>
                           <ToggleButton
                             id='toggle-check'
                             type='checkbox'
@@ -294,24 +311,57 @@ function Maps() {
                           >
                             Avec abonnement
                           </ToggleButton>
-                        </ButtonGroup>
+                        </ButtonGroup> */}
+                        <FormGroup check inline>
+                          <Input type='checkbox' />
+                          <Label check>Some input</Label>
+                        </FormGroup>
                       </Col>
                     </Row>
                     <Button
                       color='primary'
                       className='mt-4'
-                      onClick={() => setFilters(initialFilters)}
+                      onClick={e => {
+                        setaddress(adressProperty);
+                        setconnector(connectorType);
+                        console.log(
+                          adressProperty,
+                          'adressProperty',
+                          address,
+                          'address',
+                          connectorType,
+                          'connectorType'
+                        );
+
+                        e.preventDefault();
+                      }}
+                    >
+                      Rechercher
+                    </Button>
+                    <Button
+                      color='primary'
+                      className='mt-4'
+                      onClick={() => {
+                        setFilters(initialFilters);
+                        setaddress('paris');
+                        setconnector(33);
+                      }}
                     >
                       Réinitialiser
                     </Button>
                   </Form>
-                </Card.Body>
+                </CardBody>
               </Card>
             </Col>
           </Row>
+          <Map
+            address={address}
+            filters={filters}
+            connectiontypeid={connectorType}
+          />
         </Container>
       </Row>
-      <Map filters={filters} connectiontypeid={connectorType} />
+
       {/* <div ref={ref} style={{ height: '300px', width: '500px' }} /> */}
     </>
   );
