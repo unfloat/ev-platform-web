@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getCPOLocations } from '../../actions/locationAction';
 import { connect } from 'react-redux';
 import { usePosition } from '../../hooks/usePosition';
-import { Alert, Modal } from 'react-bootstrap';
+import { Alert, Card, Modal } from 'react-bootstrap';
 
 const Map = ({ user, locations, filters }) => {
   // const  = props;
 
   const [map, setMap] = useState();
   const ref = useRef(null);
+
   const { latitude, longitude } = usePosition();
   const [markers, setMarkers] = useState([]);
 
@@ -18,54 +19,65 @@ const Map = ({ user, locations, filters }) => {
   };
   const addMarkers = (locs, mapInstance) => {
     console.log('here?');
-    markers.forEach(marker => marker.setMap(null));
-    // Deleting previous markers before adding the new list of markers
+    removeMarkers(markers);
     const tmpMarkers = [];
     const bounds = new window.google.maps.LatLngBounds();
+
     if (locs.length > 0) {
       locs.forEach(location => {
-        // debugger; // eslint-disable-line no-debugger
-        // console.log('=========== ~ file: Map.js ~ line 37 ~ location', location);
-        const marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(
-            parseFloat(location.coordinates.latitude),
-            parseFloat(location.coordinates.longitude)
-          ),
-          // title: location.station_name,
-        });
-        marker.setMap(mapInstance);
-
-        console.log('marker', locs);
-
-        const infowindow = new window.google.maps.InfoWindow({
-          content: `<p>Adresse: ${location.address}</p>
-          <ul>
-            <li><strong>Conditions d'accés</strong>: ${location.condition_acces}</li>
-            <li><strong>Type d'emplacement</strong>: ${location.location_type}</li>
-            <li><strong>Phone</strong>: <a href="tel:${location.telephone_operateur}">${location.telephone_operateur}</a></li>
-          </ul>`,
-          boxStyle: {
-            width: '300px',
-            height: '300px',
-          },
-        });
-
-        bounds.extend(
-          new window.google.maps.LatLng(
-            location.coordinates.latitude,
-            location.coordinates.longitude
-          )
-        );
-
-        marker.addListener('click', () => {
-          infowindow.open({
-            anchor: marker,
-            map: mapInstance,
-            shouldFocus: true,
+        // .latitude && location.coordinates.longitude
+        if (location.coordinates !== undefined) {
+          console.log('fuck me');
+          const marker = new window.google.maps.Marker({
+            position: new window.google.maps.LatLng(
+              parseFloat(location.coordinates.latitude),
+              parseFloat(location.coordinates.longitude)
+            ),
+            // title: location.station_name,
           });
-        });
+          marker.setMap(mapInstance);
 
-        tmpMarkers.push(marker);
+          console.log('marker', locs);
+
+          const infowindow = new window.google.maps.InfoWindow({
+            content: `<h3> ${location.location_name}</h3>
+            <h4>Adresse: ${location.address}</h4>
+              <ul>
+                <li style="font-size:20px"><strong>Conditions d'accés</strong>: ${location.condition_acces}</li>
+                <li style="font-size:20px"><strong>Type d'emplacement</strong>: ${location.location_type}</li>
+              </ul>
+              <h4>Connecteur: ${location.standard}</h4>
+              <ul>
+              <li style="font-size:20px"><strong>Format</strong>: ${location.format}</li>
+              <li style="font-size:20px"><strong>Voltage</strong>: ${location.max_voltage}</li>
+              <li style="font-size:20px"><strong>Ampérage</strong>: ${location.max_amperage}</li>
+            </ul>
+            <p><strong>Téléphone</strong>: <a href="tel:${location.telephone_operateur}">${location.telephone_operateur}</a></p>
+
+              `,
+            boxStyle: {
+              width: '300px',
+              height: '300px',
+            },
+          });
+
+          bounds.extend(
+            new window.google.maps.LatLng(
+              location.coordinates.latitude,
+              location.coordinates.longitude
+            )
+          );
+
+          marker.addListener('click', () => {
+            infowindow.open({
+              anchor: marker,
+              map: mapInstance,
+              shouldFocus: true,
+            });
+          });
+
+          tmpMarkers.push(marker);
+        }
       });
     }
 
@@ -75,14 +87,35 @@ const Map = ({ user, locations, filters }) => {
     const onLoad = () => {
       try {
         const options = {
-          lat: 45.891181, //45.891181
-          lng: 7, // 4.8223994
+          lat: latitude ?? 45.891181,
+          //45.891181
+          lng: longitude ?? 4.8223994,
+          // 4.8223994
         };
         const _map = new window.google.maps.Map(ref.current, {
           center: options,
-          zoom: 6,
+          zoom: 5,
         });
         setMap(_map);
+        // const bounds = new window.google.maps.LatLngBounds(
+        //   new window.google.maps.LatLng(
+        //     latitude ?? 45.891181,
+        //     longitude ?? 4.8223994
+        //   )
+        // );
+        console.log('onLoad', options);
+
+        const marker = new window.google.maps.Marker({
+          map: _map,
+          position: new window.google.maps.LatLng(
+            latitude ?? 45.891181,
+            longitude ?? 4.8223994
+          ),
+          title: 'Vous êtes ici!',
+        });
+
+        marker.setMap(_map);
+        //_map.fitBounds(bounds);
       } catch (err) {
         console.log(err);
       }
@@ -94,21 +127,20 @@ const Map = ({ user, locations, filters }) => {
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
       document.head.append(script);
       script.addEventListener(`load`, onLoad);
-
-      // return () => script.removeEventListener(`load`, onLoad);
     } else onLoad();
   }, []);
 
   useEffect(() => {
     getCPOLocations(user.id);
     console.log('user', user);
-  });
+  }, [getCPOLocations]);
 
   // Drop Markers
   useEffect(() => {
-    if (locations.length && map) {
+    if (locations.length > 0 && map) {
       // .renderingType != 'UNINITIALIZED'
-      addMarkers(locations, map, addedMarkers => setMarkers(addedMarkers));
+      //addMarkers(locations, map, addedMarkers => setMarkers(addedMarkers));
+      addMarkers(locations, map);
     }
     // console.log('locations from the server', locations);
   }, [locations, map]);
@@ -164,10 +196,16 @@ const Map = ({ user, locations, filters }) => {
 
   return (
     <>
-      <div
-        style={{ height: `60vh`, margin: `1em 0`, borderRadius: `0.5em` }}
-        ref={ref}
-      />
+      <Card>
+        <Card.Body>
+          <Card.Title as='h4'>Mes bornes</Card.Title>
+
+          <div
+            style={{ height: `60vh`, margin: `1em 0`, borderRadius: `0.5em` }}
+            ref={ref}
+          />
+        </Card.Body>
+      </Card>
     </>
   );
 };

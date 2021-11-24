@@ -4,11 +4,11 @@ import Map from '../../components/cpo/Map';
 
 function Bornes() {
   // filters={filters}
-  const [stations, setstations] = useState({});
-
+  // const [stations, setstations] = useState({});
+  // stations={stations}
   return (
     <>
-      <Map stations={stations} />
+      <Map />
     </>
   );
 }

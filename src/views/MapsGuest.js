@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 // UI components
-import MapGuest from '../components/guest/MapGuest';
+import MapGuest from '../components/msp/Map';
 import {
   ToggleButton,
   Card,

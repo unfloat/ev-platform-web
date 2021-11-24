@@ -19,15 +19,13 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
-import isEmpty from 'validation/is-empty';
 
 const Map = ({
   locations,
   getLocations,
   getLocationsByUserGeolocation,
   getLocationsByConnectorType,
-  filters,
-  connectiontypeid,
+
   loading,
   address,
   user,
@@ -37,7 +35,7 @@ const Map = ({
   const ref = useRef(null);
   const history = useHistory();
 
-  // const { latitude, longitude } = usePosition();
+  const { latitude, longitude } = usePosition();
   const [markers, setMarkers] = useState([]);
   const [showModal, setshowModal] = useState(false);
   const [currentLocation, setcurrentLocation] = useState({});
@@ -47,14 +45,6 @@ const Map = ({
   };
   const [selectedLatLng, setselectedLatLng] = useState(initialSelectedCoord);
   const [reservation, setreservation] = useState(false);
-
-  const [searchParameters, setsearchParameters] = useState({
-    latitude: selectedLatLng.latitude ?? 45.891181,
-    longitude: selectedLatLng.longitude ?? 4.8223994,
-    connectiontypeid: null,
-  });
-
-  // const [connector, setconnector] = useState();
 
   //  removes markers from map
   const removeMarkers = markersArray => {
@@ -94,30 +84,9 @@ const Map = ({
           setshowModal(true);
         });
         tmpMarkers.push(marker);
-        // Create the initial InfoWindow.
-        // if (selectedLatLng) {
-        //   let infoWindow = new window.google.maps.InfoWindow({
-        //     content: 'Cliquez où vous voulez chercher votre borne',
-        //     position: selectedLatLng,
-        //   });
-        //   infoWindow.open(mapInstance);
-        //   mapInstance.addListener('click', mapsMouseEvent => {
-        //     console.log('mapsMouseEvent', mapsMouseEvent.latLng.toJSON().lat);
-        //     infoWindow.close();
-        //     setselectedLatLng({
-        //       latitude: mapsMouseEvent.latLng.toJSON().lat,
-        //       longitude: mapsMouseEvent.latLng.toJSON().lng,
-        //     });
-
-        //     // setshowModal(true);
-
-        //     console.log('selectedLatLng', selectedLatLng);
-        //     setcurrentLocation({});
-        //   });
-        //}
       });
     } else {
-      console.log('selectedLatLng', selectedLatLng);
+      console.log('selectedLatLng');
     }
 
     setMarkers(tmpMarkers);
@@ -142,15 +111,15 @@ const Map = ({
         setCarte(_map);
         const _geocoder = new window.google.maps.Geocoder();
         console.log(_geocoder, 'onGeocode');
-        console.log(searchParameters, 'searchParameters');
 
         setgeocoder(_geocoder);
+        console.log(latitude, longitude);
       } catch (err) {
         console.log(err);
       }
     };
 
-    if (window.google === undefined || !window.google) {
+    if (!window.google) {
       const script = document.createElement(`script`);
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
       document.head.append(script);
@@ -176,13 +145,9 @@ const Map = ({
             latitude: results[0].geometry.location.lat(),
             longitude: results[0].geometry.location.lng(),
           });
-          // setsearchParameters({
-          //   latitude: results[0].geometry.location.lat(),
-          //   longitude: results[0].geometry.location.lng(),
-          // });
 
           let infoWindow = new window.google.maps.InfoWindow({
-            content: 'Filtrez les stations à proximité de cette position',
+            content: 'Stations à proximité de cette position',
             position: results[0].geometry.location,
           });
           infoWindow.open(carte);
@@ -210,77 +175,11 @@ const Map = ({
   }, [geocoder, address]);
 
   // useEffect(() => {
-  //   if (geocoder) {
-  //     if (address !== undefined && !isEmpty(address))
-  //       geocoder.geocode({ address: address }, (results, status) => {
-  //         if (status == 'OK') {
-  //           carte.setCenter(
-  //             results[0].geometry.location[0],
-  //             results[0].geometry.location[1]
-  //           );
-  //           const marker = new window.google.maps.Marker({
-  //             map: carte,
-  //             position: results[0].geometry.location,
-  //           });
-  //           setselectedLatLng(
-  //             results[0].geometry.location[0],
-  //             results[0].geometry.location[1]
-  //           );
-  //           let infoWindow = new window.google.maps.InfoWindow({
-  //             content: 'Filtrez les stations à proximité de cette position',
-  //             position:
-  //               (results[0].geometry.location[0],
-  //               results[0].geometry.location[1]),
-  //           });
-  //           infoWindow.open(carte);
-  //           marker.setMap(carte);
-
-  //           console.log(
-  //             'geometry',
-  //             results[0].geometry.location[0],
-  //             results[0].geometry.location[1]
-  //           );
-  //         } else {
-  //           alert(
-  //             'Geocode was not successful for the following reason: ' + status
-  //           );
-  //         }
-  //       });
-  //     else {
-  //       geocoder.geocode({ address: user.address }, (results, status) => {
-  //         if (status == 'OK') {
-  //           carte.setCenter(
-  //             results[0].geometry.location[0],
-  //             results[0].geometry.location[1]
-  //           );
-  //           const marker = new window.google.maps.Marker({
-  //             map: carte,
-  //             position: results[0].geometry.location,
-  //           });
-  //           marker.setMap(carte);
-  //           // setselectedLatLng(results[0].geometry.location);
-  //           console.log(
-  //             'user.address',
-  //             results[0].geometry.location[0],
-  //             results[0].geometry.location[1]
-  //           );
-  //         } else {
-  //           alert(
-  //             'Geocode was not successful for the following reason: ' + status
-  //           );
-  //         }
-  //       });
-  //     }
-  //   } else console.log('geocoder didnt work');
-  // }, [address]);
+  //   console.log('getLocations');
+  //   getLocations();
+  // }, []);
 
   useEffect(() => {
-    console.log('getLocations');
-    getLocations();
-  }, []);
-
-  useEffect(() => {
-    console.log('getLocationsByUserGeolocation', searchParameters);
     getLocationsByUserGeolocation(selectedLatLng);
   }, [selectedLatLng]);
 
@@ -300,39 +199,49 @@ const Map = ({
   }, [locations, carte]);
 
   // Map Filter
-  useEffect(() => {
-    let filterdLoc = locations;
-    if (carte && locations.length > 0) {
-      if (filters.recently_verified) {
-        filterdLoc = locations.filter(
-          loc => loc.IsRecentlyVerified === filters.recently_verified
-        );
-        addMarkers(filterdLoc, carte);
-      }
-      if (filters.is_operational) {
-        filterdLoc = locations.filter(
-          loc => loc.StatusType.IsOperational === filters.is_operational
-        );
-        addMarkers(filterdLoc, carte);
-      }
-      if (filters.is_pay_at_location) {
-        filterdLoc = locations.filter(
-          loc => loc.UsageType?.IsPayAtLocation === filters.is_pay_at_location
-        );
-        addMarkers(filterdLoc, carte);
-      }
-      if (filters.is_membership_required) {
-        filterdLoc = locations.filter(
-          loc =>
-            loc.UsageType?.IsMembershipRequired ===
-            filters.is_membership_required
-        );
-        addMarkers(filterdLoc, carte);
-      }
+  // useEffect(() => {
+  //   let filterdLoc = locations;
+  //   if (carte && locations.length > 0) {
+  //     if (filters.recently_verified) {
+  //       filterdLoc = locations.filter(
+  //         loc => loc.IsRecentlyVerified === filters.recently_verified
+  //       );
+  //       addMarkers(filterdLoc, carte);
+  //     }
 
-      addMarkers(filterdLoc, carte);
-    }
-  }, [filters]);
+  //     // if (filters.is_pay_at_location) {
+  //     //   filterdLoc = locations.filter(
+  //     //     loc =>
+  //     //       (loc.UsageType?.IsPayAtLocation !== null &&
+  //     //         loc.UsageType?.IsPayAtLocation) === filters.is_pay_at_location
+  //     //   );
+  //     //   addMarkers(filterdLoc, carte);
+  //     // }
+  //     if (filters.is_membership_required) {
+  //       filterdLoc = locations.filter(
+  //         loc =>
+  //           (loc.UsageType?.IsMembershipRequired !== null &&
+  //             loc.UsageType?.IsMembershipRequired) ===
+  //           filters.is_membership_required
+  //       );
+  //       addMarkers(filterdLoc, carte);
+  //     }
+  //     if (filters.bookable) {
+  //       filterdLoc = locations.filter(
+  //         loc =>
+  //           (loc.UsageType?.IsAccessKeyRequired !== null &&
+  //             loc.UsageType?.IsAccessKeyRequired) === filters.bookable
+  //       );
+  //       addMarkers(filterdLoc, carte);
+  //     }
+  //     // if (filters.free_charging) {
+  //     //   filterdLoc = locations.filter(loc => loc.UsageCost === 'Free');
+  //     //   addMarkers(filterdLoc, carte);
+  //     // }
+
+  //     addMarkers(filterdLoc, carte);
+  //   }
+  // }, [filters]);
 
   return (
     <>

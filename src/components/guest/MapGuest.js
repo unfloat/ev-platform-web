@@ -53,7 +53,7 @@ function MapGuest({
       }
     };
 
-    if (window.google === undefined) {
+    if (!window.google === undefined) {
       const script = document.createElement(`script`);
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBwo-QDe0-NuBA5EZSM9UiyAnTYok74maU`;
       document.head.append(script);

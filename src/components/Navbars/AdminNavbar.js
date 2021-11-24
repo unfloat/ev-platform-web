@@ -96,7 +96,7 @@ function Header({ logoutUser }) {
               <Nav.Link
                 className='m-0'
                 href='#pablo'
-                onClick={e => e.preventDefault()}
+                onClick={e => history.push('/admin/user')}
               >
                 <span className='no-icon'>Compte</span>
               </Nav.Link>

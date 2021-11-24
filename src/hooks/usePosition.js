@@ -10,6 +10,9 @@ export const usePosition = (watch = false, settings = defaultSettings) => {
   const [position, setPosition] = useState({});
   const [error, setError] = useState(null);
 
+  /*latitude: coords.latitude,
+      longitude: coords.longitude,*/
+
   const onChange = ({ coords, timestamp }) => {
     setPosition({
       latitude: coords.latitude,

@@ -179,9 +179,12 @@ function User({ user, updateProfile }) {
                 <div className='author'>
                   <a href='#pablo' onClick={e => e.preventDefault()}>
                     <img
-                      alt='...'
+                      alt={user.email}
                       className='avatar border-gray'
-                      src={require('assets/img/default-avatar.png').default}
+                      src={
+                        user.avatar ??
+                        require('assets/img/default-avatar.png').default
+                      }
                     />
                     <h3 className='title'>
                       {user.firstname} {user.lastname} ( {user.role} )

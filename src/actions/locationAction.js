@@ -105,7 +105,7 @@ export const getLocationsByConnectorType = connectiontypeid => dispatch => {
 export const addLocation = locationData => dispatch => {
   dispatch(setLocationLoading());
   axios
-    .post('/locations/createCpoOwnedLocation', locationData)
+    .post('/locations/new', locationData)
     .then(res => {
       dispatch(getCPOLocations(res.data.owner._id));
     })
@@ -128,35 +128,37 @@ export const addLocation = locationData => dispatch => {
     });
 };
 
-export const updateCPOLocation = (locationData, id) => dispatch => {
-  dispatch(setLocationLoading());
-  axios
-    .put('/locations/cpo/update', locationData, {
-      params: {
-        locationId: id,
-      },
-    })
-    .then(res => {
-      dispatch(getCPOLocations(res.data));
-    })
-    .then(res => {
-      dispatch({
-        type: GET_LOCATIONS,
-        payload: res.data,
-      });
-    })
-    .catch(error => {
-      if (error.response && error.response.data) {
+export const updateCPOLocation =
+  (locationData, locationId, connectorId) => dispatch => {
+    dispatch(setLocationLoading());
+    axios
+      .put('/locations/cpo/update', locationData, {
+        params: {
+          locationId,
+          connectorId,
+        },
+      })
+      .then(res => {
+        dispatch(getCPOLocations(res.data));
+      })
+      .then(res => {
         dispatch({
-          type: GET_ERRORS,
-          payload: {
-            message: error.response.data,
-            visible: true,
-          },
+          type: GET_LOCATIONS,
+          payload: res.data,
         });
-      }
-    });
-};
+      })
+      .catch(error => {
+        if (error.response && error.response.data) {
+          dispatch({
+            type: GET_ERRORS,
+            payload: {
+              message: error.response.data,
+              visible: true,
+            },
+          });
+        }
+      });
+  };
 
 export const deleteLocation = (id, owner) => dispatch => {
   dispatch(setLocationLoading());

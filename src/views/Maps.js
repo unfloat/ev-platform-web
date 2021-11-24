@@ -2,25 +2,16 @@ import React, { useRef, useState, useEffect } from 'react';
 // UI components
 import Map from '../components/msp/Map';
 import {
-  CardHeader,
   Card,
   ButtonGroup,
-  CardBody,
   Container,
   Row,
   Col,
   Form,
-  CardTitle,
   Button,
   Alert,
-  FormGroup,
-  Input,
-  Label,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from 'reactstrap';
+  ToggleButton,
+} from 'react-bootstrap';
 
 // constants
 import greenEnergyTypeOptions from './../constants/greenEnergyTypes';
@@ -37,8 +28,9 @@ function Maps() {
   const initialFilters = {
     recently_verified: false,
     is_operational: true,
-    is_pay_at_location: false,
     is_membership_required: false,
+    bookable: false,
+    // free_charging: false,
   };
   // const initialFilters = {
   //   isBookable: false,
@@ -49,18 +41,19 @@ function Maps() {
   //   supportsTwoWheel: false,
   // };
   const [filters, setFilters] = useState(initialFilters);
+  const [filterParameters, setfilterParameters] = useState(filters);
 
   const [connectorType, setconnectorType] = useState();
   const [connector, setconnector] = useState();
 
-  const [address, setaddress] = useState();
-  const [adressProperty, setadressProperty] = useState();
+  const [address, setaddress] = useState('paris');
+  const [adressProperty, setadressProperty] = useState('');
 
   const [openDropdown, setopenDropdown] = useState(false);
 
-  // const handleInputChange = (value, fieldName) => {
-  //   setadressProperty(prevState => ({ ...prevState, [fieldName]: value }));
-  // };
+  const handleInputChange = (value, fieldName) => {
+    setFilters(prevState => ({ ...prevState, [fieldName]: value }));
+  };
 
   console.log('address', address);
   console.log('adressProperty', adressProperty);
@@ -181,17 +174,14 @@ function Maps() {
           <Row>
             <Col>
               <Card>
-                <CardHeader>
-                  <CardTitle as='h4'>Filtrer les stations par:</CardTitle>
-                </CardHeader>
-                <CardBody>
+                <Card.Body>
                   <Form onSubmit={e => e.preventDefault()}>
                     <Row>
                       <Col md='12'>
                         {/* <FormGroup> */}
-                        <label>Adresse</label>
+                        <label>Rechercher par adresse</label>
                         <div>
-                          <Input
+                          <Form.Control
                             bsSize='lg'
                             placeholder='Adresse'
                             type='text'
@@ -207,158 +197,108 @@ function Maps() {
                     {/* <Row>
                       <Col md='12'>
                         <label>Type de prise</label>
-                        {/* <FormControl
+                        <Form.Control
                           aria-label='Type de prise'
                           as='select'
                           custom
                           name='standard'
                           onChange={e => setconnectorType(e.target.value)}
                         >
-                          {/* <option defaultValue=''>Type de connecteur</option> 
+                          //  <option defaultValue=''>Type de connecteur</option> 
                           {ConnectionTypes.map((option, idx) => (
                             <option key={idx} value={option.ID}>
                               {option.Title}
                             </option>
                           ))}
-                        </FormControl> 
-
-                        <Dropdown
-                          toggle={e => {
-                            setopenDropdown(!openDropdown);
-                          }}
-                          isOpen={openDropdown}
-                        >
-                          <DropdownToggle caret>Type de prise</DropdownToggle>
-                          <DropdownMenu>
-                            {ConnectionTypes.map((option, idx) => (
-                              <DropdownItem
-                                key={idx}
-                                onClick={e => {
-                                  setconnectorType(option.ID);
-                                  e.preventDefault();
-                                }}
-                              >
-                                {option.Title}
-                              </DropdownItem>
-                            ))}
-                          </DropdownMenu>
-                        </Dropdown>
-                      </Col>
-                    </Row> */}
-
-                    <Row>
-                      <Col md='4'>
-                        {/* <ButtonGroup className='mb-2'>
-                          <ToggleButton
-                            id='toggle-check'
-                            type='checkbox'
-                            variant='secondary'
-                            checked={filters.is_pay_at_location}
-                            name='is_pay_at_location'
-                            onChange={e =>
-                              setFilters(prevState => ({
-                                ...prevState,
-                                is_pay_at_location: !filters.is_pay_at_location,
-                              }))
-                            }
-                          >
-                            Paiement sur place
-                          </ToggleButton>
-                        </ButtonGroup> */}
-                        <FormGroup check inline>
-                          <Input className='checkbox' type='checkbox' />
-                          <Label check>Some input</Label>
-                        </FormGroup>
-                      </Col>
-                      <Col md='4'>
-                        {/* <label>Vérifié récemment</label> */}
-                        {/* <ButtonGroup className='mb-2'>
-                          <ToggleButton
-                            id='toggle-check'
-                            type='checkbox'
-                            variant='secondary'
-                            checked={filters.recently_verified}
-                            onChange={e =>
-                              setFilters(prevState => ({
-                                ...prevState,
-                                recently_verified: !filters.recently_verified,
-                              }))
-                            }
-                          >
-                            Mis à jour
-                          </ToggleButton>
-                        </ButtonGroup> */}
-                        <FormGroup check inline>
-                          <Input type='checkbox' />
-                          <Label check>Some input</Label>
-                        </FormGroup>
-                      </Col>
-                      <Col md='4'>
-                        {/* <label>Vérifié récemment</label> */}
-                        {/* <ButtonGroup className='mb-2'>
-                          <ToggleButton
-                            id='toggle-check'
-                            type='checkbox'
-                            variant='secondary'
-                            checked={filters.is_membership_required}
-                            onChange={e =>
-                              setFilters(prevState => ({
-                                ...prevState,
-                                is_membership_required:
-                                  !filters.is_membership_required,
-                              }))
-                            }
-                          >
-                            Avec abonnement
-                          </ToggleButton>
-                        </ButtonGroup> */}
-                        <FormGroup check inline>
-                          <Input type='checkbox' />
-                          <Label check>Some input</Label>
-                        </FormGroup>
+                        </Form.Control>
                       </Col>
                     </Row>
-                    <Button
-                      color='primary'
-                      className='mt-4'
-                      onClick={e => {
-                        setaddress(adressProperty);
-                        setconnector(connectorType);
-                        console.log(
-                          adressProperty,
-                          'adressProperty',
-                          address,
-                          'address',
-                          connectorType,
-                          'connectorType'
-                        );
+                     */}
+                    {/* <Row>
+                      <Col md='6'>
+                        {/* <Col md='4'> 
+                        <Form.Check
+                          type='switch'
+                          id='bookable-switch'
+                          label='Reservation'
+                          value={filters.bookable}
+                          name='bookable'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
+                        />
+                        <Form.Check
+                          type='switch'
+                          id='recently_verified-switch'
+                          label='Vérification récente'
+                          value={filters.recently_verified}
+                          name='recently_verified'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
+                        />
+                        {/* <Form.Check
+                          type='switch'
+                          id='free_charging-switch'
+                          label='Recharge gratuite'
+                          value={filters.free_charging}
+                          name='free_charging'
+                          onChange={e =>
+                            handleInputChange(e.target.value, e.target.name)
+                          }
+                        /> 
+                        <Form.Check
+                          type='switch'
+                          id='is_membership_required-switch'
+                          label='Avec abonnement'
+                          value={filters.is_membership_required}
+                          name='is_membership_required'
+                          onChange={e =>
+                            setFilters(prevState => ({
+                              ...prevState,
+                              is_membership_required:
+                                !filters.is_membership_required,
+                            }))
+                          }
+                        />
+                      </Col>
+                    </Row> */}
+                    <Row>
+                      <Col md='2'>
+                        <Button
+                          color='primary'
+                          className='mt-4'
+                          disabled={adressProperty.length == 0}
+                          onClick={e => {
+                            setaddress(adressProperty);
 
-                        e.preventDefault();
-                      }}
-                    >
-                      Rechercher
-                    </Button>
-                    <Button
-                      color='primary'
-                      className='mt-4'
-                      onClick={() => {
-                        setFilters(initialFilters);
-                        setaddress('paris');
-                        setconnector(33);
-                      }}
-                    >
-                      Réinitialiser
-                    </Button>
+                            e.preventDefault();
+                          }}
+                        >
+                          Rechercher
+                        </Button>
+                      </Col>
+                      {/* <Col md='1'>
+                        <Button
+                          color='primary'
+                          className='mt-4'
+                          onClick={() => {
+                            // setfilterParameters(initialFilters);
+                            setaddress('paris');
+                            setadressProperty('');
+                            // setconnector(33);
+                          }}
+                        >
+                          Réinitialiser
+                        </Button> 
+                      </Col>*/}
+                    </Row>
                   </Form>
-                </CardBody>
+                </Card.Body>
               </Card>
             </Col>
           </Row>
-          <Map
-            address={address}
-            filters={filters}
-            connectiontypeid={connectorType}
-          />
+          <Map address={address} />
         </Container>
       </Row>
 
